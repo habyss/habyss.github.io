@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Mysql Explain 简解 | 叶灰灰的小窝</title>
-<meta name="keywords" content="Mysql">
-<meta name="description" content="Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查">
+<title>UML类图关系 | 叶灰灰的小窝</title>
+<meta name="keywords" content="UML">
+<meta name="description" content="UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关">
 <meta name="author" content="叶灰灰">
-<link rel="canonical" href="https://habyss.github.io/posts/tech/mysql_explain/">
+<link rel="canonical" href="https://habyss.github.io/posts/tech/uml/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.3299c596a7007118365635c056dd427dace22b7b8c1341fdef6fa6c31359ba10.css" integrity="sha256-MpnFlqcAcRg2VjXAVt1CfaziK3uME0H972&#43;mwxNZuhA=" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity="sha256-rLVP0yu8GYJCi4hQMX5F0Ha5UBJzClk2Zn5rwhd3aSo="
     onload="hljs.initHighlightingOnLoad();"></script>
@@ -56,16 +56,16 @@
         }
 
     </style>
-</noscript><meta property="og:title" content="Mysql Explain 简解" />
-<meta property="og:description" content="Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查" />
+</noscript><meta property="og:title" content="UML类图关系" />
+<meta property="og:description" content="UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://habyss.github.io/posts/tech/mysql_explain/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2018-11-29T15:36:53+08:00" />
+<meta property="og:url" content="https://habyss.github.io/posts/tech/uml/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-01-23T15:36:53+08:00" />
 <meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Mysql Explain 简解"/>
-<meta name="twitter:description" content="Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查"/>
+<meta name="twitter:title" content="UML类图关系"/>
+<meta name="twitter:description" content="UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关"/>
 
 
 <script type="application/ld+json">
@@ -88,8 +88,8 @@
     {
       "@type": "ListItem",
       "position":  3 ,
-      "name": "Mysql Explain 简解",
-      "item": "https://habyss.github.io/posts/tech/mysql_explain/"
+      "name": "UML类图关系",
+      "item": "https://habyss.github.io/posts/tech/uml/"
     }
   ]
 }
@@ -98,16 +98,16 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Mysql Explain 简解",
-  "name": "Mysql Explain 简解",
-  "description": "Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查",
+  "headline": "UML类图关系",
+  "name": "UML类图关系",
+  "description": "UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 \u0026lt; 关联关系 \u0026lt; 聚合关系 \u0026lt; 组合关系 \u0026lt; 实现关",
   "keywords": [
-    "Mysql"
+    "UML"
   ],
-  "articleBody": "Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有:\nSIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查询中如果包含子查询或其他部分, 则外层的SELECT将被标记为PRIMARY SUBQUERY: 子查询中的第一个SELECT NUION: 在UNION语句中, UNION之后出现的SELECT DERIVED: 在FROM中出现的子查询 UNION RESULT: UNION查询的结果 table 当前的数据表\npartitions 查询所匹配记录的分区, 对于未分区的表, 值为NULL\ntype 查询执行的类型, 最优排行\nsystem \u003e const \u003e eq_ref \u003e ref \u003e fulltext \u003e ref_or_null \u003e index_merge \u003e unique_subquery \u003e index_subquery \u003e range \u003e index \u003e ALL\nsystem: 表中只有一行数据, 是const的一种特例 const: 表中最多只有一行匹配的记录 eq_ref: 连表查询时, 前一张表的行在当前表中只有一行与之对应(除了system与const最好的连表方式) ref: 使用普通索引作为查询条件, 查询结果可能找到多行匹配的记录 fulltext: 全文索引 ref_or_null: 使用普通索引作为查询条件 , 查询结果可能找到多行匹配的记录, 还查询了值为NULL的行 index_merge: 当查询条件使用多个索引时, index_merge表示开启了Index Merge优化 unique_subquery: eq_ref类似, 在一些使用IN的子查询中, 使用唯一索引 index_subquery: 与unique_subquery类似, 在IN子查询中, 使用了普通索引 range: 对索引列进行范围查询 index: 查询便利了整个索引树, ALL: 遍历全表, 很可能读磁盘, 速度最慢 possible_key 可能被使用的索引, 不一定被查询实际使用\nkey 查询中实际使用到的索引, 如果为NULL, 则表示为建立索引或索引失效\nkey_len 查询索引时使用的字节数, 在满足前提的需求下, 越小越好\nref 在查询索引时, 那些列或常量被用来与索引值比较\nrows 可能查询时需要遍历的行数\nfiltered 估算经过查询条件筛选出的列数的百分比\nExtra 查询时的额外信息\n当包含Using filesort或Using temporary, 需要优化\nUsing filesort: 在排序时使用了外部的索引排序, 没有使用表内的索引进行排序 Using temporary: 需要创建临时表来存储查询的结果, 常见于ORDER BY和GROUP BY Using index: 使用了索引覆盖, 查询效率非常高 Using where: 使用了WHERE子句进行条件过滤, 一般在没有使用到索引的时候出现 Impossible where: 表示where子句的结果总是false且无法查到任意行 Using join buffer(Block Nested Loop): 连表查询时, 当被驱动表没有使用索引时, 会先将驱动表读到join buffer中, 再遍历被驱动表与驱动表进行查询 Using json buffer(Batched Key Access): 与Using join buffer(Block Nested Loop)类似, 使用的是BKA算法– 前提是被驱动表有索引可用 ",
-  "wordCount" : "975",
+  "articleBody": "UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言.\nUML类图中有六种关系，从弱到强依次是：\n依赖关系 \u003c 关联关系 \u003c 聚合关系 \u003c 组合关系 \u003c 实现关系 = 泛化关系\n类的成员变量和方法前面的修饰符有public, private, protected, default，在UML类图中分别用 +, -, #, ~表示。\n1. 依赖关系 通用描述: 依赖关系表示某个类依赖于另外一个类\n代码表现: 某个类的方法的参数使用了另外一个类的对象\n箭头描述: 依赖关系使用带箭头的虚线表示, 箭头指向被依赖的类\n示例图样:\n2. 关联关系 通用描述: 关联关系表示一个类和另外一个类的联系, 如老师和学生\n代码表现: 某个类的成员变量是另外一个类的对象\n箭头描述: 依赖关系有单向和双向, 单向使用带箭头的实线表示, 箭头指向被关联的类, 双向使用双箭头或者没有箭头的实线表示.\n示例图样:\n3. 聚合关系 通用描述: 聚合关系是关联关系的一种, 表示的是整体与部分之间的关系, 如学校和老师, 车子和轮胎\n代码表现: 某个类的成员变量是另外一个类的对象\n箭头描述: 聚合关系使用带空心菱形的实线表示, 菱形指向整体\n示例图样:\n4. 组合关系 通用描述: 组合关系是关联关系的一种, 是一种比聚合关系更强的一种关系, 部分不能脱离整体而单独存在, 如身体和大脑\n代码表现: 某个类的成员变量是另外一个类的对象\n箭头描述: 组合关系使用带实心菱形的实线表示, 菱形指向整体\n示例图样:\n5. 实现关系 通用描述: 实现关系是接口和实现类之间的关系\n代码表现: 接口和实现类\n箭头描述: 实现关系使用带空心三角箭头的虚线表示, 箭头指向接口\n示例图样:\n6. 泛化关系 通用描述: 泛化关系是父子类之间的继承关系\n代码表现: 抽象父子与子类, 继承\n箭头描述: 泛化关系使用带空心三角箭头的实线来表示, 箭头指向父类\n示例图样:\n总结 依赖关系 \u003c 关联关系 \u003c 聚合关系 \u003c 组合关系 \u003c 实现关系 = 泛化关系 关系名称 代码表现 箭头形式 箭头指向 依赖关系 方法参数 虚线箭头 指向被依赖的类(方法参数的类) 关联关系 成员变量 实线箭头 指向被关联的类(成员变量的类) 聚合关系 成员变量 实线空心菱形 指向整体 组合关系 成员变量 实线实心菱形 指向整体 实现关系 接口与实现类 虚线空心三角 指向接口 泛化关系 抽象父类与子类 实线空心三角 指向父类 ",
+  "wordCount" : "877",
   "inLanguage": "zh",
-  "datePublished": "2018-11-29T15:36:53+08:00",
+  "datePublished": "2019-01-23T15:36:53+08:00",
   "dateModified": "2022-11-29T15:36:53+08:00",
   "author":[{
     "@type": "Person",
@@ -115,7 +115,7 @@
   }],
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://habyss.github.io/posts/tech/mysql_explain/"
+    "@id": "https://habyss.github.io/posts/tech/uml/"
   },
   "publisher": {
     "@type": "Organization",
@@ -203,9 +203,9 @@
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/tech/">👨🏻‍💻技术</a></div>
     <h1 class="post-title">
-      Mysql Explain 简解
+      UML类图关系
     </h1>
-    <div class="post-meta"><span title='2018-11-29 15:36:53 +0800 CST'>2018-11-29</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
+    <div class="post-meta"><span title='2019-01-23 15:36:53 +0800 CST'>2019-01-23</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
 
 </div>
   </header> <div class="toc">
@@ -216,119 +216,157 @@
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#mysql-explain" aria-label="Mysql-explain">Mysql-explain</a><ul>
-                        
+                    <a href="#uml%e7%b1%bb%e5%9b%be%e5%85%b3%e7%b3%bb" aria-label="UML类图关系">UML类图关系</a></li>
                 <li>
-                    <a href="#id" aria-label="id"><strong>id</strong></a></li>
+                    <a href="#1-%e4%be%9d%e8%b5%96%e5%85%b3%e7%b3%bb" aria-label="1. 依赖关系">1. 依赖关系</a></li>
                 <li>
-                    <a href="#select_type" aria-label="select_type"><strong>select_type</strong></a></li>
+                    <a href="#2-%e5%85%b3%e8%81%94%e5%85%b3%e7%b3%bb" aria-label="2. 关联关系">2. 关联关系</a></li>
                 <li>
-                    <a href="#table" aria-label="table"><strong>table</strong></a></li>
+                    <a href="#3-%e8%81%9a%e5%90%88%e5%85%b3%e7%b3%bb" aria-label="3. 聚合关系">3. 聚合关系</a></li>
                 <li>
-                    <a href="#partitions" aria-label="partitions"><strong>partitions</strong></a></li>
+                    <a href="#4-%e7%bb%84%e5%90%88%e5%85%b3%e7%b3%bb" aria-label="4. 组合关系">4. 组合关系</a></li>
                 <li>
-                    <a href="#type" aria-label="type"><strong>type</strong></a></li>
+                    <a href="#5-%e5%ae%9e%e7%8e%b0%e5%85%b3%e7%b3%bb" aria-label="5. 实现关系">5. 实现关系</a></li>
                 <li>
-                    <a href="#possible_key" aria-label="possible_key"><strong>possible_key</strong></a></li>
+                    <a href="#6-%e6%b3%9b%e5%8c%96%e5%85%b3%e7%b3%bb" aria-label="6. 泛化关系">6. 泛化关系</a></li>
                 <li>
-                    <a href="#key" aria-label="key"><strong>key</strong></a></li>
-                <li>
-                    <a href="#key_len" aria-label="key_len"><strong>key_len</strong></a></li>
-                <li>
-                    <a href="#ref" aria-label="ref"><strong>ref</strong></a></li>
-                <li>
-                    <a href="#rows" aria-label="rows"><strong>rows</strong></a></li>
-                <li>
-                    <a href="#filtered" aria-label="filtered"><strong>filtered</strong></a></li>
-                <li>
-                    <a href="#extra" aria-label="Extra"><strong>Extra</strong></a>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
                 </li>
-            </ul>
-            </li>
             </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><h1 id="mysql-explain">Mysql-explain<a hidden class="anchor" aria-hidden="true" href="#mysql-explain">#</a></h1>
-<h2 id="id"><strong>id</strong><a hidden class="anchor" aria-hidden="true" href="#id">#</a></h2>
+  <div class="post-content"><h1 id="uml类图关系">UML类图关系<a hidden class="anchor" aria-hidden="true" href="#uml类图关系">#</a></h1>
+<p>💡 <code>UML</code> 全称<code>Unified Modeling Language</code>, 统计建模语言.</p>
+<p>UML类图中有六种关系，从弱到强依次是：</p>
+<p><strong>依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关系 = 泛化关系</strong></p>
+<p>类的成员变量和方法前面的修饰符有<code>public</code>, <code>private</code>, <code>protected</code>, <code>default</code>，在<code>UML</code>类图中分别用 +, -, #, ~表示。</p>
+<h1 id="1-依赖关系">1. 依赖关系<a hidden class="anchor" aria-hidden="true" href="#1-依赖关系">#</a></h1>
+<hr>
+<p>通用描述: 依赖关系表示某个类依赖于另外一个类</p>
+<p>代码表现: 某个类的方法的参数使用了另外一个类的对象</p>
+<p>箭头描述: 依赖关系使用带箭头的虚线表示, 箭头指向被依赖的类</p>
+<p>示例图样:</p>
+<p><img loading="lazy" src="1.png" alt="1"  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c1.png" alt=""  />
+</p>
+<h1 id="2-关联关系">2. 关联关系<a hidden class="anchor" aria-hidden="true" href="#2-关联关系">#</a></h1>
+<hr>
+<p>通用描述: 关联关系表示一个类和另外一个类的联系, 如老师和学生</p>
+<p>代码表现: 某个类的成员变量是另外一个类的对象</p>
+<p>箭头描述: 依赖关系有单向和双向, 单向使用带箭头的实线表示, 箭头指向被关联的类, 双向使用双箭头或者没有箭头的实线表示.</p>
+<p>示例图样:</p>
+<p><img loading="lazy" src="2.png" alt="2"  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c2.png" alt=""  />
+</p>
+<h1 id="3-聚合关系">3. 聚合关系<a hidden class="anchor" aria-hidden="true" href="#3-聚合关系">#</a></h1>
+<hr>
+<p>通用描述: 聚合关系是关联关系的一种, 表示的是整体与部分之间的关系, 如学校和老师, 车子和轮胎</p>
+<p>代码表现: 某个类的成员变量是另外一个类的对象</p>
+<p>箭头描述: 聚合关系使用带空心菱形的实线表示, 菱形指向整体</p>
+<p>示例图样:</p>
+<p><img loading="lazy" src="3.png" alt="3"  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c3.png" alt=""  />
+</p>
+<h1 id="4-组合关系">4. 组合关系<a hidden class="anchor" aria-hidden="true" href="#4-组合关系">#</a></h1>
+<hr>
+<p>通用描述: 组合关系是关联关系的一种, 是一种比聚合关系更强的一种关系, 部分不能脱离整体而单独存在, 如身体和大脑</p>
+<p>代码表现: 某个类的成员变量是另外一个类的对象</p>
+<p>箭头描述: 组合关系使用带实心菱形的实线表示, 菱形指向整体</p>
+<p>示例图样:</p>
+<p><img loading="lazy" src="4.png" alt="4"  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c4.png" alt=""  />
+</p>
+<h1 id="5-实现关系">5. 实现关系<a hidden class="anchor" aria-hidden="true" href="#5-实现关系">#</a></h1>
+<hr>
+<p>通用描述: 实现关系是接口和实现类之间的关系</p>
+<p>代码表现: 接口和实现类</p>
+<p>箭头描述: 实现关系使用带空心三角箭头的虚线表示, 箭头指向接口</p>
+<p>示例图样:</p>
+<p><img loading="lazy" src="5.png" alt="5"  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c5.png" alt=""  />
+</p>
+<h1 id="6-泛化关系">6. 泛化关系<a hidden class="anchor" aria-hidden="true" href="#6-泛化关系">#</a></h1>
+<hr>
+<p>通用描述: 泛化关系是父子类之间的继承关系</p>
+<p>代码表现: 抽象父子与子类, 继承</p>
+<p>箭头描述: 泛化关系使用带空心三角箭头的实线来表示, 箭头指向父类</p>
+<p>示例图样:</p>
+<p><img loading="lazy" src="6.png" alt="6"  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c6.png" alt=""  />
+</p>
+<h1 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h1>
 <ul>
-<li>id相同时, 执行顺序由上而下</li>
-<li>id不同时, 执行顺序由大到小, 一般为子查询</li>
+<li><strong>依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关系 = 泛化关系</strong></li>
 </ul>
-<h2 id="select_type"><strong>select_type</strong><a hidden class="anchor" aria-hidden="true" href="#select_type">#</a></h2>
-<p>查询类型, 常见的值有:</p>
-<ul>
-<li>SIMPLE: 简单查询, 不包含UNION或者子查询</li>
-<li>PRIMARY: 查询中如果包含子查询或其他部分, 则外层的SELECT将被标记为PRIMARY</li>
-<li>SUBQUERY: 子查询中的第一个SELECT</li>
-<li>NUION: 在UNION语句中, UNION之后出现的SELECT</li>
-<li>DERIVED: 在FROM中出现的子查询</li>
-<li>UNION RESULT: UNION查询的结果</li>
-</ul>
-<h2 id="table"><strong>table</strong><a hidden class="anchor" aria-hidden="true" href="#table">#</a></h2>
-<p>当前的数据表</p>
-<h2 id="partitions"><strong>partitions</strong><a hidden class="anchor" aria-hidden="true" href="#partitions">#</a></h2>
-<p>查询所匹配记录的分区, 对于未分区的表, 值为NULL</p>
-<h2 id="type"><strong>type</strong><a hidden class="anchor" aria-hidden="true" href="#type">#</a></h2>
-<p>查询执行的类型, 最优排行</p>
-<p>system &gt; const &gt; eq_ref &gt; ref &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt; index_subquery &gt; range &gt; index &gt; ALL</p>
-<ul>
-<li>system: 表中只有一行数据, 是const的一种特例</li>
-<li>const: 表中最多只有一行匹配的记录</li>
-<li>eq_ref: 连表查询时, 前一张表的行在当前表中只有一行与之对应(除了system与const最好的连表方式)</li>
-<li>ref: 使用普通索引作为查询条件, 查询结果可能找到多行匹配的记录</li>
-<li>fulltext: 全文索引</li>
-<li>ref_or_null: 使用普通索引作为查询条件 , 查询结果可能找到多行匹配的记录, 还查询了值为NULL的行</li>
-<li>index_merge: 当查询条件使用多个索引时, index_merge表示开启了Index Merge优化</li>
-<li>unique_subquery: eq_ref类似, 在一些使用IN的子查询中, 使用唯一索引</li>
-<li>index_subquery: 与unique_subquery类似, 在IN子查询中, 使用了普通索引</li>
-<li>range: 对索引列进行范围查询</li>
-<li>index: 查询便利了整个索引树,</li>
-<li>ALL: 遍历全表, 很可能读磁盘, 速度最慢</li>
-</ul>
-<h2 id="possible_key"><strong>possible_key</strong><a hidden class="anchor" aria-hidden="true" href="#possible_key">#</a></h2>
-<p>可能被使用的索引, 不一定被查询实际使用</p>
-<h2 id="key"><strong>key</strong><a hidden class="anchor" aria-hidden="true" href="#key">#</a></h2>
-<p>查询中实际使用到的索引, 如果为NULL, 则表示为建立索引或索引失效</p>
-<h2 id="key_len"><strong>key_len</strong><a hidden class="anchor" aria-hidden="true" href="#key_len">#</a></h2>
-<p>查询索引时使用的字节数, 在满足前提的需求下, 越小越好</p>
-<h2 id="ref"><strong>ref</strong><a hidden class="anchor" aria-hidden="true" href="#ref">#</a></h2>
-<p>在查询索引时, 那些列或常量被用来与索引值比较</p>
-<h2 id="rows"><strong>rows</strong><a hidden class="anchor" aria-hidden="true" href="#rows">#</a></h2>
-<p>可能查询时需要遍历的行数</p>
-<h2 id="filtered"><strong>filtered</strong><a hidden class="anchor" aria-hidden="true" href="#filtered">#</a></h2>
-<p>估算经过查询条件筛选出的列数的百分比</p>
-<h2 id="extra"><strong>Extra</strong><a hidden class="anchor" aria-hidden="true" href="#extra">#</a></h2>
-<p>查询时的额外信息</p>
-<p>当包含Using filesort或Using temporary, 需要优化</p>
-<ul>
-<li>Using filesort: 在排序时使用了外部的索引排序, 没有使用表内的索引进行排序</li>
-<li>Using temporary: 需要创建临时表来存储查询的结果, 常见于ORDER BY和GROUP BY</li>
-<li>Using index: 使用了索引覆盖, 查询效率非常高</li>
-<li>Using where: 使用了WHERE子句进行条件过滤, 一般在没有使用到索引的时候出现</li>
-<li>Impossible where: 表示where子句的结果总是false且无法查到任意行</li>
-<li>Using join buffer(Block Nested Loop): 连表查询时, 当被驱动表没有使用索引时, 会先将驱动表读到join buffer中, 再遍历被驱动表与驱动表进行查询</li>
-<li>Using json buffer(Batched Key Access): 与Using join buffer(Block Nested Loop)类似, 使用的是BKA算法&ndash; 前提是被驱动表有索引可用</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>关系名称</th>
+<th>代码表现</th>
+<th>箭头形式</th>
+<th>箭头指向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>依赖关系</td>
+<td>方法参数</td>
+<td>虚线箭头</td>
+<td>指向被依赖的类(方法参数的类)</td>
+</tr>
+<tr>
+<td>关联关系</td>
+<td>成员变量</td>
+<td>实线箭头</td>
+<td>指向被关联的类(成员变量的类)</td>
+</tr>
+<tr>
+<td>聚合关系</td>
+<td>成员变量</td>
+<td>实线空心菱形</td>
+<td>指向整体</td>
+</tr>
+<tr>
+<td>组合关系</td>
+<td>成员变量</td>
+<td>实线实心菱形</td>
+<td>指向整体</td>
+</tr>
+<tr>
+<td>实现关系</td>
+<td>接口与实现类</td>
+<td>虚线空心三角</td>
+<td>指向接口</td>
+</tr>
+<tr>
+<td>泛化关系</td>
+<td>抽象父类与子类</td>
+<td>实线空心三角</td>
+<td>指向父类</td>
+</tr>
+</tbody>
+</table>
 
 
   </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://habyss.github.io/tags/mysql/">Mysql</a></li>
+      <li><a href="https://habyss.github.io/tags/uml/">UML</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="https://habyss.github.io/posts/tool/%E5%B0%8F%E9%B9%A4%E5%8F%8C%E6%8B%BC/">
-    <span class="title">« 上一页</span>
-    <br>
-    <span>小鹤双拼</span>
-  </a>
-  <a class="next" href="https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/">
+  <a class="next" href="https://habyss.github.io/posts/tech/transactional/">
     <span class="title">下一页 »</span>
     <br>
-    <span>测试</span>
+    <span>@Transactional失效排查</span>
   </a>
 </nav>
 
