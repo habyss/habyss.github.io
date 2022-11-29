@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>$ref-fastjson排查 | 叶灰灰的小窝</title>
-<meta name="keywords" content="SpringBoot, LocalDateTime">
+<meta name="keywords" content="SpringBoot, FastJson">
 <meta name="description" content="$ref-fastjson 问题排查 问题排查 项目返回的数据中出现$ref数据 查询得知是fastjson的特性循环引用 fastjson支持循环引用，并且是缺省打开的。 当">
 <meta name="author" content="叶灰灰">
 <link rel="canonical" href="https://habyss.github.io/posts/tech/ref-fastjson/">
@@ -102,7 +102,7 @@
   "name": "$ref-fastjson排查",
   "description": "$ref-fastjson 问题排查 问题排查 项目返回的数据中出现$ref数据 查询得知是fastjson的特性循环引用 fastjson支持循环引用，并且是缺省打开的。 当",
   "keywords": [
-    "SpringBoot", "LocalDateTime"
+    "SpringBoot", "FastJson"
   ],
   "articleBody": "$ref-fastjson 问题排查 问题排查 项目返回的数据中出现$ref数据\n查询得知是fastjson的特性循环引用 fastjson支持循环引用，并且是缺省打开的。\n当序列化后的JSON传输到浏览器或者其他语言中，这些json解析器不支持循环引用，从而导致数据丢失。你可以关闭fastjson的循环引用支持。关闭引用检测，还能够提升序列化时的性能。\n全局配置关闭\n1 JSON.DEFAULT_GENERATE_FEATURE |= SerializerFeature.DisableCircularReferenceDetect.getMask(); 非全局关闭\n1 JSON.toJSONString(obj, SerializerFeature.DisableCircularReferenceDetect); 项目中配置了全局默认使用fastjson, 所以导致默认的jackson不生效. $ref-fastjson-解决方案 全局配置关闭\n非全局关闭\n删除全局默认fastjson\n",
   "wordCount" : "260",
@@ -298,7 +298,7 @@
   <footer class="post-footer">
     <ul class="post-tags">
       <li><a href="https://habyss.github.io/tags/springboot/">SpringBoot</a></li>
-      <li><a href="https://habyss.github.io/tags/localdatetime/">LocalDateTime</a></li>
+      <li><a href="https://habyss.github.io/tags/fastjson/">FastJson</a></li>
     </ul>
 <nav class="paginav">
   <a class="prev" href="https://habyss.github.io/posts/tech/transactional/">

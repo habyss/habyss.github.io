@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Transactional on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/transactional/</link>
+    <description>Recent content in Transactional on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 03 Jan 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/transactional/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>@Transactional失效排查</title>
+      <link>https://habyss.github.io/posts/tech/transactional/</link>
+      <pubDate>Thu, 03 Jan 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/transactional/</guid>
+      <description>@Transactional失效 整合shiro之后，UserRealm类里自动注入的service中的@Transactional注解失效 解</description>
+    </item>
+    
+  </channel>
+</rss>

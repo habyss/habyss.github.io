@@ -6,25 +6,7 @@
     <description>Recent content in LocalDateTime on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 03 Jan 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/localdatetime/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>@Transactional失效排查</title>
-      <link>https://habyss.github.io/posts/tech/transactional/</link>
-      <pubDate>Thu, 03 Jan 2019 15:36:53 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/posts/tech/transactional/</guid>
-      <description>@Transactional失效 整合shiro之后，UserRealm类里自动注入的service中的@Transactional注解失效 解</description>
-    </item>
-    
-    <item>
-      <title>$ref-fastjson排查</title>
-      <link>https://habyss.github.io/posts/tech/ref-fastjson/</link>
-      <pubDate>Thu, 20 Dec 2018 15:36:53 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/posts/tech/ref-fastjson/</guid>
-      <description>$ref-fastjson 问题排查 问题排查 项目返回的数据中出现$ref数据 查询得知是fastjson的特性循环引用 fastjson支持循环引用，并且是缺省打开的。 当</description>
-    </item>
-    
+    <lastBuildDate>Mon, 10 Dec 2018 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/localdatetime/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SpringBoot中时间戳和LocalDateTime相关的接收和转换</title>
       <link>https://habyss.github.io/posts/tech/springboot_localdatetime/</link>
