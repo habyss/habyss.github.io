@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>SpringBoot中时间戳和LocalDateTime相关的接收和转换 | 叶灰灰的小窝</title>
+<meta name="keywords" content="SpringBoot, LocalDateTime">
+<meta name="description" content="SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端">
+<meta name="author" content="叶灰灰">
+<link rel="canonical" href="https://habyss.github.io/posts/tech/springboot_localdatetime/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css" integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://habyss.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://habyss.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://habyss.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="SpringBoot中时间戳和LocalDateTime相关的接收和转换" />
+<meta property="og:description" content="SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://habyss.github.io/posts/tech/springboot_localdatetime/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-12-10T15:36:53+08:00" />
+<meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SpringBoot中时间戳和LocalDateTime相关的接收和转换"/>
+<meta name="twitter:description" content="SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://habyss.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻技术",
+      "item": "https://habyss.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "SpringBoot中时间戳和LocalDateTime相关的接收和转换",
+      "item": "https://habyss.github.io/posts/tech/springboot_localdatetime/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SpringBoot中时间戳和LocalDateTime相关的接收和转换",
+  "name": "SpringBoot中时间戳和LocalDateTime相关的接收和转换",
+  "description": "SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端",
+  "keywords": [
+    "SpringBoot", "LocalDateTime"
+  ],
+  "articleBody": "SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端自由定制） 时间格式由于java8的新增时间处理类比较好用,而且更加线程安全, 所以将项目中的时间相关改为LocalDateTime，而不是传统的Date 前置要求 mybatis需要3.4.6以上, 否则会不支持xml和javaType的转换 druid需要比较新的版本, 这里使用的是1.1.21, 否则查询会报错,结果集result set中找不到元素 正文 请求方式的情况分类\n@RequestBody中修饰LocalDateTime 其他, 比如@RequestParam和@PathVariable以及不加注解的单参数和对象参数 情况一. @RequestBody中的LocalDateTime 通过@RequestBody很明显的就是要通过JSON序列化进行处理，Spring默认的是Jackson进行处理，所以我们需要对默认的JSON处理器进行日期类型的添加(假如默认不带对应序列化器的情况下)\n此时需要用的是JsonDeserializer这个类，对应的实现如下所示：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 /** * 入参 时间戳 -\u003e LocalDateTime */ public class CustomDateDeserializer { public static class LocalDateTimeDeserializer extends JsonDeserializer\u003cLocalDateTime\u003e { @Override public LocalDateTime deserialize(JsonParser p, DeserializationContext context) throws IOException { Long timestamp = Long.valueOf(p.getText()); Instant instant = Instant.ofEpochMilli(timestamp); return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()); } } } /** * @author kun.han on 2020/3/4 15:45 * 返回参数 LocalDateTime -\u003e 时间戳 */ public class CustomDateSerializer { public static class LocalDateTimeSerializer extends JsonSerializer\u003cLocalDateTime\u003e { @Override public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException { jsonGenerator.writeNumber(localDateTime.toInstant(ZoneOffset.of(\"+8\")).toEpochMilli()); } } } 有了这个了类，还需要添加到Spring中，Spring利用的是ObjectMapper，我们自定义一个ObjectMapper替换原本的就可以了。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 @Configuration public class CustomDateConfig implements WebMvcConfigurer { /** * Json序列化和反序列化转换器，用于转换Post请求体中的json以及将我们的对象序列化为返回响应的json */ @Bean public ObjectMapper objectMapper() { ObjectMapper objectMapper = new ObjectMapper(); //不显示为null的字段 objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS); objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES); // 忽略不能转移的字符 objectMapper.configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true); // 过滤对象的null属性. objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); //忽略transient objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true); objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE); //LocalDateTime系列序列化和反序列化模块，继承自jsr310，我们在这里修改了日期格式 JavaTimeModule javaTimeModule = new JavaTimeModule(); // LocalDateTime 这里只需要LocalDateTime 如果需要转其他的,相应放开注释, 并在上面两个类中适当修改 javaTimeModule.addSerializer(LocalDateTime.class, new CustomDateSerializer.LocalDateTimeSerializer()); javaTimeModule.addDeserializer(LocalDateTime.class,new CustomDateDeserializer.LocalDateTimeDeserializer()); // // LocalDate // javaTimeModule.addSerializer(LocalDate.class, new CustomDateSerializer.LocalDateSerializer()); // javaTimeModule.addDeserializer(LocalDate.class, new CustomDateDeserializer.LocalDateDeserializer()); // //Date序列化和反序列化 // javaTimeModule.addSerializer(Date.class,new CustomDateSerializer.DateSerializer()); // javaTimeModule.addDeserializer(Date.class,new CustomDateDeserializer.DateDeserializer()); objectMapper.registerModule(javaTimeModule); return objectMapper; } } 情况二. 其他 比如@RequestParam和@PathVariable以及不加注解的单参数和对象参数 方式一: Convert 可以根据自身需求进行定制，这里我通过Convert转换LocalDateTime为例，进行转换：\n1 2 3 4 5 6 7 8 9 public class CustomDateConverter { public static class LocalDateConvert implements Converter\u003cString, LocalDateTime\u003e { @Override public LocalDateTime convert(String timestamp) { return LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(timestamp)), ZoneId.systemDefault()); } } } 同样的需要在配置类中引用\n1 2 3 4 5 6 7 8 @Configuration public class CustomDateConfig implements WebMvcConfigurer { @Bean public Converter\u003cString, LocalDateTime\u003e localDateConverter() { //此处不能替换为lambda表达式 return new CustomDateConverter.LocalDateConvert(); } } 方式二: ControllerAdvice 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 /** * requestBody之外的入参 时间戳-\u003eLocalDateTime * * @author hankun */ @ControllerAdvice public class LocalDateTimeAdvice { @InitBinder protected void initBinder(WebDataBinder binder) { // 这里只需要LocalDateTime 如果需要转其他的,相应添加/修改 binder.registerCustomEditor(LocalDateTime.class, new PropertyEditorSupport() { @Override public void setAsText(String timestamp) throws IllegalArgumentException { if (!StringUtils.hasText(timestamp)) { setValue(null); } else { setValue(LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(timestamp)), ZoneId.systemDefault())); } } }); // 这里只需要LocalDateTime 如果需要转其他的,相应添加/修改 binder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() { @Override public void setAsText(String timestamp) throws IllegalArgumentException { if (!StringUtils.hasText(timestamp)) { setValue(null); } else { setValue(LocalDate.ofInstant(Instant.ofEpochMilli(Long.parseLong(timestamp)), ZoneId.systemDefault())); } } }); } } 相关知识点 时间差 精确时间差:\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 long start = 1584328558000L; long now = 1584400558000L; Instant startTime = Instant.ofEpochMilli(start); LocalDateTime startTimeT = LocalDateTime.ofInstant(startTime, ZoneId.systemDefault()); Instant endTime = Instant.ofEpochMilli(now); LocalDateTime entTimeT = LocalDateTime.ofInstant(startTime, ZoneId.systemDefault()); Duration duration = Duration.between(startTimeT, entTimeT); // Duration duration = Duration.between(startTime, entTime); long day = duration.toDays(); long hours = duration.toHours(); long min = duration.toMinutes(); long millis= duration.toMillis(); long nanos = duration.toNanos(); 粗略时间差, 比如今天明天算一天\n1 2 3 4 5 6 7 8 9 10 11 long start = 1584328558000L; long now = 1584400558000L; Instant startTime = Instant.ofEpochMilli(start); LocalDate startTimeT = LocalDateTime.ofInstant(startTime, ZoneId.systemDefault()).toLocalDate(); Instant endTime = Instant.ofEpochMilli(now); LocalDate entTimeT = LocalDateTime.ofInstant(startTime, ZoneId.systemDefault()).toLocalDate(); Period period = Period.between(startTimeT, entTimeT); int years = period.getYears(); int months = period.getMonths(); int days = period.getDays(); ",
+  "wordCount" : "1560",
+  "inLanguage": "zh",
+  "datePublished": "2018-12-10T15:36:53+08:00",
+  "dateModified": "2022-11-29T15:36:53+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "叶灰灰"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://habyss.github.io/posts/tech/springboot_localdatetime/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "叶灰灰的小窝",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://habyss.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://habyss.github.io/" accesskey="h" title="叶灰灰的小窝 (Alt + H)">叶灰灰的小窝</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://habyss.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/archives" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/tech/">👨🏻‍💻技术</a></div>
+    <h1 class="post-title">
+      SpringBoot中时间戳和LocalDateTime相关的接收和转换
+    </h1>
+    <div class="post-meta"><span title='2018-12-10 15:36:53 +0800 CST'>2018-12-10</span>&nbsp;·&nbsp;4 分钟&nbsp;·&nbsp;叶灰灰
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#springboot%e4%b8%ad%e6%97%b6%e9%97%b4%e6%88%b3%e5%92%8clocaldatetime%e7%9b%b8%e5%85%b3%e7%9a%84%e6%8e%a5%e6%94%b6%e5%92%8c%e8%bd%ac%e6%8d%a2" aria-label="SpringBoot中时间戳和LocalDateTime相关的接收和转换"><strong>SpringBoot中时间戳和LocalDateTime相关的接收和转换</strong></a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#%e5%89%8d%e8%a8%80" aria-label="前言"><strong>前言</strong></a></li>
+                <li>
+                    <a href="#%e5%89%8d%e7%bd%ae%e8%a6%81%e6%b1%82" aria-label="前置要求"><strong>前置要求</strong></a></li>
+                <li>
+                    <a href="#%e6%ad%a3%e6%96%87" aria-label="正文"><strong>正文</strong></a></li>
+                <li>
+                    <a href="#%e6%83%85%e5%86%b5%e4%b8%80-requestbody%e4%b8%ad%e7%9a%84localdatetime" aria-label="情况一. @RequestBody中的LocalDateTime"><strong>情况一. <code>@RequestBody</code>中的<code>LocalDateTime</code></strong></a></li>
+                <li>
+                    <a href="#%e6%83%85%e5%86%b5%e4%ba%8c-%e5%85%b6%e4%bb%96-%e6%af%94%e5%a6%82requestparam%e5%92%8cpathvariable%e4%bb%a5%e5%8f%8a%e4%b8%8d%e5%8a%a0%e6%b3%a8%e8%a7%a3%e7%9a%84%e5%8d%95%e5%8f%82%e6%95%b0%e5%92%8c%e5%af%b9%e8%b1%a1%e5%8f%82%e6%95%b0" aria-label="情况二. 其他 比如@RequestParam和@PathVariable以及不加注解的单参数和对象参数"><strong>情况二. 其他 比如<code>@RequestParam</code>和<code>@PathVariable</code>以及不加注解的单参数和对象参数</strong></a></li>
+                <li>
+                    <a href="#%e6%96%b9%e5%bc%8f%e4%b8%80-convert" aria-label="方式一: Convert">方式一: Convert</a></li>
+                <li>
+                    <a href="#%e6%96%b9%e5%bc%8f%e4%ba%8c-controlleradvice" aria-label="方式二: ControllerAdvice">方式二: ControllerAdvice</a></li></ul>
+                    
+                <li>
+                    <a href="#%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86%e7%82%b9" aria-label="相关知识点"><strong>相关知识点</strong></a><ul>
+                        
+                <li>
+                    <a href="#%e6%97%b6%e9%97%b4%e5%b7%ae" aria-label="时间差"><strong>时间差</strong></a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="springboot中时间戳和localdatetime相关的接收和转换"><strong>SpringBoot中时间戳和LocalDateTime相关的接收和转换</strong><a hidden class="anchor" aria-hidden="true" href="#springboot中时间戳和localdatetime相关的接收和转换">#</a></h1>
+<h3 id="前言"><strong>前言</strong><a hidden class="anchor" aria-hidden="true" href="#前言">#</a></h3>
+<hr>
+<ol>
+<li>一般情况下, 前端和后端在时间格式的传递上都走的是<code>时间戳</code>（方便前端自由定制）</li>
+<li>时间格式由于<code>java8</code>的新增时间处理类比较好用,而且更加线程安全, 所以将项目中的时间相关改为<code>LocalDateTime</code>，而不是传统的<code>Date</code></li>
+</ol>
+<h3 id="前置要求"><strong>前置要求</strong><a hidden class="anchor" aria-hidden="true" href="#前置要求">#</a></h3>
+<hr>
+<ol>
+<li><code>mybatis</code>需要<code>3.4.6</code>以上, 否则会不支持<code>xml</code>和<code>javaType</code>的转换</li>
+<li><code>druid</code>需要比较新的版本, 这里使用的是<code>1.1.21</code>, 否则查询会报错,结果集<code>result set</code>中找不到元素</li>
+</ol>
+<h3 id="正文"><strong>正文</strong><a hidden class="anchor" aria-hidden="true" href="#正文">#</a></h3>
+<hr>
+<p>请求方式的情况分类</p>
+<ol>
+<li><code>@RequestBody</code>中修饰<code>LocalDateTime</code></li>
+<li>其他, 比如<code>@RequestParam</code>和<code>@PathVariable</code>以及不加注解的单参数和对象参数</li>
+</ol>
+<hr>
+<h3 id="情况一-requestbody中的localdatetime"><strong>情况一. <code>@RequestBody</code>中的<code>LocalDateTime</code></strong><a hidden class="anchor" aria-hidden="true" href="#情况一-requestbody中的localdatetime">#</a></h3>
+<p>通过<code>@RequestBody</code>很明显的就是要通过<code>JSON</code>序列化进行处理，<code>Spring</code>默认的是<code>Jackson</code>进行处理，所以我们需要对默认的<code>JSON</code>处理器进行日期类型的添加(假如默认不带对应序列化器的情况下)</p>
+<p>此时需要用的是<code>JsonDeserializer</code>这个类，对应的实现如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"> <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 入参 时间戳 -&gt; LocalDateTime
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomDateDeserializer</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">LocalDateTimeDeserializer</span> <span class="kd">extends</span> <span class="n">JsonDeserializer</span><span class="o">&lt;</span><span class="n">LocalDateTime</span><span class="o">&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="n">LocalDateTime</span> <span class="nf">deserialize</span><span class="o">(</span><span class="n">JsonParser</span> <span class="n">p</span><span class="o">,</span> <span class="n">DeserializationContext</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Long</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="n">Long</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">getText</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Instant</span> <span class="n">instant</span> <span class="o">=</span> <span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">timestamp</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">instant</span><span class="o">,</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @author kun.han on 2020/3/4 15:45
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 返回参数 LocalDateTime -&gt; 时间戳
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomDateSerializer</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">LocalDateTimeSerializer</span> <span class="kd">extends</span> <span class="n">JsonSerializer</span><span class="o">&lt;</span><span class="n">LocalDateTime</span><span class="o">&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">serialize</span><span class="o">(</span><span class="n">LocalDateTime</span> <span class="n">localDateTime</span><span class="o">,</span> <span class="n">JsonGenerator</span> <span class="n">jsonGenerator</span><span class="o">,</span> <span class="n">SerializerProvider</span> <span class="n">serializerProvider</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">jsonGenerator</span><span class="o">.</span><span class="na">writeNumber</span><span class="o">(</span><span class="n">localDateTime</span><span class="o">.</span><span class="na">toInstant</span><span class="o">(</span><span class="n">ZoneOffset</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">&#34;+8&#34;</span><span class="o">)).</span><span class="na">toEpochMilli</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>有了这个了类，还需要添加到Spring中，<code>Spring</code>利用的是<code>ObjectMapper</code>，我们自定义一个<code>ObjectMapper</code>替换原本的就可以了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomDateConfig</span> <span class="kd">implements</span> <span class="n">WebMvcConfigurer</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * Json序列化和反序列化转换器，用于转换Post请求体中的json以及将我们的对象序列化为返回响应的json
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">ObjectMapper</span> <span class="nf">objectMapper</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ObjectMapper</span> <span class="n">objectMapper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//不显示为null的字段
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">objectMapper</span><span class="o">.</span><span class="na">disable</span><span class="o">(</span><span class="n">SerializationFeature</span><span class="o">.</span><span class="na">FAIL_ON_EMPTY_BEANS</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">objectMapper</span><span class="o">.</span><span class="na">disable</span><span class="o">(</span><span class="n">DeserializationFeature</span><span class="o">.</span><span class="na">FAIL_ON_UNKNOWN_PROPERTIES</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 忽略不能转移的字符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">objectMapper</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">JsonParser</span><span class="o">.</span><span class="na">Feature</span><span class="o">.</span><span class="na">ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 过滤对象的null属性.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">objectMapper</span><span class="o">.</span><span class="na">setSerializationInclusion</span><span class="o">(</span><span class="n">JsonInclude</span><span class="o">.</span><span class="na">Include</span><span class="o">.</span><span class="na">NON_NULL</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//忽略transient
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">objectMapper</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">MapperFeature</span><span class="o">.</span><span class="na">PROPAGATE_TRANSIENT_MARKER</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">objectMapper</span><span class="o">.</span><span class="na">disable</span><span class="o">(</span><span class="n">DeserializationFeature</span><span class="o">.</span><span class="na">ADJUST_DATES_TO_CONTEXT_TIME_ZONE</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">//LocalDateTime系列序列化和反序列化模块，继承自jsr310，我们在这里修改了日期格式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">JavaTimeModule</span> <span class="n">javaTimeModule</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JavaTimeModule</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// LocalDateTime 这里只需要LocalDateTime 如果需要转其他的,相应放开注释, 并在上面两个类中适当修改
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">javaTimeModule</span><span class="o">.</span><span class="na">addSerializer</span><span class="o">(</span><span class="n">LocalDateTime</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomDateSerializer</span><span class="o">.</span><span class="na">LocalDateTimeSerializer</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">javaTimeModule</span><span class="o">.</span><span class="na">addDeserializer</span><span class="o">(</span><span class="n">LocalDateTime</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="k">new</span> <span class="n">CustomDateDeserializer</span><span class="o">.</span><span class="na">LocalDateTimeDeserializer</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// // LocalDate
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// javaTimeModule.addSerializer(LocalDate.class, new CustomDateSerializer.LocalDateSerializer());
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// javaTimeModule.addDeserializer(LocalDate.class, new CustomDateDeserializer.LocalDateDeserializer());
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// //Date序列化和反序列化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// javaTimeModule.addSerializer(Date.class,new CustomDateSerializer.DateSerializer());
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// javaTimeModule.addDeserializer(Date.class,new CustomDateDeserializer.DateDeserializer());
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="n">objectMapper</span><span class="o">.</span><span class="na">registerModule</span><span class="o">(</span><span class="n">javaTimeModule</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">objectMapper</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="情况二-其他-比如requestparam和pathvariable以及不加注解的单参数和对象参数"><strong>情况二. 其他 比如<code>@RequestParam</code>和<code>@PathVariable</code>以及不加注解的单参数和对象参数</strong><a hidden class="anchor" aria-hidden="true" href="#情况二-其他-比如requestparam和pathvariable以及不加注解的单参数和对象参数">#</a></h3>
+<h3 id="方式一-convert">方式一: Convert<a hidden class="anchor" aria-hidden="true" href="#方式一-convert">#</a></h3>
+<p>可以根据自身需求进行定制，这里我通过<code>Convert</code>转换<code>LocalDateTime</code>为例，进行转换：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomDateConverter</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">LocalDateConvert</span> <span class="kd">implements</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LocalDateTime</span><span class="o">&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="n">LocalDateTime</span> <span class="nf">convert</span><span class="o">(</span><span class="n">String</span> <span class="n">timestamp</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">timestamp</span><span class="o">)),</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同样的需要在配置类中引用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomDateConfig</span> <span class="kd">implements</span> <span class="n">WebMvcConfigurer</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">LocalDateTime</span><span class="o">&gt;</span> <span class="nf">localDateConverter</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//此处不能替换为lambda表达式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="k">new</span> <span class="n">CustomDateConverter</span><span class="o">.</span><span class="na">LocalDateConvert</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="方式二-controlleradvice">方式二: ControllerAdvice<a hidden class="anchor" aria-hidden="true" href="#方式二-controlleradvice">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * requestBody之外的入参 时间戳-&gt;LocalDateTime
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @author hankun
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@ControllerAdvice</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LocalDateTimeAdvice</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@InitBinder</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">initBinder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 这里只需要LocalDateTime 如果需要转其他的,相应添加/修改
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">binder</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">LocalDateTime</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">PropertyEditorSupport</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAsText</span><span class="o">(</span><span class="n">String</span> <span class="n">timestamp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IllegalArgumentException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="o">(!</span><span class="n">StringUtils</span><span class="o">.</span><span class="na">hasText</span><span class="o">(</span><span class="n">timestamp</span><span class="o">))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">setValue</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">setValue</span><span class="o">(</span><span class="n">LocalDateTime</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">timestamp</span><span class="o">)),</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">()));</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="o">});</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 这里只需要LocalDateTime 如果需要转其他的,相应添加/修改
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">binder</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">LocalDate</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">PropertyEditorSupport</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAsText</span><span class="o">(</span><span class="n">String</span> <span class="n">timestamp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IllegalArgumentException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="o">(!</span><span class="n">StringUtils</span><span class="o">.</span><span class="na">hasText</span><span class="o">(</span><span class="n">timestamp</span><span class="o">))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">setValue</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">setValue</span><span class="o">(</span><span class="n">LocalDate</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">timestamp</span><span class="o">)),</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">()));</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="o">});</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="相关知识点"><strong>相关知识点</strong><a hidden class="anchor" aria-hidden="true" href="#相关知识点">#</a></h2>
+<h3 id="时间差"><strong>时间差</strong><a hidden class="anchor" aria-hidden="true" href="#时间差">#</a></h3>
+<ul>
+<li>
+<p>精确时间差:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">1584328558000L</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">now</span> <span class="o">=</span> <span class="mi">1584400558000L</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">Instant</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LocalDateTime</span> <span class="n">startTimeT</span> <span class="o">=</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">startTime</span><span class="o">,</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Instant</span> <span class="n">endTime</span> <span class="o">=</span> <span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">now</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LocalDateTime</span> <span class="n">entTimeT</span> <span class="o">=</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">startTime</span><span class="o">,</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Duration</span> <span class="n">duration</span> <span class="o">=</span> <span class="n">Duration</span><span class="o">.</span><span class="na">between</span><span class="o">(</span><span class="n">startTimeT</span><span class="o">,</span> <span class="n">entTimeT</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Duration duration = Duration.between(startTime, entTime);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">long</span> <span class="n">day</span> <span class="o">=</span> <span class="n">duration</span><span class="o">.</span><span class="na">toDays</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">hours</span> <span class="o">=</span> <span class="n">duration</span><span class="o">.</span><span class="na">toHours</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">min</span> <span class="o">=</span> <span class="n">duration</span><span class="o">.</span><span class="na">toMinutes</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">millis</span><span class="o">=</span> <span class="n">duration</span><span class="o">.</span><span class="na">toMillis</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">nanos</span> <span class="o">=</span> <span class="n">duration</span><span class="o">.</span><span class="na">toNanos</span><span class="o">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>粗略时间差, 比如今天明天算一天</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">1584328558000L</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="n">now</span> <span class="o">=</span> <span class="mi">1584400558000L</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">Instant</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LocalDate</span> <span class="n">startTimeT</span> <span class="o">=</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">startTime</span><span class="o">,</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">()).</span><span class="na">toLocalDate</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Instant</span> <span class="n">endTime</span> <span class="o">=</span> <span class="n">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">now</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LocalDate</span> <span class="n">entTimeT</span> <span class="o">=</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">ofInstant</span><span class="o">(</span><span class="n">startTime</span><span class="o">,</span> <span class="n">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">()).</span><span class="na">toLocalDate</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Period</span> <span class="n">period</span> <span class="o">=</span> <span class="n">Period</span><span class="o">.</span><span class="na">between</span><span class="o">(</span><span class="n">startTimeT</span><span class="o">,</span> <span class="n">entTimeT</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">years</span> <span class="o">=</span> <span class="n">period</span><span class="o">.</span><span class="na">getYears</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">months</span> <span class="o">=</span> <span class="n">period</span><span class="o">.</span><span class="na">getMonths</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">days</span> <span class="o">=</span> <span class="n">period</span><span class="o">.</span><span class="na">getDays</span><span class="o">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://habyss.github.io/tags/springboot/">SpringBoot</a></li>
+      <li><a href="https://habyss.github.io/tags/localdatetime/">LocalDateTime</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://habyss.github.io/posts/tech/ref-fastjson/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>$ref-fastjson排查</span>
+  </a>
+  <a class="next" href="https://habyss.github.io/posts/tool/%E5%B0%8F%E9%B9%A4%E5%8F%8C%E6%8B%BC/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>小鹤双拼</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://habyss.github.io/">叶灰灰的小窝</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

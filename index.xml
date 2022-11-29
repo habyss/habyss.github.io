@@ -6,23 +6,59 @@
     <description>Recent content in 测试外部 on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 29 Nov 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 03 Jan 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>@Transactional失效排查</title>
+      <link>https://habyss.github.io/posts/tech/transactional/</link>
+      <pubDate>Thu, 03 Jan 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/transactional/</guid>
+      <description>@Transactional失效 整合shiro之后，UserRealm类里自动注入的service中的@Transactional注解失效 解</description>
+    </item>
+    
+    <item>
+      <title>$ref-fastjson排查</title>
+      <link>https://habyss.github.io/posts/tech/ref-fastjson/</link>
+      <pubDate>Thu, 20 Dec 2018 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/ref-fastjson/</guid>
+      <description>$ref-fastjson 问题排查 问题排查 项目返回的数据中出现$ref数据 查询得知是fastjson的特性循环引用 fastjson支持循环引用，并且是缺省打开的。 当</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot中时间戳和LocalDateTime相关的接收和转换</title>
+      <link>https://habyss.github.io/posts/tech/springboot_localdatetime/</link>
+      <pubDate>Mon, 10 Dec 2018 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/springboot_localdatetime/</guid>
+      <description>SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端</description>
+    </item>
+    
+    <item>
+      <title>小鹤双拼</title>
+      <link>https://habyss.github.io/posts/tool/%E5%B0%8F%E9%B9%A4%E5%8F%8C%E6%8B%BC/</link>
+      <pubDate>Fri, 30 Nov 2018 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tool/%E5%B0%8F%E9%B9%A4%E5%8F%8C%E6%8B%BC/</guid>
+      <description>小鹤双拼 方案一 win + R，输入 regedit，打开注册表 找到 计算机\HKEY_CURRENT_USER\Software\Microsoft\I</description>
+    </item>
+    
     <item>
       <title>Mysql Explain 简解</title>
-      <link>https://habyss.github.io/posts/tech/second/</link>
-      <pubDate>Tue, 29 Nov 2022 15:36:53 +0800</pubDate>
+      <link>https://habyss.github.io/posts/tech/mysql_explain/</link>
+      <pubDate>Thu, 29 Nov 2018 15:36:53 +0800</pubDate>
       
-      <guid>https://habyss.github.io/posts/tech/second/</guid>
+      <guid>https://habyss.github.io/posts/tech/mysql_explain/</guid>
       <description>Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查</description>
     </item>
     
     <item>
       <title>测试</title>
       <link>https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/</link>
-      <pubDate>Tue, 29 Nov 2022 15:00:25 +0800</pubDate>
+      <pubDate>Thu, 29 Nov 2018 15:00:25 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/</guid>
-      <description>Hugo+Github Pages 1. 安装Scoop win11系统, 在hugo官网中也推荐了使用Scoop来进行包管理 打开PowerShell并运行, 保证允许本地脚本的执行</description>
+      <description>Hugo+Github Pages 1. 安装Scoop win系统, 在hugo官网中也推荐了使用Scoop来进行包管理 打开PowerShell并运行, 保证允许本地脚本的执行 1 set-executionpolicy</description>
     </item>
     
     

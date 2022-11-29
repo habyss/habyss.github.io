@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>👨🏻‍💻技术 on 叶灰灰的小窝</title>
-    <link>https://habyss.github.io/posts/tech/</link>
-    <description>Recent content in 👨🏻‍💻技术 on 叶灰灰的小窝</description>
+    <title>SpringBoot on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/springboot/</link>
+    <description>Recent content in SpringBoot on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 03 Jan 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 03 Jan 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/springboot/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>@Transactional失效排查</title>
       <link>https://habyss.github.io/posts/tech/transactional/</link>
@@ -32,24 +32,6 @@
       
       <guid>https://habyss.github.io/posts/tech/springboot_localdatetime/</guid>
       <description>SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端</description>
-    </item>
-    
-    <item>
-      <title>Mysql Explain 简解</title>
-      <link>https://habyss.github.io/posts/tech/mysql_explain/</link>
-      <pubDate>Thu, 29 Nov 2018 15:36:53 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/posts/tech/mysql_explain/</guid>
-      <description>Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查</description>
-    </item>
-    
-    <item>
-      <title>测试</title>
-      <link>https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/</link>
-      <pubDate>Thu, 29 Nov 2018 15:00:25 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/</guid>
-      <description>Hugo+Github Pages 1. 安装Scoop win系统, 在hugo官网中也推荐了使用Scoop来进行包管理 打开PowerShell并运行, 保证允许本地脚本的执行 1 set-executionpolicy</description>
     </item>
     
   </channel>

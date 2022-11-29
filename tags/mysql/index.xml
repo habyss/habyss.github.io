@@ -6,13 +6,13 @@
     <description>Recent content in Mysql on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 29 Nov 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 29 Nov 2018 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Mysql Explain 简解</title>
-      <link>https://habyss.github.io/posts/tech/second/</link>
-      <pubDate>Tue, 29 Nov 2022 15:36:53 +0800</pubDate>
+      <link>https://habyss.github.io/posts/tech/mysql_explain/</link>
+      <pubDate>Thu, 29 Nov 2018 15:36:53 +0800</pubDate>
       
-      <guid>https://habyss.github.io/posts/tech/second/</guid>
+      <guid>https://habyss.github.io/posts/tech/mysql_explain/</guid>
       <description>Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查</description>
     </item>
     
