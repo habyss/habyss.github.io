@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>测试外部 on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/</link>
+    <description>Recent content in 测试外部 on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 29 Nov 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mysql Explain 简解</title>
+      <link>https://habyss.github.io/posts/tech/second/</link>
+      <pubDate>Tue, 29 Nov 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/second/</guid>
+      <description>Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查</description>
+    </item>
+    
+    <item>
+      <title>测试</title>
+      <link>https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Tue, 29 Nov 2022 15:00:25 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/</guid>
+      <description>Hugo+Github Pages 1. 安装Scoop win11系统, 在hugo官网中也推荐了使用Scoop来进行包管理 打开PowerShell并运行, 保证允许本地脚本的执行</description>
+    </item>
+    
+    
+    
+  </channel>
+</rss>
