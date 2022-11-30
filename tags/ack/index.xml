@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>ACK on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/ack/</link>
+    <description>Recent content in ACK on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 16 Jun 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/ack/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>rabbitmq ack 探索</title>
+      <link>https://habyss.github.io/posts/tech/rabbitmq_ack/</link>
+      <pubDate>Sun, 16 Jun 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/rabbitmq_ack/</guid>
+      <description>RabbitMq 生产者确认消息被消费 探索 消费者手动ack的一些状态, 生产者是不能准确得知的. 例如: 1 2 // 处理失败 重新进入队列 继续消费 channel.basicNack(msg.getMessageProperties().getDeliveryTag(), false,true); 当消费者把消息重新</description>
+    </item>
+    
+  </channel>
+</rss>

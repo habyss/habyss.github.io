@@ -5,10 +5,40 @@
     <loc>https://habyss.github.io/posts/tech/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
+    <loc>https://habyss.github.io/tags/ack/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
     <loc>https://habyss.github.io/posts/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
+    <loc>https://habyss.github.io/tags/rabbitmq/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/rabbitmq_ack/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/springboot/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
     <loc>https://habyss.github.io/tags/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/rabbitmq_qos_random/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/rabbitmq_delay/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/aop/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/redis/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/springboot_aop/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/tags/uml/</loc>
@@ -17,13 +47,7 @@
     <loc>https://habyss.github.io/posts/tech/uml/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
-    <loc>https://habyss.github.io/</loc>
-    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
-  </url><url>
     <loc>https://habyss.github.io/posts/tech/transactional/</loc>
-    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
-  </url><url>
-    <loc>https://habyss.github.io/tags/springboot/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/tags/transactional/</loc>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>AOP on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/aop/</link>
+    <description>Recent content in AOP on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 03 Feb 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/aop/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于springboot常用aop方式</title>
+      <link>https://habyss.github.io/posts/tech/springboot_aop/</link>
+      <pubDate>Sun, 03 Feb 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/springboot_aop/</guid>
+      <description>方式一: 基于表达式 例如简单日志打印: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 @Slf4j @Aspect @Component public class WebLogAspect { /** * xxx包及其子包下的以Contro</description>
+    </item>
+    
+  </channel>
+</rss>

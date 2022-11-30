@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>UML类图关系 | 叶灰灰的小窝</title>
-<meta name="keywords" content="UML">
-<meta name="description" content="UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关">
+<title>rabbitmq限流Qos 多个消费者同时消费一个消息 | 叶灰灰的小窝</title>
+<meta name="keywords" content="SpringBoot, Rabbitmq">
+<meta name="description" content="高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)">
 <meta name="author" content="叶灰灰">
-<link rel="canonical" href="https://habyss.github.io/posts/tech/uml/">
+<link rel="canonical" href="https://habyss.github.io/posts/tech/rabbitmq_qos_random/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
 <link rel="icon" href="https://habyss.github.io/favicon.ico">
@@ -55,16 +55,16 @@
         }
 
     </style>
-</noscript><meta property="og:title" content="UML类图关系" />
-<meta property="og:description" content="UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关" />
+</noscript><meta property="og:title" content="rabbitmq限流Qos 多个消费者同时消费一个消息" />
+<meta property="og:description" content="高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://habyss.github.io/posts/tech/uml/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2019-01-22T15:36:53+08:00" />
+<meta property="og:url" content="https://habyss.github.io/posts/tech/rabbitmq_qos_random/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-05-20T15:36:53+08:00" />
 <meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="UML类图关系"/>
-<meta name="twitter:description" content="UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关"/>
+<meta name="twitter:title" content="rabbitmq限流Qos 多个消费者同时消费一个消息"/>
+<meta name="twitter:description" content="高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)"/>
 
 
 <script type="application/ld+json">
@@ -87,8 +87,8 @@
     {
       "@type": "ListItem",
       "position":  3 ,
-      "name": "UML类图关系",
-      "item": "https://habyss.github.io/posts/tech/uml/"
+      "name": "rabbitmq限流Qos 多个消费者同时消费一个消息",
+      "item": "https://habyss.github.io/posts/tech/rabbitmq_qos_random/"
     }
   ]
 }
@@ -97,16 +97,16 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "UML类图关系",
-  "name": "UML类图关系",
-  "description": "UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言. UML类图中有六种关系，从弱到强依次是： 依赖关系 \u0026lt; 关联关系 \u0026lt; 聚合关系 \u0026lt; 组合关系 \u0026lt; 实现关",
+  "headline": "rabbitmq限流Qos 多个消费者同时消费一个消息",
+  "name": "rabbitmq限流Qos 多个消费者同时消费一个消息",
+  "description": "高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)",
   "keywords": [
-    "UML"
+    "SpringBoot", "Rabbitmq"
   ],
-  "articleBody": "UML类图关系 💡 UML 全称Unified Modeling Language, 统计建模语言.\nUML类图中有六种关系，从弱到强依次是：\n依赖关系 \u003c 关联关系 \u003c 聚合关系 \u003c 组合关系 \u003c 实现关系 = 泛化关系\n类的成员变量和方法前面的修饰符有public, private, protected, default，在UML类图中分别用 +, -, #, ~表示。\n1. 依赖关系 通用描述: 依赖关系表示某个类依赖于另外一个类\n代码表现: 某个类的方法的参数使用了另外一个类的对象\n箭头描述: 依赖关系使用带箭头的虚线表示, 箭头指向被依赖的类\n示例图样:\n2. 关联关系 通用描述: 关联关系表示一个类和另外一个类的联系, 如老师和学生\n代码表现: 某个类的成员变量是另外一个类的对象\n箭头描述: 依赖关系有单向和双向, 单向使用带箭头的实线表示, 箭头指向被关联的类, 双向使用双箭头或者没有箭头的实线表示.\n示例图样:\n3. 聚合关系 通用描述: 聚合关系是关联关系的一种, 表示的是整体与部分之间的关系, 如学校和老师, 车子和轮胎\n代码表现: 某个类的成员变量是另外一个类的对象\n箭头描述: 聚合关系使用带空心菱形的实线表示, 菱形指向整体\n示例图样:\n4. 组合关系 通用描述: 组合关系是关联关系的一种, 是一种比聚合关系更强的一种关系, 部分不能脱离整体而单独存在, 如身体和大脑\n代码表现: 某个类的成员变量是另外一个类的对象\n箭头描述: 组合关系使用带实心菱形的实线表示, 菱形指向整体\n示例图样:\n5. 实现关系 通用描述: 实现关系是接口和实现类之间的关系\n代码表现: 接口和实现类\n箭头描述: 实现关系使用带空心三角箭头的虚线表示, 箭头指向接口\n示例图样:\n6. 泛化关系 通用描述: 泛化关系是父子类之间的继承关系\n代码表现: 抽象父子与子类, 继承\n箭头描述: 泛化关系使用带空心三角箭头的实线来表示, 箭头指向父类\n示例图样:\n总结 依赖关系 \u003c 关联关系 \u003c 聚合关系 \u003c 组合关系 \u003c 实现关系 = 泛化关系 关系名称 代码表现 箭头形式 箭头指向 依赖关系 方法参数 虚线箭头 指向被依赖的类(方法参数的类) 关联关系 成员变量 实线箭头 指向被关联的类(成员变量的类) 聚合关系 成员变量 实线空心菱形 指向整体 组合关系 成员变量 实线实心菱形 指向整体 实现关系 接口与实现类 虚线空心三角 指向接口 泛化关系 抽象父类与子类 实线空心三角 指向父类 ",
-  "wordCount" : "877",
+  "articleBody": "高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos\n1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message) throws IOException { channel.basicQos(12); } 多个消费者同时消费一个消息 使用广播模式, 监听时不指定队列, 则会产生随即队列\n为了防止系统迭代重启产生的大量随机队列, 需要断开时删除随机队列\n1 2 3 4 5 @RabbitListener(bindings = @QueueBinding( //注意这里不要定义队列名称,系统会随机产生 value = @Queue(exclusive = \"true\"),// exclusive = \"true\" 断开时删除随机队列 避免系统迭代重启产生的大量随机队列 exchange = @Exchange(value = \"填写交换机名称\", type = ExchangeTypes.FANOUT) )) ",
+  "wordCount" : "233",
   "inLanguage": "zh",
-  "datePublished": "2019-01-22T15:36:53+08:00",
+  "datePublished": "2019-05-20T15:36:53+08:00",
   "dateModified": "2022-11-29T15:36:53+08:00",
   "author":[{
     "@type": "Person",
@@ -114,7 +114,7 @@
   }],
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://habyss.github.io/posts/tech/uml/"
+    "@id": "https://habyss.github.io/posts/tech/rabbitmq_qos_random/"
   },
   "publisher": {
     "@type": "Organization",
@@ -202,9 +202,9 @@
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/tech/">👨🏻‍💻技术</a></div>
     <h1 class="post-title">
-      UML类图关系
+      rabbitmq限流Qos 多个消费者同时消费一个消息
     </h1>
-    <div class="post-meta"><span title='2019-01-22 15:36:53 +0800 CST'>2019-01-22</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
+    <div class="post-meta"><span title='2019-05-20 15:36:53 +0800 CST'>2019-05-20</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰
 
 </div>
   </header> <div class="toc">
@@ -215,162 +215,75 @@
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#uml%e7%b1%bb%e5%9b%be%e5%85%b3%e7%b3%bb" aria-label="UML类图关系">UML类图关系</a></li>
+                    <a href="#%e9%ab%98%e5%b9%b6%e5%8f%91%e6%83%85%e5%86%b5%e4%b8%8b-rabbitmq-%e6%9c%8d%e5%8a%a1%e9%99%90%e6%b5%81" aria-label="高并发情况下 RabbitMQ 服务限流">高并发情况下 RabbitMQ 服务限流</a></li>
                 <li>
-                    <a href="#1-%e4%be%9d%e8%b5%96%e5%85%b3%e7%b3%bb" aria-label="1. 依赖关系">1. 依赖关系</a></li>
-                <li>
-                    <a href="#2-%e5%85%b3%e8%81%94%e5%85%b3%e7%b3%bb" aria-label="2. 关联关系">2. 关联关系</a></li>
-                <li>
-                    <a href="#3-%e8%81%9a%e5%90%88%e5%85%b3%e7%b3%bb" aria-label="3. 聚合关系">3. 聚合关系</a></li>
-                <li>
-                    <a href="#4-%e7%bb%84%e5%90%88%e5%85%b3%e7%b3%bb" aria-label="4. 组合关系">4. 组合关系</a></li>
-                <li>
-                    <a href="#5-%e5%ae%9e%e7%8e%b0%e5%85%b3%e7%b3%bb" aria-label="5. 实现关系">5. 实现关系</a></li>
-                <li>
-                    <a href="#6-%e6%b3%9b%e5%8c%96%e5%85%b3%e7%b3%bb" aria-label="6. 泛化关系">6. 泛化关系</a></li>
-                <li>
-                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                    <a href="#%e5%a4%9a%e4%b8%aa%e6%b6%88%e8%b4%b9%e8%80%85%e5%90%8c%e6%97%b6%e6%b6%88%e8%b4%b9%e4%b8%80%e4%b8%aa%e6%b6%88%e6%81%af" aria-label="多个消费者同时消费一个消息">多个消费者同时消费一个消息</a>
                 </li>
             </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><h1 id="uml类图关系">UML类图关系<a hidden class="anchor" aria-hidden="true" href="#uml类图关系">#</a></h1>
-<p>💡 <code>UML</code> 全称<code>Unified Modeling Language</code>, 统计建模语言.</p>
-<p>UML类图中有六种关系，从弱到强依次是：</p>
-<p><strong>依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关系 = 泛化关系</strong></p>
-<p>类的成员变量和方法前面的修饰符有<code>public</code>, <code>private</code>, <code>protected</code>, <code>default</code>，在<code>UML</code>类图中分别用 +, -, #, ~表示。</p>
-<h1 id="1-依赖关系">1. 依赖关系<a hidden class="anchor" aria-hidden="true" href="#1-依赖关系">#</a></h1>
-<hr>
-<p>通用描述: 依赖关系表示某个类依赖于另外一个类</p>
-<p>代码表现: 某个类的方法的参数使用了另外一个类的对象</p>
-<p>箭头描述: 依赖关系使用带箭头的虚线表示, 箭头指向被依赖的类</p>
-<p>示例图样:</p>
-<p><img loading="lazy" src="1.png" alt="1"  />
-</p>
-<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c1.png" alt=""  />
-</p>
-<h1 id="2-关联关系">2. 关联关系<a hidden class="anchor" aria-hidden="true" href="#2-关联关系">#</a></h1>
-<hr>
-<p>通用描述: 关联关系表示一个类和另外一个类的联系, 如老师和学生</p>
-<p>代码表现: 某个类的成员变量是另外一个类的对象</p>
-<p>箭头描述: 依赖关系有单向和双向, 单向使用带箭头的实线表示, 箭头指向被关联的类, 双向使用双箭头或者没有箭头的实线表示.</p>
-<p>示例图样:</p>
-<p><img loading="lazy" src="2.png" alt="2"  />
-</p>
-<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c2.png" alt=""  />
-</p>
-<h1 id="3-聚合关系">3. 聚合关系<a hidden class="anchor" aria-hidden="true" href="#3-聚合关系">#</a></h1>
-<hr>
-<p>通用描述: 聚合关系是关联关系的一种, 表示的是整体与部分之间的关系, 如学校和老师, 车子和轮胎</p>
-<p>代码表现: 某个类的成员变量是另外一个类的对象</p>
-<p>箭头描述: 聚合关系使用带空心菱形的实线表示, 菱形指向整体</p>
-<p>示例图样:</p>
-<p><img loading="lazy" src="3.png" alt="3"  />
-</p>
-<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c3.png" alt=""  />
-</p>
-<h1 id="4-组合关系">4. 组合关系<a hidden class="anchor" aria-hidden="true" href="#4-组合关系">#</a></h1>
-<hr>
-<p>通用描述: 组合关系是关联关系的一种, 是一种比聚合关系更强的一种关系, 部分不能脱离整体而单独存在, 如身体和大脑</p>
-<p>代码表现: 某个类的成员变量是另外一个类的对象</p>
-<p>箭头描述: 组合关系使用带实心菱形的实线表示, 菱形指向整体</p>
-<p>示例图样:</p>
-<p><img loading="lazy" src="4.png" alt="4"  />
-</p>
-<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c4.png" alt=""  />
-</p>
-<h1 id="5-实现关系">5. 实现关系<a hidden class="anchor" aria-hidden="true" href="#5-实现关系">#</a></h1>
-<hr>
-<p>通用描述: 实现关系是接口和实现类之间的关系</p>
-<p>代码表现: 接口和实现类</p>
-<p>箭头描述: 实现关系使用带空心三角箭头的虚线表示, 箭头指向接口</p>
-<p>示例图样:</p>
-<p><img loading="lazy" src="5.png" alt="5"  />
-</p>
-<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c5.png" alt=""  />
-</p>
-<h1 id="6-泛化关系">6. 泛化关系<a hidden class="anchor" aria-hidden="true" href="#6-泛化关系">#</a></h1>
-<hr>
-<p>通用描述: 泛化关系是父子类之间的继承关系</p>
-<p>代码表现: 抽象父子与子类, 继承</p>
-<p>箭头描述: 泛化关系使用带空心三角箭头的实线来表示, 箭头指向父类</p>
-<p>示例图样:</p>
-<p><img loading="lazy" src="6.png" alt="6"  />
-</p>
-<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctech%5cUML%5c6.png" alt=""  />
-</p>
-<h1 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h1>
-<ul>
-<li><strong>依赖关系 &lt; 关联关系 &lt; 聚合关系 &lt; 组合关系 &lt; 实现关系 = 泛化关系</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>关系名称</th>
-<th>代码表现</th>
-<th>箭头形式</th>
-<th>箭头指向</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>依赖关系</td>
-<td>方法参数</td>
-<td>虚线箭头</td>
-<td>指向被依赖的类(方法参数的类)</td>
-</tr>
-<tr>
-<td>关联关系</td>
-<td>成员变量</td>
-<td>实线箭头</td>
-<td>指向被关联的类(成员变量的类)</td>
-</tr>
-<tr>
-<td>聚合关系</td>
-<td>成员变量</td>
-<td>实线空心菱形</td>
-<td>指向整体</td>
-</tr>
-<tr>
-<td>组合关系</td>
-<td>成员变量</td>
-<td>实线实心菱形</td>
-<td>指向整体</td>
-</tr>
-<tr>
-<td>实现关系</td>
-<td>接口与实现类</td>
-<td>虚线空心三角</td>
-<td>指向接口</td>
-</tr>
-<tr>
-<td>泛化关系</td>
-<td>抽象父类与子类</td>
-<td>实线空心三角</td>
-<td>指向父类</td>
-</tr>
-</tbody>
-</table>
-
+  <div class="post-content"><h2 id="高并发情况下-rabbitmq-服务限流">高并发情况下 RabbitMQ 服务限流<a hidden class="anchor" aria-hidden="true" href="#高并发情况下-rabbitmq-服务限流">#</a></h2>
+<blockquote>
+<p>spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">    @RabbitHandler
+</span></span><span class="line"><span class="cl">    @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE)
+</span></span><span class="line"><span class="cl">    public void process(Channel channel, Message message) throws IOException {
+</span></span><span class="line"><span class="cl">        channel.basicQos(12);
+</span></span><span class="line"><span class="cl">    }
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="多个消费者同时消费一个消息">多个消费者同时消费一个消息<a hidden class="anchor" aria-hidden="true" href="#多个消费者同时消费一个消息">#</a></h2>
+<blockquote>
+<p>使用广播模式, 监听时不指定队列, 则会产生随即队列</p>
+<p>为了防止系统迭代重启产生的大量随机队列, 需要断开时删除随机队列</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@RabbitListener</span><span class="o">(</span><span class="n">bindings</span> <span class="o">=</span> <span class="nd">@QueueBinding</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//注意这里不要定义队列名称,系统会随机产生
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">value</span> <span class="o">=</span> <span class="nd">@Queue</span><span class="o">(</span><span class="n">exclusive</span> <span class="o">=</span> <span class="s">&#34;true&#34;</span><span class="o">),</span><span class="c1">// exclusive = &#34;true&#34; 断开时删除随机队列 避免系统迭代重启产生的大量随机队列
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">exchange</span> <span class="o">=</span> <span class="nd">@Exchange</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;填写交换机名称&#34;</span><span class="o">,</span> <span class="n">type</span> <span class="o">=</span> <span class="n">ExchangeTypes</span><span class="o">.</span><span class="na">FANOUT</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 
   </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://habyss.github.io/tags/uml/">UML</a></li>
+      <li><a href="https://habyss.github.io/tags/springboot/">SpringBoot</a></li>
+      <li><a href="https://habyss.github.io/tags/rabbitmq/">Rabbitmq</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="https://habyss.github.io/posts/tech/springboot_aop/">
+  <a class="prev" href="https://habyss.github.io/posts/tech/rabbitmq_ack/">
     <span class="title">« 上一页</span>
     <br>
-    <span>基于springboot常用aop方式</span>
+    <span>rabbitmq ack 探索</span>
   </a>
-  <a class="next" href="https://habyss.github.io/posts/tech/transactional/">
+  <a class="next" href="https://habyss.github.io/posts/tech/rabbitmq_delay/">
     <span class="title">下一页 »</span>
     <br>
-    <span>@Transactional失效排查</span>
+    <span>rabbitmq实现延时队列</span>
   </a>
 </nav>
 

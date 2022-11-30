@@ -6,7 +6,43 @@
     <description>Recent content in 👨🏻‍💻技术 on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 22 Jan 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Jun 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>rabbitmq ack 探索</title>
+      <link>https://habyss.github.io/posts/tech/rabbitmq_ack/</link>
+      <pubDate>Sun, 16 Jun 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/rabbitmq_ack/</guid>
+      <description>RabbitMq 生产者确认消息被消费 探索 消费者手动ack的一些状态, 生产者是不能准确得知的. 例如: 1 2 // 处理失败 重新进入队列 继续消费 channel.basicNack(msg.getMessageProperties().getDeliveryTag(), false,true); 当消费者把消息重新</description>
+    </item>
+    
+    <item>
+      <title>rabbitmq限流Qos 多个消费者同时消费一个消息</title>
+      <link>https://habyss.github.io/posts/tech/rabbitmq_qos_random/</link>
+      <pubDate>Mon, 20 May 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/rabbitmq_qos_random/</guid>
+      <description>高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)</description>
+    </item>
+    
+    <item>
+      <title>rabbitmq实现延时队列</title>
+      <link>https://habyss.github.io/posts/tech/rabbitmq_delay/</link>
+      <pubDate>Fri, 12 Apr 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/rabbitmq_delay/</guid>
+      <description>方式一: 原生RabbitMq延时队列 💡缺点: 每个队列的消息是顺序的, 靠后的过期时间短的消息并不能先执行 配置队列 机制 “死信”是RabbitMQ</description>
+    </item>
+    
+    <item>
+      <title>基于springboot常用aop方式</title>
+      <link>https://habyss.github.io/posts/tech/springboot_aop/</link>
+      <pubDate>Sun, 03 Feb 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/springboot_aop/</guid>
+      <description>方式一: 基于表达式 例如简单日志打印: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 @Slf4j @Aspect @Component public class WebLogAspect { /** * xxx包及其子包下的以Contro</description>
+    </item>
+    
     <item>
       <title>UML类图关系</title>
       <link>https://habyss.github.io/posts/tech/uml/</link>

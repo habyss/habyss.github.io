@@ -6,22 +6,58 @@
     <description>Recent content in Tags on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 22 Jan 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Jun 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>UML</title>
-      <link>https://habyss.github.io/tags/uml/</link>
-      <pubDate>Tue, 22 Jan 2019 15:36:53 +0800</pubDate>
+      <title>ACK</title>
+      <link>https://habyss.github.io/tags/ack/</link>
+      <pubDate>Sun, 16 Jun 2019 15:36:53 +0800</pubDate>
       
-      <guid>https://habyss.github.io/tags/uml/</guid>
+      <guid>https://habyss.github.io/tags/ack/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rabbitmq</title>
+      <link>https://habyss.github.io/tags/rabbitmq/</link>
+      <pubDate>Sun, 16 Jun 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/rabbitmq/</guid>
       <description></description>
     </item>
     
     <item>
       <title>SpringBoot</title>
       <link>https://habyss.github.io/tags/springboot/</link>
-      <pubDate>Thu, 03 Jan 2019 15:36:53 +0800</pubDate>
+      <pubDate>Sun, 16 Jun 2019 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/tags/springboot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AOP</title>
+      <link>https://habyss.github.io/tags/aop/</link>
+      <pubDate>Sun, 03 Feb 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/aop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>https://habyss.github.io/tags/redis/</link>
+      <pubDate>Sun, 03 Feb 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>UML</title>
+      <link>https://habyss.github.io/tags/uml/</link>
+      <pubDate>Tue, 22 Jan 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/uml/</guid>
       <description></description>
     </item>
     
