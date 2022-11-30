@@ -6,7 +6,43 @@
     <description>Recent content in 测试外部 on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 16 Jun 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Aug 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mybatis-plus typeHandler 加解密简单实现</title>
+      <link>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</link>
+      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</guid>
+      <description>💡 不可以对查询参数加解密 💡 不会修改原对象数据 💡 对于手写sql需要特殊指定 💡 对于非sql的CRUD可自动加解密 1. 非sql查询 — 数据库实体类 1 2</description>
+    </item>
+    
+    <item>
+      <title>OpenFeign优化</title>
+      <link>https://habyss.github.io/posts/tech/openfeign/</link>
+      <pubDate>Fri, 24 Jun 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/openfeign/</guid>
+      <description>一、超时优化 OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间</description>
+    </item>
+    
+    <item>
+      <title>resilience4j-spring-boot2 熔断</title>
+      <link>https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/</link>
+      <pubDate>Thu, 12 May 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/</guid>
+      <description>pom 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 &amp;lt;dependencies&amp;gt; &amp;lt;!-- resilience4j 按需引入 或 all--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-ratelimiter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!-- resilience4j 按需引入 或 all--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-all&amp;lt;/artifactId&amp;gt; version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-spring-boot2&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!-- 想使用resilienc</description>
+    </item>
+    
+    <item>
+      <title>TraceId 日志跟踪</title>
+      <link>https://habyss.github.io/posts/tech/springboot_traceid/</link>
+      <pubDate>Wed, 23 Oct 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/springboot_traceid/</guid>
+      <description>全局拦截, 在 MDC 中插入自定义 traceId 💡 MDC（Mapped Diagnostic Context）机制实现，支持主流的Log4j、Log4j2和Logback日志框架。 1</description>
+    </item>
+    
     <item>
       <title>rabbitmq ack 探索</title>
       <link>https://habyss.github.io/posts/tech/rabbitmq_ack/</link>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>OpenFeign优化 | 叶灰灰的小窝</title>
+<meta name="keywords" content="SpringBoot, OpenFeign">
+<meta name="description" content="一、超时优化 OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间">
+<meta name="author" content="叶灰灰">
+<link rel="canonical" href="https://habyss.github.io/posts/tech/openfeign/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://habyss.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://habyss.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://habyss.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="OpenFeign优化" />
+<meta property="og:description" content="一、超时优化 OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://habyss.github.io/posts/tech/openfeign/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-24T15:36:53+08:00" />
+<meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OpenFeign优化"/>
+<meta name="twitter:description" content="一、超时优化 OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://habyss.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻技术",
+      "item": "https://habyss.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "OpenFeign优化",
+      "item": "https://habyss.github.io/posts/tech/openfeign/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "OpenFeign优化",
+  "name": "OpenFeign优化",
+  "description": "一、超时优化 OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间",
+  "keywords": [
+    "SpringBoot", "OpenFeign"
+  ],
+  "articleBody": "一、超时优化 OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间都是 1s, 当我们使用 OpenFeign 调用了服务接口超过 1s，就会出现错误.\n因为 1s 确实太短了，因此我们需要手动设置 OpenFeign 的超时时间以保证它能正确的处理业务。OpenFeign 的超时时间有以下两种更改方法：\n通过修改 Ribbon 的超时时间，被动的修改 OpenFeign 的超时时间。 直接修改 OpenFeign 的超时时间(推荐使用)。 1、设置Ribbon超时时间(未验证) 在项目配置文件 application.yml 中添加以下配置：\n1 2 3 ribbon: ReadTimeout: 5000 # 请求连接的超时时间 ConnectionTimeout: 10000 # 请求处理的超时时间 2、设置OpenFeign超时时间 在项目配置文件 application.yml 中添加以下配置：\n1 2 3 4 5 6 feign: client: config: default: connect-timeout: 2000 read-timeout: 5000 推荐使用此方式来设置 OpenFeign 的超时时间，因为这样的配置语义更明确。\n二、请求连接优化 OpenFeign 底层通信组件默认使用 JDK 自带的 URLConnection 对象进行 HTTP 请求的，因为没有使用连接池，所以性能不是很好。我们可以将 OpenFeign 的通讯组件，手动替换成像 Apache HttpClient 或 OKHttp 这样的专用通信组件，这些的专用通信组件自带连接池可以更好地对 HTTP 连接对象进行重用与管理，同时也能大大的提升 HTTP 请求的效率。接下来以 Apache HttpClient 为例，演示一下专用通讯组件的使用。\n1、引入Apache HttpClient依赖 在项目的依赖管理文件 pom.xml 中添加以下配置：\n1 2 3 4 5 6 7 8 org.springframework.cloud spring-cloud-starter-openfeign io.github.openfeign feign-httpclient 2、开启Apache HttpClient使用 启动 Apache HttpClient 组件，在项目配置文件 application.yml 中添加以下配置,\n1 2 3 feign: httpclient: enabled: true 三、数据压缩 OpenFeign 默认不会开启数据压缩功能，但我们可以手动的开启它的 Gzip 压缩功能，这样可以极大的提高宽带利用率和加速数据的传输速度，在项目配置文件 application.yml 中添加以下配置：\n1 2 3 4 5 6 7 8 9 feign: compression: request: enabled: true # 默认就是这些类型 # mime-types: text/xml, application/xml, application/json min-request-size: 1024 response: enabled: true PS：如果服务消费端的 CPU 资源比较紧张的话，建议不要开启数据的压缩功能，因为数据压缩和解压都需要消耗 CPU 的资源，这样反而会给 CPU 增加了额外的负担，也会导致系统性能降低。\n四、负载均衡优化 OpenFeign 底层使用的是 Ribbon 做负载均衡的，查看源码我们可以看到它默认的负载均衡策略是轮询策略\n然而除了轮询策略之外，我们还有其他 6 种内置的负载均衡策略可以选择，这些负载均衡策略如下：\n**权重策略：**WeightedResponseTimeRule，根据每个服务提供者的响应时间分配一个权重，响应时间越长，权重越小，被选中的可能性也就越低。它的实现原理是，刚开始使用轮询策略并开启一个计时器，每一段时间收集一次所有服务提供者的平均响应时间，然后再给每个服务提供者附上一个权重，权重越高被选中的概率也越大。 **最小连接数策略：**BestAvailableRule，也叫最小并发数策略，它是遍历服务提供者列表，选取连接数最小的⼀个服务实例。如果有相同的最小连接数，那么会调用轮询策略进行选取。 **区域敏感策略：**ZoneAvoidanceRule，根据服务所在区域(zone)的性能和服务的可用性来选择服务实例，在没有区域的环境下，该策略和轮询策略类似。 **可用敏感性策略：**AvailabilityFilteringRule，先过滤掉非健康的服务实例，然后再选择连接数较小的服务实例。 **随机策略：**RandomRule，从服务提供者的列表中随机选择一个服务实例。 **重试策略：**RetryRule，按照轮询策略来获取服务，如果获取的服务实例为 null 或已经失效，则在指定的时间之内不断地进行重试来获取服务，如果超过指定时间依然没获取到服务实例则返回 null。 出于性能方面的考虑，我们可以选择用权重策略或区域敏感策略来替代轮询策略，因为这样的执行效率最高。\n五、日志级别优化 OpenFeign 提供了日志增强功能，它的日志级别有以下几个：\n**NONE：**默认的，不显示任何日志。 **BASIC：**仅记录请求方法、URL、响应状态码及执行时间。 **HEADERS：**除了 BASIC 中定义的信息之外，还有请求和响应的头信息。 **FULL：**除了 HEADERS 中定义的信息之外，还有请求和响应的正文及元数据。 我们可以通过配置文件来设置日志级别，配置信息如下：\n1 2 3 4 5 6 7 8 9 10 @Configuration public class OpenfeignConfig { @Bean Logger.Level feignLoggerLevel(){ return Logger.Level.FULL;//FULL是详细日志 } } logging: level: cn.xxx.service: debug 其中 cn.xxx.service 为 OpenFeign 接口所在的包名。虽然 OpenFeign 默认是不输出任何日志，但在开发阶段可能会被修改，因此在生产环境中，我们应仔细检查并设置合理的日志级别，以提高 OpenFeign 的运行效率。\n总结 OpenFeign 是 Spring 官方推出的一种声明式服务调用和负载均衡组件，在生产环境中我们可以通过以下配置来优化 OpenFeign 的运行：\n修改 OpenFeign 的超时时间，让 OpenFeign 能够正确的处理业务。 通过配置专用的通信组件 Apache HttpClient 或 OKHttp，让 OpenFeign 可以更好地对 HTTP 连接对象进行重用和管理，以提高其性能。 开启数据压缩功能，可以提高宽带利用率和加速数据传输速度。 使用合适的负载均衡策略来替换默认的轮询负载均衡策略，已获得更好的执行效率。 检查生成环境中 OpenFeign 的日志级别，选择合适的日志输出级别，防止无效的日志输出。 ",
+  "wordCount" : "2013",
+  "inLanguage": "zh",
+  "datePublished": "2022-06-24T15:36:53+08:00",
+  "dateModified": "2022-11-29T15:36:53+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "叶灰灰"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://habyss.github.io/posts/tech/openfeign/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "叶灰灰的小窝",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://habyss.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://habyss.github.io/" accesskey="h" title="叶灰灰的小窝 (Alt + H)">叶灰灰的小窝</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://habyss.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/archives" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/tech/">👨🏻‍💻技术</a></div>
+    <h1 class="post-title">
+      OpenFeign优化
+    </h1>
+    <div class="post-meta"><span title='2022-06-24 15:36:53 +0800 CST'>2022-06-24</span>&nbsp;·&nbsp;5 分钟&nbsp;·&nbsp;叶灰灰
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e4%b8%80%e8%b6%85%e6%97%b6%e4%bc%98%e5%8c%96" aria-label="一、超时优化">一、超时优化</a><ul>
+                        
+                <li>
+                    <a href="#1%e8%ae%be%e7%bd%aeribbon%e8%b6%85%e6%97%b6%e6%97%b6%e9%97%b4%e6%9c%aa%e9%aa%8c%e8%af%81" aria-label="1、设置Ribbon超时时间(未验证)">1、设置Ribbon超时时间(未验证)</a></li>
+                <li>
+                    <a href="#2%e8%ae%be%e7%bd%aeopenfeign%e8%b6%85%e6%97%b6%e6%97%b6%e9%97%b4" aria-label="2、设置OpenFeign超时时间">2、设置OpenFeign超时时间</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e4%ba%8c%e8%af%b7%e6%b1%82%e8%bf%9e%e6%8e%a5%e4%bc%98%e5%8c%96" aria-label="二、请求连接优化">二、请求连接优化</a><ul>
+                        
+                <li>
+                    <a href="#1%e5%bc%95%e5%85%a5apache-httpclient%e4%be%9d%e8%b5%96" aria-label="1、引入Apache HttpClient依赖">1、引入Apache HttpClient依赖</a></li>
+                <li>
+                    <a href="#2%e5%bc%80%e5%90%afapache-httpclient%e4%bd%bf%e7%94%a8" aria-label="2、开启Apache HttpClient使用">2、开启Apache HttpClient使用</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e4%b8%89%e6%95%b0%e6%8d%ae%e5%8e%8b%e7%bc%a9" aria-label="三、数据压缩">三、数据压缩</a></li>
+                <li>
+                    <a href="#%e5%9b%9b%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e4%bc%98%e5%8c%96" aria-label="四、负载均衡优化">四、负载均衡优化</a></li>
+                <li>
+                    <a href="#%e4%ba%94%e6%97%a5%e5%bf%97%e7%ba%a7%e5%88%ab%e4%bc%98%e5%8c%96" aria-label="五、日志级别优化">五、日志级别优化</a></li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="一超时优化">一、超时优化<a hidden class="anchor" aria-hidden="true" href="#一超时优化">#</a></h2>
+<p>OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间都是 1s, 当我们使用 OpenFeign 调用了服务接口超过 1s，就会出现错误.</p>
+<p>因为 1s 确实太短了，因此我们需要手动设置 OpenFeign 的超时时间以保证它能正确的处理业务。OpenFeign 的超时时间有以下两种更改方法：</p>
+<ol>
+<li>通过修改 Ribbon 的超时时间，被动的修改 OpenFeign 的超时时间。</li>
+<li>直接修改 OpenFeign 的超时时间(推荐使用)。</li>
+</ol>
+<h3 id="1设置ribbon超时时间未验证">1、设置Ribbon超时时间(未验证)<a hidden class="anchor" aria-hidden="true" href="#1设置ribbon超时时间未验证">#</a></h3>
+<p>在项目配置文件 application.yml 中添加以下配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">ribbon</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nt">ReadTimeout</span><span class="p">:</span><span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="c"># 请求连接的超时时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nt">ConnectionTimeout</span><span class="p">:</span><span class="w"> </span><span class="m">10000</span><span class="w"> </span><span class="c"># 请求处理的超时时间</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2设置openfeign超时时间">2、设置OpenFeign超时时间<a hidden class="anchor" aria-hidden="true" href="#2设置openfeign超时时间">#</a></h3>
+<p>在项目配置文件 application.yml 中添加以下配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">feign</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">client</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">connect-timeout</span><span class="p">:</span><span class="w"> </span><span class="m">2000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">read-timeout</span><span class="p">:</span><span class="w"> </span><span class="m">5000</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>推荐使用此方式来设置 OpenFeign 的超时时间，因为这样的配置语义更明确。</p>
+<h2 id="二请求连接优化">二、请求连接优化<a hidden class="anchor" aria-hidden="true" href="#二请求连接优化">#</a></h2>
+<p>OpenFeign 底层通信组件默认使用 JDK 自带的 URLConnection 对象进行 HTTP 请求的，因为没有使用连接池，所以性能不是很好。我们可以将 OpenFeign 的通讯组件，手动替换成像 Apache HttpClient 或 OKHttp 这样的专用通信组件，这些的专用通信组件自带连接池可以更好地对 HTTP 连接对象进行重用与管理，同时也能大大的提升 HTTP 请求的效率。接下来以 Apache HttpClient 为例，演示一下专用通讯组件的使用。</p>
+<h3 id="1引入apache-httpclient依赖">1、引入Apache HttpClient依赖<a hidden class="anchor" aria-hidden="true" href="#1引入apache-httpclient依赖">#</a></h3>
+<p>在项目的依赖管理文件 pom.xml 中添加以下配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">		<span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-openfeign<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>io.github.openfeign<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>feign-httpclient<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2开启apache-httpclient使用">2、开启Apache HttpClient使用<a hidden class="anchor" aria-hidden="true" href="#2开启apache-httpclient使用">#</a></h3>
+<p>启动 Apache HttpClient 组件，在项目配置文件 application.yml 中添加以下配置,</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">feign</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">httpclient</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="三数据压缩">三、数据压缩<a hidden class="anchor" aria-hidden="true" href="#三数据压缩">#</a></h2>
+<p>OpenFeign 默认不会开启数据压缩功能，但我们可以手动的开启它的 Gzip 压缩功能，这样可以极大的提高宽带利用率和加速数据的传输速度，在项目配置文件 application.yml 中添加以下配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">feign</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">compression</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">request</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c">#      默认就是这些类型</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c">#      mime-types: text/xml, application/xml, application/json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">min-request-size</span><span class="p">:</span><span class="w"> </span><span class="m">1024</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">response</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>PS：如果服务消费端的 CPU 资源比较紧张的话，建议不要开启数据的压缩功能，因为数据压缩和解压都需要消耗 CPU 的资源，这样反而会给 CPU 增加了额外的负担，也会导致系统性能降低。</p>
+</blockquote>
+<h2 id="四负载均衡优化">四、负载均衡优化<a hidden class="anchor" aria-hidden="true" href="#四负载均衡优化">#</a></h2>
+<p>OpenFeign 底层使用的是 Ribbon 做负载均衡的，查看源码我们可以看到它默认的负载均衡策略是轮询策略</p>
+<p>然而除了轮询策略之外，我们还有其他 6 种内置的负载均衡策略可以选择，这些负载均衡策略如下：</p>
+<ol>
+<li>**权重策略：**WeightedResponseTimeRule，根据每个服务提供者的响应时间分配一个权重，响应时间越长，权重越小，被选中的可能性也就越低。它的实现原理是，刚开始使用轮询策略并开启一个计时器，每一段时间收集一次所有服务提供者的平均响应时间，然后再给每个服务提供者附上一个权重，权重越高被选中的概率也越大。</li>
+<li>**最小连接数策略：**BestAvailableRule，也叫最小并发数策略，它是遍历服务提供者列表，选取连接数最小的⼀个服务实例。如果有相同的最小连接数，那么会调用轮询策略进行选取。</li>
+<li>**区域敏感策略：**ZoneAvoidanceRule，根据服务所在区域(zone)的性能和服务的可用性来选择服务实例，在没有区域的环境下，该策略和轮询策略类似。</li>
+<li>**可用敏感性策略：**AvailabilityFilteringRule，先过滤掉非健康的服务实例，然后再选择连接数较小的服务实例。</li>
+<li>**随机策略：**RandomRule，从服务提供者的列表中随机选择一个服务实例。</li>
+<li>**重试策略：**RetryRule，按照轮询策略来获取服务，如果获取的服务实例为 null 或已经失效，则在指定的时间之内不断地进行重试来获取服务，如果超过指定时间依然没获取到服务实例则返回 null。</li>
+</ol>
+<p>出于性能方面的考虑，我们可以选择用权重策略或区域敏感策略来替代轮询策略，因为这样的执行效率最高。</p>
+<h2 id="五日志级别优化">五、日志级别优化<a hidden class="anchor" aria-hidden="true" href="#五日志级别优化">#</a></h2>
+<p>OpenFeign 提供了日志增强功能，它的日志级别有以下几个：</p>
+<ul>
+<li>**NONE：**默认的，不显示任何日志。</li>
+<li>**BASIC：**仅记录请求方法、URL、响应状态码及执行时间。</li>
+<li>**HEADERS：**除了 BASIC 中定义的信息之外，还有请求和响应的头信息。</li>
+<li>**FULL：**除了 HEADERS 中定义的信息之外，还有请求和响应的正文及元数据。</li>
+</ul>
+<p>我们可以通过配置文件来设置日志级别，配置信息如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OpenfeignConfig</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Logger</span><span class="o">.</span><span class="na">Level</span> <span class="nf">feignLoggerLevel</span><span class="o">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Logger</span><span class="o">.</span><span class="na">Level</span><span class="o">.</span><span class="na">FULL</span><span class="o">;</span><span class="c1">//FULL是详细日志
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="nl">logging:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">level</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cn</span><span class="o">.</span><span class="na">xxx</span><span class="o">.</span><span class="na">service</span><span class="o">:</span> <span class="n">debug</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 cn.xxx.service 为 OpenFeign 接口所在的包名。虽然 OpenFeign 默认是不输出任何日志，但在开发阶段可能会被修改，因此在生产环境中，我们应仔细检查并设置合理的日志级别，以提高 OpenFeign 的运行效率。</p>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>OpenFeign 是 Spring 官方推出的一种声明式服务调用和负载均衡组件，在生产环境中我们可以通过以下配置来优化 OpenFeign 的运行：</p>
+<ol>
+<li>修改 OpenFeign 的超时时间，让 OpenFeign 能够正确的处理业务。</li>
+<li>通过配置专用的通信组件 Apache HttpClient 或 OKHttp，让 OpenFeign 可以更好地对 HTTP 连接对象进行重用和管理，以提高其性能。</li>
+<li>开启数据压缩功能，可以提高宽带利用率和加速数据传输速度。</li>
+<li>使用合适的负载均衡策略来替换默认的轮询负载均衡策略，已获得更好的执行效率。</li>
+<li>检查生成环境中 OpenFeign 的日志级别，选择合适的日志输出级别，防止无效的日志输出。</li>
+</ol>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://habyss.github.io/tags/springboot/">SpringBoot</a></li>
+      <li><a href="https://habyss.github.io/tags/openfeign/">OpenFeign</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://habyss.github.io/posts/tech/mybatis_plus_typehandler/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>mybatis-plus typeHandler 加解密简单实现</span>
+  </a>
+  <a class="next" href="https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>resilience4j-spring-boot2 熔断</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://habyss.github.io/">叶灰灰的小窝</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -5,16 +5,13 @@
     <loc>https://habyss.github.io/posts/tech/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
-    <loc>https://habyss.github.io/tags/ack/</loc>
+    <loc>https://habyss.github.io/tags/mybatis-plus/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/posts/</loc>
-    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
-  </url><url>
-    <loc>https://habyss.github.io/tags/rabbitmq/</loc>
-    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
-  </url><url>
-    <loc>https://habyss.github.io/posts/tech/rabbitmq_ack/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/tags/springboot/</loc>
@@ -24,6 +21,42 @@
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/%E5%8A%A0%E8%A7%A3%E5%AF%86/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/openfeign/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/openfeign/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/resilience4j/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/%E7%86%94%E6%96%AD/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/traceid/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/springboot_traceid/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/%E6%97%A5%E5%BF%97/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/ack/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/rabbitmq/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/rabbitmq_ack/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/posts/tech/rabbitmq_qos_random/</loc>

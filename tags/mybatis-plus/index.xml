@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>mybatis-plus on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/mybatis-plus/</link>
+    <description>Recent content in mybatis-plus on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 23 Aug 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/mybatis-plus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mybatis-plus typeHandler 加解密简单实现</title>
+      <link>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</link>
+      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</guid>
+      <description>💡 不可以对查询参数加解密 💡 不会修改原对象数据 💡 对于手写sql需要特殊指定 💡 对于非sql的CRUD可自动加解密 1. 非sql查询 — 数据库实体类 1 2</description>
+    </item>
+    
+  </channel>
+</rss>

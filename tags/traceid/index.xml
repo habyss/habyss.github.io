@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>TraceId on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/traceid/</link>
+    <description>Recent content in TraceId on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 23 Oct 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/traceid/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>TraceId 日志跟踪</title>
+      <link>https://habyss.github.io/posts/tech/springboot_traceid/</link>
+      <pubDate>Wed, 23 Oct 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/springboot_traceid/</guid>
+      <description>全局拦截, 在 MDC 中插入自定义 traceId 💡 MDC（Mapped Diagnostic Context）机制实现，支持主流的Log4j、Log4j2和Logback日志框架。 1</description>
+    </item>
+    
+  </channel>
+</rss>

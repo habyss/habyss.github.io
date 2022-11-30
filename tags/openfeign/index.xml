@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>OpenFeign on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/openfeign/</link>
+    <description>Recent content in OpenFeign on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 24 Jun 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/openfeign/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpenFeign优化</title>
+      <link>https://habyss.github.io/posts/tech/openfeign/</link>
+      <pubDate>Fri, 24 Jun 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/openfeign/</guid>
+      <description>一、超时优化 OpenFeign 底层内置了 Ribbon 框架，并且使用了 Ribbon 的请求连接超时时间和请求处理超时时间作为其超时时间，而 Ribbon 默认的请求连接超时时间和请求处理超时时间</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -6,7 +6,79 @@
     <description>Recent content in Tags on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 16 Jun 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Aug 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mybatis-plus</title>
+      <link>https://habyss.github.io/tags/mybatis-plus/</link>
+      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/mybatis-plus/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SpringBoot</title>
+      <link>https://habyss.github.io/tags/springboot/</link>
+      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/springboot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>加解密</title>
+      <link>https://habyss.github.io/tags/%E5%8A%A0%E8%A7%A3%E5%AF%86/</link>
+      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/%E5%8A%A0%E8%A7%A3%E5%AF%86/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OpenFeign</title>
+      <link>https://habyss.github.io/tags/openfeign/</link>
+      <pubDate>Fri, 24 Jun 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/openfeign/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>resilience4j</title>
+      <link>https://habyss.github.io/tags/resilience4j/</link>
+      <pubDate>Thu, 12 May 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/resilience4j/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>熔断</title>
+      <link>https://habyss.github.io/tags/%E7%86%94%E6%96%AD/</link>
+      <pubDate>Thu, 12 May 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/%E7%86%94%E6%96%AD/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>TraceId</title>
+      <link>https://habyss.github.io/tags/traceid/</link>
+      <pubDate>Wed, 23 Oct 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/traceid/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>日志</title>
+      <link>https://habyss.github.io/tags/%E6%97%A5%E5%BF%97/</link>
+      <pubDate>Wed, 23 Oct 2019 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/tags/%E6%97%A5%E5%BF%97/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>ACK</title>
       <link>https://habyss.github.io/tags/ack/</link>
@@ -22,15 +94,6 @@
       <pubDate>Sun, 16 Jun 2019 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/tags/rabbitmq/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>SpringBoot</title>
-      <link>https://habyss.github.io/tags/springboot/</link>
-      <pubDate>Sun, 16 Jun 2019 15:36:53 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/tags/springboot/</guid>
       <description></description>
     </item>
     

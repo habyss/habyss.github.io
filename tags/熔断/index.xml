@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>熔断 on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/%E7%86%94%E6%96%AD/</link>
+    <description>Recent content in 熔断 on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 12 May 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/%E7%86%94%E6%96%AD/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>resilience4j-spring-boot2 熔断</title>
+      <link>https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/</link>
+      <pubDate>Thu, 12 May 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/</guid>
+      <description>pom 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 &amp;lt;dependencies&amp;gt; &amp;lt;!-- resilience4j 按需引入 或 all--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-ratelimiter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!-- resilience4j 按需引入 或 all--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-all&amp;lt;/artifactId&amp;gt; version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-spring-boot2&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!-- 想使用resilienc</description>
+    </item>
+    
+  </channel>
+</rss>
