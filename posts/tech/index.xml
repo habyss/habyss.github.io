@@ -8,7 +8,7 @@
     <language>zh-cn</language>
     <lastBuildDate>Tue, 23 Aug 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/tech/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>mybatis-plus typeHandler 加解密简单实现</title>
+      <title>基于mybatis-plus typeHandler 加解密简单实现</title>
       <link>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</link>
       <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
       
@@ -32,6 +32,42 @@
       
       <guid>https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/</guid>
       <description>pom 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 &amp;lt;dependencies&amp;gt; &amp;lt;!-- resilience4j 按需引入 或 all--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-ratelimiter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!-- resilience4j 按需引入 或 all--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-all&amp;lt;/artifactId&amp;gt; version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.github.resilience4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;resilience4j-spring-boot2&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${resilience4jVersion}&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!-- 想使用resilienc</description>
+    </item>
+    
+    <item>
+      <title>单例模式双重检查</title>
+      <link>https://habyss.github.io/posts/tech/single_double/</link>
+      <pubDate>Thu, 23 Sep 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/single_double/</guid>
+      <description>标准写法 1 2 3 4 5 6 7 8 9 10 11 12 13 // 单例模式双重检查 private volatile static Singleton client; public static Singleton getSingleton() { if (client == null) { synchronized (Singleton.class) { if (client == null) { client = new Singleton(); } } } return client; } 线程并发涉及三个概念:</description>
+    </item>
+    
+    <item>
+      <title>阿里云/天翼云文件上传 单例优化</title>
+      <link>https://habyss.github.io/posts/tech/oss_file_upload/</link>
+      <pubDate>Thu, 26 Aug 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/oss_file_upload/</guid>
+      <description>1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(&amp;#34;${oss.bucket}&amp;#34;) private String bucketName; @Value(&amp;#34;${oss.fileURL}&amp;#34;) private String OSS_URL; @PostMapping(&amp;#34;singleUpload&amp;#34;) @ApiOperation(&amp;#</description>
+    </item>
+    
+    <item>
+      <title>模板模式&amp;策略模式-登录优化</title>
+      <link>https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/</link>
+      <pubDate>Tue, 22 Sep 2020 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/</guid>
+      <description>策略模式 策略模式是一种行为模式，也是替代大量 if else 的利器。他能帮你解决的场景，一般是具有同类可替代的行为逻辑算法场景。 比如： 不同类型的交易方式</description>
+    </item>
+    
+    <item>
+      <title>大文件分片上传</title>
+      <link>https://habyss.github.io/posts/tech/big_file_upload/</link>
+      <pubDate>Wed, 12 Aug 2020 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/big_file_upload/</guid>
+      <description>简单demo实现 简单实现, 以大文件的md5作为唯一key 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42</description>
     </item>
     
     <item>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>单例 on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/%E5%8D%95%E4%BE%8B/</link>
+    <description>Recent content in 单例 on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 23 Sep 2021 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/%E5%8D%95%E4%BE%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>单例模式双重检查</title>
+      <link>https://habyss.github.io/posts/tech/single_double/</link>
+      <pubDate>Thu, 23 Sep 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/single_double/</guid>
+      <description>标准写法 1 2 3 4 5 6 7 8 9 10 11 12 13 // 单例模式双重检查 private volatile static Singleton client; public static Singleton getSingleton() { if (client == null) { synchronized (Singleton.class) { if (client == null) { client = new Singleton(); } } } return client; } 线程并发涉及三个概念:</description>
+    </item>
+    
+    <item>
+      <title>阿里云/天翼云文件上传 单例优化</title>
+      <link>https://habyss.github.io/posts/tech/oss_file_upload/</link>
+      <pubDate>Thu, 26 Aug 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/oss_file_upload/</guid>
+      <description>1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(&amp;#34;${oss.bucket}&amp;#34;) private String bucketName; @Value(&amp;#34;${oss.fileURL}&amp;#34;) private String OSS_URL; @PostMapping(&amp;#34;singleUpload&amp;#34;) @ApiOperation(&amp;#</description>
+    </item>
+    
+  </channel>
+</rss>

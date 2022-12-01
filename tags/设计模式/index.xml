@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>设计模式 on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+    <description>Recent content in 设计模式 on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 23 Sep 2021 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>单例模式双重检查</title>
+      <link>https://habyss.github.io/posts/tech/single_double/</link>
+      <pubDate>Thu, 23 Sep 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/single_double/</guid>
+      <description>标准写法 1 2 3 4 5 6 7 8 9 10 11 12 13 // 单例模式双重检查 private volatile static Singleton client; public static Singleton getSingleton() { if (client == null) { synchronized (Singleton.class) { if (client == null) { client = new Singleton(); } } } return client; } 线程并发涉及三个概念:</description>
+    </item>
+    
+    <item>
+      <title>模板模式&amp;策略模式-登录优化</title>
+      <link>https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/</link>
+      <pubDate>Tue, 22 Sep 2020 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/</guid>
+      <description>策略模式 策略模式是一种行为模式，也是替代大量 if else 的利器。他能帮你解决的场景，一般是具有同类可替代的行为逻辑算法场景。 比如： 不同类型的交易方式</description>
+    </item>
+    
+  </channel>
+</rss>

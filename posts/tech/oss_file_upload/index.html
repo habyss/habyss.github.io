@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>阿里云/天翼云文件上传 单例优化 | 叶灰灰的小窝</title>
+<meta name="keywords" content="阿里云, 天翼云, 单例">
+<meta name="description" content="1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(&#34;${oss.bucket}&#34;) private String bucketName; @Value(&#34;${oss.fileURL}&#34;) private String OSS_URL; @PostMapping(&#34;singleUpload&#34;) @ApiOperation(&#">
+<meta name="author" content="叶灰灰">
+<link rel="canonical" href="https://habyss.github.io/posts/tech/oss_file_upload/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://habyss.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://habyss.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://habyss.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="阿里云/天翼云文件上传 单例优化" />
+<meta property="og:description" content="1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(&#34;${oss.bucket}&#34;) private String bucketName; @Value(&#34;${oss.fileURL}&#34;) private String OSS_URL; @PostMapping(&#34;singleUpload&#34;) @ApiOperation(&#" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://habyss.github.io/posts/tech/oss_file_upload/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-26T15:36:53+08:00" />
+<meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="阿里云/天翼云文件上传 单例优化"/>
+<meta name="twitter:description" content="1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(&#34;${oss.bucket}&#34;) private String bucketName; @Value(&#34;${oss.fileURL}&#34;) private String OSS_URL; @PostMapping(&#34;singleUpload&#34;) @ApiOperation(&#"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://habyss.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻技术",
+      "item": "https://habyss.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "阿里云/天翼云文件上传 单例优化",
+      "item": "https://habyss.github.io/posts/tech/oss_file_upload/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "阿里云/天翼云文件上传 单例优化",
+  "name": "阿里云\/天翼云文件上传 单例优化",
+  "description": "1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(\u0026#34;${oss.bucket}\u0026#34;) private String bucketName; @Value(\u0026#34;${oss.fileURL}\u0026#34;) private String OSS_URL; @PostMapping(\u0026#34;singleUpload\u0026#34;) @ApiOperation(\u0026#",
+  "keywords": [
+    "阿里云", "天翼云", "单例"
+  ],
+  "articleBody": "1. 阿里云文件上传 前提设置好bucket和相应的url\ncontroller\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(\"${oss.bucket}\") private String bucketName; @Value(\"${oss.fileURL}\") private String OSS_URL; @PostMapping(\"singleUpload\") @ApiOperation(\"单文件上传\") public ResponseResult\u003cString\u003e singleUpload( @ApiParam(\"uni-app上传时 name属性\") @RequestParam(\"file\") MultipartFile file, @RequestParam(value = \"folderType\", defaultValue = \"6\") Integer folderType) { String originalFilename = file.getOriginalFilename(); String pathFileName = OSSFolderEnum.valueOfCode(folderType).getFolder() + LocalDateTime.now().format(DateTimePatterns.F_YYYY_MM_DD_HH_MM_SS_SSS) + Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf(\".\")); OSSUtil.uploadFile(bucketName, pathFileName, file); String fileUrl = OSS_URL + pathFileName; return ResponseResult.createBySuccess(fileUrl); } utils, 单例模式双重检查获取client, 避免重复获取和释放\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 /** * 阿里云oss */ public class OSSUtil { public final static String endpoint = \"\"; public final static String accessKeyId = \"\"; public final static String accessKeySecret = \"\"; // 单例模式双重检查 private volatile static OSS client; public static OSS getOSSClient() { if (client == null) { synchronized (OSSUtil.class) { if (client == null) { client = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret); } } } return client; } public static void uploadFile(String bucketName, String ObjectName, MultipartFile file) { OSS ossClient = getOSSClient(); try (InputStream ins = file.getInputStream()) { ossClient.putObject(bucketName, ObjectName, ins); } catch (Exception e) { throw new ServiceException(\"文件上传异常, 请稍后再试\"); } } public static void deleteFile(String bucketName, String urlPath) { OSS ossClient = getOSSClient(); ossClient.deleteObject(bucketName, urlPath); } } OSSFolderEnum, 不同分类的文件存放的路径\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 @Getter @AllArgsConstructor public enum OSSFolderEnum { USER_AVATAR(1, \"web/avatar/\", \"用户头像\"), CONSULTATION_IMG(2, \"web/xxxx/\", \"xxx2\"), HOSPITALIZATION(3, \"web/xxx/\", \"xxx3\"), ARTICLE_IMG(4, \"web/xxxxxx/\", \"xxx4\"), NOTICE_IMG(5, \"web/notice/\", \"xx5\"), DEFAULT_IMG(6, \"web/default/\", \"DEFAULT\"), ; private final int code; private final String folder; private final String desc; public static OSSFolderEnum valueOfCode(int code) { return Arrays.stream(OSSFolderEnum.values()) .filter(e -\u003e e.getCode() == code) .findFirst() .orElse(DEFAULT_IMG); } } 2. 天翼云上传 controller\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(\"${oos.bucket}\") private String bucketName; @Value(\"${oos.fileURL}\") private String OOS_URL; @PostMapping(\"singleUpload\") @ApiOperation(\"单文件上传\") public ResponseResult\u003cObject\u003e singleUpload( @NotNull(message = \"请选择照片上传\") @RequestParam(\"file\") MultipartFile file, @RequestParam(value = \"folderType\", defaultValue = \"6\") Integer folderType) { String originalFilename = file.getOriginalFilename(); String pathFileName = OSSFolderEnum.valueOfCode(folderType).getFolder() + LocalDateTime.now().format(DateTimePatterns.F_YYYY_MM_DD_HH_MM_SS_SSS) + Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf(\".\")); OosUtil.uploadFile(bucketName, pathFileName, file); String fileUrl = OOS_URL + pathFileName; return ResponseResult.createBySuccess(fileUrl); } utils, 单例模式双重检查获取client, 避免重复获取和释放\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 public class OosUtil { private static final String accessKey = \"\"; private static final String secretKey = \"\"; private static final String endpoint = \"\"; // 单例模式双重检查 private volatile static AmazonS3 client; public static AmazonS3 getOOSClient() { if (client == null) { synchronized (OSSUtil.class) { if (client == null) { ClientConfiguration clientConfig = new ClientConfiguration(); // 设置连接的超时时间，单位毫秒 clientConfig.setConnectionTimeout(30 * 1000); // 设置 socket 超时时间，单位毫秒 clientConfig.setSocketTimeout(30 * 1000); clientConfig.setProtocol(Protocol.HTTP); //设置 http // 设置 V4 签名算法中负载是否参与签名 S3ClientOptions options = new S3ClientOptions(); options.setPayloadSigningEnabled(true); // 创建 client client = new AmazonS3Client( new PropertiesCredentials(accessKey, secretKey)); // 设置 endpoint client.setEndpoint(endpoint); //设置选项 client.setS3ClientOptions(options); } } } return client; } public static void uploadFile(String bucket, String fileName, MultipartFile file) { AmazonS3 oosClient = getOOSClient(); try (InputStream inputStream = file.getInputStream()) { oosClient.putObject(bucket, fileName, inputStream, null); } catch (Exception e) { throw new ServiceException(\"上传文件失败, 请稍后再试\"); } } public static void deleteFile(String bucketName, String urlPath) { getOOSClient().deleteObject(bucketName, urlPath); } } ",
+  "wordCount" : "933",
+  "inLanguage": "zh",
+  "datePublished": "2021-08-26T15:36:53+08:00",
+  "dateModified": "2022-11-29T15:36:53+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "叶灰灰"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://habyss.github.io/posts/tech/oss_file_upload/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "叶灰灰的小窝",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://habyss.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://habyss.github.io/" accesskey="h" title="叶灰灰的小窝 (Alt + H)">叶灰灰的小窝</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://habyss.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/archives" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/tech/">👨🏻‍💻技术</a></div>
+    <h1 class="post-title">
+      阿里云/天翼云文件上传 单例优化
+    </h1>
+    <div class="post-meta"><span title='2021-08-26 15:36:53 +0800 CST'>2021-08-26</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#1-%e9%98%bf%e9%87%8c%e4%ba%91%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0" aria-label="1. 阿里云文件上传">1. 阿里云文件上传</a></li>
+                <li>
+                    <a href="#2-%e5%a4%a9%e7%bf%bc%e4%ba%91%e4%b8%8a%e4%bc%a0" aria-label="2. 天翼云上传">2. 天翼云上传</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="1-阿里云文件上传">1. 阿里云文件上传<a hidden class="anchor" aria-hidden="true" href="#1-阿里云文件上传">#</a></h2>
+<blockquote>
+<p>前提设置好bucket和相应的url</p>
+</blockquote>
+<p>controller</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl">    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${oss.bucket}&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">String</span> <span class="n">bucketName</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${oss.fileURL}&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">String</span> <span class="n">OSS_URL</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">&#34;singleUpload&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@ApiOperation</span><span class="o">(</span><span class="s">&#34;单文件上传&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">ResponseResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">singleUpload</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">            <span class="nd">@ApiParam</span><span class="o">(</span><span class="s">&#34;uni-app上传时 name属性&#34;</span><span class="o">)</span> <span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&#34;file&#34;</span><span class="o">)</span> <span class="n">MultipartFile</span> <span class="n">file</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nd">@RequestParam</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;folderType&#34;</span><span class="o">,</span> <span class="n">defaultValue</span> <span class="o">=</span> <span class="s">&#34;6&#34;</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">folderType</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">originalFilename</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">getOriginalFilename</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">pathFileName</span> <span class="o">=</span> <span class="n">OSSFolderEnum</span><span class="o">.</span><span class="na">valueOfCode</span><span class="o">(</span><span class="n">folderType</span><span class="o">).</span><span class="na">getFolder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">                <span class="o">+</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">now</span><span class="o">().</span><span class="na">format</span><span class="o">(</span><span class="n">DateTimePatterns</span><span class="o">.</span><span class="na">F_YYYY_MM_DD_HH_MM_SS_SSS</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">                <span class="o">+</span> <span class="n">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">originalFilename</span><span class="o">).</span><span class="na">substring</span><span class="o">(</span><span class="n">originalFilename</span><span class="o">.</span><span class="na">lastIndexOf</span><span class="o">(</span><span class="s">&#34;.&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">OSSUtil</span><span class="o">.</span><span class="na">uploadFile</span><span class="o">(</span><span class="n">bucketName</span><span class="o">,</span> <span class="n">pathFileName</span><span class="o">,</span> <span class="n">file</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">fileUrl</span> <span class="o">=</span> <span class="n">OSS_URL</span> <span class="o">+</span> <span class="n">pathFileName</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ResponseResult</span><span class="o">.</span><span class="na">createBySuccess</span><span class="o">(</span><span class="n">fileUrl</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>utils, 单例模式双重检查获取client, 避免重复获取和释放</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 阿里云oss
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OSSUtil</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">accessKeyId</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">accessKeySecret</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 单例模式双重检查
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">private</span> <span class="kd">volatile</span> <span class="kd">static</span> <span class="n">OSS</span> <span class="n">client</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">OSS</span> <span class="nf">getOSSClient</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">client</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">synchronized</span> <span class="o">(</span><span class="n">OSSUtil</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="o">(</span><span class="n">client</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="n">OSSClientBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">endpoint</span><span class="o">,</span> <span class="n">accessKeyId</span><span class="o">,</span> <span class="n">accessKeySecret</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">client</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">uploadFile</span><span class="o">(</span><span class="n">String</span> <span class="n">bucketName</span><span class="o">,</span> <span class="n">String</span> <span class="n">ObjectName</span><span class="o">,</span> <span class="n">MultipartFile</span> <span class="n">file</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">OSS</span> <span class="n">ossClient</span> <span class="o">=</span> <span class="n">getOSSClient</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">(</span><span class="n">InputStream</span> <span class="n">ins</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">())</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ossClient</span><span class="o">.</span><span class="na">putObject</span><span class="o">(</span><span class="n">bucketName</span><span class="o">,</span> <span class="n">ObjectName</span><span class="o">,</span> <span class="n">ins</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="k">new</span> <span class="n">ServiceException</span><span class="o">(</span><span class="s">&#34;文件上传异常, 请稍后再试&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">deleteFile</span><span class="o">(</span><span class="n">String</span> <span class="n">bucketName</span><span class="o">,</span> <span class="n">String</span> <span class="n">urlPath</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">OSS</span> <span class="n">ossClient</span> <span class="o">=</span> <span class="n">getOSSClient</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ossClient</span><span class="o">.</span><span class="na">deleteObject</span><span class="o">(</span><span class="n">bucketName</span><span class="o">,</span> <span class="n">urlPath</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>OSSFolderEnum, 不同分类的文件存放的路径</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Getter</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@AllArgsConstructor</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">enum</span> <span class="n">OSSFolderEnum</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">USER_AVATAR</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">&#34;web/avatar/&#34;</span><span class="o">,</span> <span class="s">&#34;用户头像&#34;</span><span class="o">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CONSULTATION_IMG</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">&#34;web/xxxx/&#34;</span><span class="o">,</span> <span class="s">&#34;xxx2&#34;</span><span class="o">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HOSPITALIZATION</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="s">&#34;web/xxx/&#34;</span><span class="o">,</span> <span class="s">&#34;xxx3&#34;</span><span class="o">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ARTICLE_IMG</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="s">&#34;web/xxxxxx/&#34;</span><span class="o">,</span> <span class="s">&#34;xxx4&#34;</span><span class="o">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NOTICE_IMG</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="s">&#34;web/notice/&#34;</span><span class="o">,</span> <span class="s">&#34;xx5&#34;</span><span class="o">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DEFAULT_IMG</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span> <span class="s">&#34;web/default/&#34;</span><span class="o">,</span> <span class="s">&#34;DEFAULT&#34;</span><span class="o">),</span>
+</span></span><span class="line"><span class="cl">    <span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">code</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">folder</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">desc</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">OSSFolderEnum</span> <span class="nf">valueOfCode</span><span class="o">(</span><span class="kt">int</span> <span class="n">code</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">OSSFolderEnum</span><span class="o">.</span><span class="na">values</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">                <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="n">e</span><span class="o">.</span><span class="na">getCode</span><span class="o">()</span> <span class="o">==</span> <span class="n">code</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">                <span class="o">.</span><span class="na">findFirst</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">                <span class="o">.</span><span class="na">orElse</span><span class="o">(</span><span class="n">DEFAULT_IMG</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="2-天翼云上传">2. 天翼云上传<a hidden class="anchor" aria-hidden="true" href="#2-天翼云上传">#</a></h2>
+<p>controller</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl">    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${oos.bucket}&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">String</span> <span class="n">bucketName</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${oos.fileURL}&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">String</span> <span class="n">OOS_URL</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@PostMapping</span><span class="o">(</span><span class="s">&#34;singleUpload&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@ApiOperation</span><span class="o">(</span><span class="s">&#34;单文件上传&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">ResponseResult</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="nf">singleUpload</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">            <span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">&#34;请选择照片上传&#34;</span><span class="o">)</span> <span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&#34;file&#34;</span><span class="o">)</span> <span class="n">MultipartFile</span> <span class="n">file</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nd">@RequestParam</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;folderType&#34;</span><span class="o">,</span> <span class="n">defaultValue</span> <span class="o">=</span> <span class="s">&#34;6&#34;</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">folderType</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">originalFilename</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">getOriginalFilename</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">pathFileName</span> <span class="o">=</span> <span class="n">OSSFolderEnum</span><span class="o">.</span><span class="na">valueOfCode</span><span class="o">(</span><span class="n">folderType</span><span class="o">).</span><span class="na">getFolder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">                <span class="o">+</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="na">now</span><span class="o">().</span><span class="na">format</span><span class="o">(</span><span class="n">DateTimePatterns</span><span class="o">.</span><span class="na">F_YYYY_MM_DD_HH_MM_SS_SSS</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">                <span class="o">+</span> <span class="n">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">originalFilename</span><span class="o">).</span><span class="na">substring</span><span class="o">(</span><span class="n">originalFilename</span><span class="o">.</span><span class="na">lastIndexOf</span><span class="o">(</span><span class="s">&#34;.&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">OosUtil</span><span class="o">.</span><span class="na">uploadFile</span><span class="o">(</span><span class="n">bucketName</span><span class="o">,</span> <span class="n">pathFileName</span><span class="o">,</span> <span class="n">file</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">fileUrl</span> <span class="o">=</span> <span class="n">OOS_URL</span> <span class="o">+</span> <span class="n">pathFileName</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ResponseResult</span><span class="o">.</span><span class="na">createBySuccess</span><span class="o">(</span><span class="n">fileUrl</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>utils, 单例模式双重检查获取client, 避免重复获取和释放</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OosUtil</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">accessKey</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">secretKey</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 单例模式双重检查
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">private</span> <span class="kd">volatile</span> <span class="kd">static</span> <span class="n">AmazonS3</span> <span class="n">client</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">AmazonS3</span> <span class="nf">getOOSClient</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">client</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">synchronized</span> <span class="o">(</span><span class="n">OSSUtil</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="o">(</span><span class="n">client</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ClientConfiguration</span> <span class="n">clientConfig</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClientConfiguration</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 设置连接的超时时间，单位毫秒
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">clientConfig</span><span class="o">.</span><span class="na">setConnectionTimeout</span><span class="o">(</span><span class="mi">30</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 设置 socket 超时时间，单位毫秒
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">clientConfig</span><span class="o">.</span><span class="na">setSocketTimeout</span><span class="o">(</span><span class="mi">30</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">clientConfig</span><span class="o">.</span><span class="na">setProtocol</span><span class="o">(</span><span class="n">Protocol</span><span class="o">.</span><span class="na">HTTP</span><span class="o">);</span> <span class="c1">//设置 http
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="c1">// 设置 V4 签名算法中负载是否参与签名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">S3ClientOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="n">S3ClientOptions</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">options</span><span class="o">.</span><span class="na">setPayloadSigningEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 创建 client
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AmazonS3Client</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">new</span> <span class="n">PropertiesCredentials</span><span class="o">(</span><span class="n">accessKey</span><span class="o">,</span> <span class="n">secretKey</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 设置 endpoint
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">client</span><span class="o">.</span><span class="na">setEndpoint</span><span class="o">(</span><span class="n">endpoint</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">//设置选项
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">client</span><span class="o">.</span><span class="na">setS3ClientOptions</span><span class="o">(</span><span class="n">options</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">client</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">uploadFile</span><span class="o">(</span><span class="n">String</span> <span class="n">bucket</span><span class="o">,</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">,</span> <span class="n">MultipartFile</span> <span class="n">file</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">AmazonS3</span> <span class="n">oosClient</span> <span class="o">=</span> <span class="n">getOOSClient</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">(</span><span class="n">InputStream</span> <span class="n">inputStream</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">())</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">oosClient</span><span class="o">.</span><span class="na">putObject</span><span class="o">(</span><span class="n">bucket</span><span class="o">,</span> <span class="n">fileName</span><span class="o">,</span> <span class="n">inputStream</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="k">new</span> <span class="n">ServiceException</span><span class="o">(</span><span class="s">&#34;上传文件失败, 请稍后再试&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">deleteFile</span><span class="o">(</span><span class="n">String</span> <span class="n">bucketName</span><span class="o">,</span> <span class="n">String</span> <span class="n">urlPath</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">getOOSClient</span><span class="o">().</span><span class="na">deleteObject</span><span class="o">(</span><span class="n">bucketName</span><span class="o">,</span> <span class="n">urlPath</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://habyss.github.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91/">阿里云</a></li>
+      <li><a href="https://habyss.github.io/tags/%E5%A4%A9%E7%BF%BC%E4%BA%91/">天翼云</a></li>
+      <li><a href="https://habyss.github.io/tags/%E5%8D%95%E4%BE%8B/">单例</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://habyss.github.io/posts/tech/single_double/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>单例模式双重检查</span>
+  </a>
+  <a class="next" href="https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>模板模式&amp;策略模式-登录优化</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://habyss.github.io/">叶灰灰的小窝</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

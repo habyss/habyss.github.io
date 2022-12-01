@@ -8,7 +8,7 @@
     <language>zh-cn</language>
     <lastBuildDate>Tue, 23 Aug 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/springboot/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>mybatis-plus typeHandler 加解密简单实现</title>
+      <title>基于mybatis-plus typeHandler 加解密简单实现</title>
       <link>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</link>
       <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
       
