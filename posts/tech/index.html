@@ -200,6 +200,18 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>连续日期统计数据/日期无数据填充
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>需求 首页需要展示最近七天的一些指标的统计图, 而数据库中实在不同的地方存储的, 且日期并非连续有数据. 数据库 常规使用groupby分组 1 2 3 4 5...</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-06-10 15:36:53 +0800 CST'>2022-06-10</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <a class="entry-link" aria-label="post link to 连续日期统计数据/日期无数据填充" href="https://habyss.github.io/posts/tech/%E8%BF%9E%E7%BB%AD%E6%97%A5%E6%9C%9F%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>resilience4j-spring-boot2 熔断
     </h2>
   </header>
@@ -220,66 +232,6 @@
   </div>
   <footer class="entry-footer"><span title='2021-09-23 15:36:53 +0800 CST'>2021-09-23</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
   <a class="entry-link" aria-label="post link to 单例模式双重检查" href="https://habyss.github.io/posts/tech/single_double/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>阿里云/天翼云文件上传 单例优化
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(&#34;${oss.bucket}&#34;) private String bucketName; @Value(&#34;${oss.fileURL}&#34;) private String OSS_URL; @PostMapping(&#34;singleUpload&#34;) @ApiOperation(&amp;#...</p>
-  </div>
-  <footer class="entry-footer"><span title='2021-08-26 15:36:53 +0800 CST'>2021-08-26</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to 阿里云/天翼云文件上传 单例优化" href="https://habyss.github.io/posts/tech/oss_file_upload/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>短链服务实现
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>简单demo代码, 短链生成算法, 重定向方式, 存储方式和缓存根据业务情况实现</p>
-  </div>
-  <footer class="entry-footer"><span title='2021-07-01 15:36:53 +0800 CST'>2021-07-01</span>&nbsp;·&nbsp;3 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to 短链服务实现" href="https://habyss.github.io/posts/tech/shorturl/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>模板模式&amp;策略模式-登录优化
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>策略模式 策略模式是一种行为模式，也是替代大量 if else 的利器。他能帮你解决的场景，一般是具有同类可替代的行为逻辑算法场景。 比如： 不同类型的交易方式...</p>
-  </div>
-  <footer class="entry-footer"><span title='2020-09-22 15:36:53 +0800 CST'>2020-09-22</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to 模板模式&amp;策略模式-登录优化" href="https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>TraceId 日志跟踪
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>全局拦截, 在 MDC 中插入自定义 traceId 💡 MDC（Mapped Diagnostic Context）机制实现，支持主流的Log4j、Log4j2和Logback日志框架。 1...</p>
-  </div>
-  <footer class="entry-footer"><span title='2019-10-23 15:36:53 +0800 CST'>2019-10-23</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to TraceId 日志跟踪" href="https://habyss.github.io/posts/tech/springboot_traceid/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>rabbitmq ack 探索
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>RabbitMq 生产者确认消息被消费 探索 消费者手动ack的一些状态, 生产者是不能准确得知的. 例如: 1 2 // 处理失败 重新进入队列 继续消费 channel.basicNack(msg.getMessageProperties().getDeliveryTag(), false,true); 当消费者把消息重新...</p>
-  </div>
-  <footer class="entry-footer"><span title='2019-06-16 15:36:53 +0800 CST'>2019-06-16</span>&nbsp;·&nbsp;3 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to rabbitmq ack 探索" href="https://habyss.github.io/posts/tech/rabbitmq_ack/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

@@ -35,6 +35,15 @@
     </item>
     
     <item>
+      <title>连续日期统计数据/日期无数据填充</title>
+      <link>https://habyss.github.io/posts/tech/%E8%BF%9E%E7%BB%AD%E6%97%A5%E6%9C%9F%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE/</link>
+      <pubDate>Fri, 10 Jun 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/%E8%BF%9E%E7%BB%AD%E6%97%A5%E6%9C%9F%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE/</guid>
+      <description>需求 首页需要展示最近七天的一些指标的统计图, 而数据库中实在不同的地方存储的, 且日期并非连续有数据. 数据库 常规使用groupby分组 1 2 3 4 5</description>
+    </item>
+    
+    <item>
       <title>resilience4j-spring-boot2 熔断</title>
       <link>https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/</link>
       <pubDate>Thu, 12 May 2022 15:36:53 +0800</pubDate>
