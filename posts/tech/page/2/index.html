@@ -164,6 +164,18 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>rabbitmq限流Qos 多个消费者同时消费一个消息
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)...</p>
+  </div>
+  <footer class="entry-footer"><span title='2019-05-20 15:36:53 +0800 CST'>2019-05-20</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <a class="entry-link" aria-label="post link to rabbitmq限流Qos 多个消费者同时消费一个消息" href="https://habyss.github.io/posts/tech/rabbitmq_qos_random/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>rabbitmq实现延时队列
     </h2>
   </header>
