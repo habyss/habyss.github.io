@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>mybatisPlus on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/mybatisplus/</link>
+    <description>Recent content in mybatisPlus on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 08 Jul 2021 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/mybatisplus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mybatisPlus下的批量插入修改 探索</title>
+      <link>https://habyss.github.io/posts/tech/mybatis_plus_batch/</link>
+      <pubDate>Thu, 08 Jul 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/mybatis_plus_batch/</guid>
+      <description>问题 使用mybatisPlus自带的saveBatch() 和 updateBatchById() 方法进行批量插入/更新时, 仅仅30条数据耗时3~5s.. 这很不正常 原因 源码 1 2</description>
+    </item>
+    
+  </channel>
+</rss>

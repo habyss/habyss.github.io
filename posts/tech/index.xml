@@ -26,6 +26,15 @@
     </item>
     
     <item>
+      <title>拖拽排序实现</title>
+      <link>https://habyss.github.io/posts/tech/%E6%8B%96%E6%8B%BD%E6%8E%92%E5%BA%8F/</link>
+      <pubDate>Fri, 08 Jul 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/%E6%8B%96%E6%8B%BD%E6%8E%92%E5%BA%8F/</guid>
+      <description>思路 表结构: 1 2 3 4 5 6 7 8 9 create table scar_test.h_sort_table ( id bigint auto_increment primary key, `sort` bigint not null, update_time datetime null, create_time datetime null ) comment &amp;#39;测试&amp;#39;; sort为序号, 初始间隔为2^10=102</description>
+    </item>
+    
+    <item>
       <title>OpenFeign优化</title>
       <link>https://habyss.github.io/posts/tech/openfeign/</link>
       <pubDate>Fri, 24 Jun 2022 15:36:53 +0800</pubDate>
@@ -68,6 +77,15 @@
       
       <guid>https://habyss.github.io/posts/tech/oss_file_upload/</guid>
       <description>1. 阿里云文件上传 前提设置好bucket和相应的url controller 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Value(&amp;#34;${oss.bucket}&amp;#34;) private String bucketName; @Value(&amp;#34;${oss.fileURL}&amp;#34;) private String OSS_URL; @PostMapping(&amp;#34;singleUpload&amp;#34;) @ApiOperation(&amp;#</description>
+    </item>
+    
+    <item>
+      <title>mybatisPlus下的批量插入修改 探索</title>
+      <link>https://habyss.github.io/posts/tech/mybatis_plus_batch/</link>
+      <pubDate>Thu, 08 Jul 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/mybatis_plus_batch/</guid>
+      <description>问题 使用mybatisPlus自带的saveBatch() 和 updateBatchById() 方法进行批量插入/更新时, 仅仅30条数据耗时3~5s.. 这很不正常 原因 源码 1 2</description>
     </item>
     
     <item>

@@ -164,6 +164,18 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>单例模式双重检查
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>标准写法 1 2 3 4 5 6 7 8 9 10 11 12 13 // 单例模式双重检查 private volatile static Singleton client; public static Singleton getSingleton() { if (client == null) { synchronized (Singleton.class) { if (client == null) { client = new Singleton(); } } } return client; } 线程并发涉及三个概念:...</p>
+  </div>
+  <footer class="entry-footer"><span title='2021-09-23 15:36:53 +0800 CST'>2021-09-23</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <a class="entry-link" aria-label="post link to 单例模式双重检查" href="https://habyss.github.io/posts/tech/single_double/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>阿里云/天翼云文件上传 单例优化
     </h2>
   </header>
@@ -172,6 +184,18 @@
   </div>
   <footer class="entry-footer"><span title='2021-08-26 15:36:53 +0800 CST'>2021-08-26</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
   <a class="entry-link" aria-label="post link to 阿里云/天翼云文件上传 单例优化" href="https://habyss.github.io/posts/tech/oss_file_upload/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>mybatisPlus下的批量插入修改 探索
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>问题 使用mybatisPlus自带的saveBatch() 和 updateBatchById() 方法进行批量插入/更新时, 仅仅30条数据耗时3~5s.. 这很不正常 原因 源码 1 2...</p>
+  </div>
+  <footer class="entry-footer"><span title='2021-07-08 15:36:53 +0800 CST'>2021-07-08</span>&nbsp;·&nbsp;4 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <a class="entry-link" aria-label="post link to mybatisPlus下的批量插入修改 探索" href="https://habyss.github.io/posts/tech/mybatis_plus_batch/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -208,30 +232,6 @@
   </div>
   <footer class="entry-footer"><span title='2019-10-23 15:36:53 +0800 CST'>2019-10-23</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰</footer>
   <a class="entry-link" aria-label="post link to TraceId 日志跟踪" href="https://habyss.github.io/posts/tech/springboot_traceid/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>rabbitmq ack 探索
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>RabbitMq 生产者确认消息被消费 探索 消费者手动ack的一些状态, 生产者是不能准确得知的. 例如: 1 2 // 处理失败 重新进入队列 继续消费 channel.basicNack(msg.getMessageProperties().getDeliveryTag(), false,true); 当消费者把消息重新...</p>
-  </div>
-  <footer class="entry-footer"><span title='2019-06-16 15:36:53 +0800 CST'>2019-06-16</span>&nbsp;·&nbsp;3 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to rabbitmq ack 探索" href="https://habyss.github.io/posts/tech/rabbitmq_ack/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>rabbitmq限流Qos 多个消费者同时消费一个消息
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)...</p>
-  </div>
-  <footer class="entry-footer"><span title='2019-05-20 15:36:53 +0800 CST'>2019-05-20</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to rabbitmq限流Qos 多个消费者同时消费一个消息" href="https://habyss.github.io/posts/tech/rabbitmq_qos_random/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
