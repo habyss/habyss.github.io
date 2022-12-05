@@ -205,5 +205,14 @@
       <description>Hugo+Github Pages 1. 安装Scoop win系统, 在hugo官网中也推荐了使用Scoop来进行包管理 打开PowerShell并运行, 保证允许本地脚本的执行 1 set-executionpolicy</description>
     </item>
     
+    <item>
+      <title></title>
+      <link>https://habyss.github.io/posts/tech/%E7%AE%80%E5%8E%86/</link>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/%E7%AE%80%E5%8E%86/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
