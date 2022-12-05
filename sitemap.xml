@@ -2,16 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://habyss.github.io/posts/tech/</loc>
+    <loc>https://habyss.github.io/posts/mine/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/posts/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
-    <loc>https://habyss.github.io/tags/</loc>
+    <loc>https://habyss.github.io/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
-    <loc>https://habyss.github.io/</loc>
+    <loc>https://habyss.github.io/posts/mine/%E7%AE%80%E5%8E%86/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/posts/tech/</loc>
+    <lastmod>2022-11-29T15:36:53+08:00</lastmod>
+  </url><url>
+    <loc>https://habyss.github.io/tags/</loc>
     <lastmod>2022-11-29T15:36:53+08:00</lastmod>
   </url><url>
     <loc>https://habyss.github.io/posts/tech/big_file_upload/</loc>
