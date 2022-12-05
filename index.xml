@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>个人简历</title>
+      <link>https://habyss.github.io/%E7%AE%80%E5%8E%86/</link>
+      <pubDate>Tue, 01 Nov 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/%E7%AE%80%E5%8E%86/</guid>
+      <description>韩坤 个人信息 姓名: 韩坤 学历: 本科 (2014-2018) 学校: 海南热带海洋学院 专业: 数字媒体与技术 英语水平: CET-4 工作年限: 4年 联系邮箱: hankun_0421@163.com 联系方式: 15224970</description>
+    </item>
+    
+    <item>
       <title>基于mybatis-plus typeHandler 加解密简单实现</title>
       <link>https://habyss.github.io/posts/tech/mybatis_plus_typehandler/</link>
       <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
@@ -212,15 +221,6 @@
       
       <guid>https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/</guid>
       <description>Hugo+Github Pages 1. 安装Scoop win系统, 在hugo官网中也推荐了使用Scoop来进行包管理 打开PowerShell并运行, 保证允许本地脚本的执行 1 set-executionpolicy</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://habyss.github.io/posts/tech/%E7%AE%80%E5%8E%86/</link>
-      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/posts/tech/%E7%AE%80%E5%8E%86/</guid>
-      <description></description>
     </item>
     
     
