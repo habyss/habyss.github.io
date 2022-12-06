@@ -71,6 +71,15 @@
     </item>
     
     <item>
+      <title>hls ts m3u8 ffmpeg 前后端视频流demo</title>
+      <link>https://habyss.github.io/posts/tech/hls_ts_m3u8_demo/</link>
+      <pubDate>Wed, 12 Jan 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/hls_ts_m3u8_demo/</guid>
+      <description>最近看到视频流的东西, 浅浅看了一下, demo记录 ffmpeg视频切片 1 ffmpeg -i test.mp4 -c copy -f hls -hls_list_size 0 -hls_time 10 -hls_segment_filename &amp;#39;file%03d.ts&amp;#39; out.m3u8 命令简单解释: 1.ffmpeg切片命令，以</description>
+    </item>
+    
+    <item>
       <title>单例模式双重检查</title>
       <link>https://habyss.github.io/posts/tech/single_double/</link>
       <pubDate>Thu, 23 Sep 2021 15:36:53 +0800</pubDate>

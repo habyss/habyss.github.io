@@ -11,11 +11,11 @@
 <meta name="author" content="叶灰灰">
 <link rel="canonical" href="https://habyss.github.io/posts/tech/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://habyss.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://habyss.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://habyss.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="apple-touch-icon" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="mask-icon" href="https://habyss.github.io/gif/hwlm.gif">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
 <link rel="alternate" type="application/rss+xml" href="https://habyss.github.io/posts/tech/index.xml">
@@ -164,6 +164,18 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>hls ts m3u8 ffmpeg 前后端视频流demo
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>最近看到视频流的东西, 浅浅看了一下, demo记录 ffmpeg视频切片 1 ffmpeg -i test.mp4 -c copy -f hls -hls_list_size 0 -hls_time 10 -hls_segment_filename &#39;file%03d.ts&#39; out.m3u8 命令简单解释: 1.ffmpeg切片命令，以...</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-01-12 15:36:53 +0800 CST'>2022-01-12</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <a class="entry-link" aria-label="post link to hls ts m3u8 ffmpeg 前后端视频流demo" href="https://habyss.github.io/posts/tech/hls_ts_m3u8_demo/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>单例模式双重检查
     </h2>
   </header>
@@ -220,18 +232,6 @@
   </div>
   <footer class="entry-footer"><span title='2021-03-10 15:36:53 +0800 CST'>2021-03-10</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
   <a class="entry-link" aria-label="post link to Java中的锁" href="https://habyss.github.io/posts/tech/java%E4%B8%AD%E7%9A%84%E9%94%81/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>模板模式&amp;策略模式-登录优化
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>策略模式 策略模式是一种行为模式，也是替代大量 if else 的利器。他能帮你解决的场景，一般是具有同类可替代的行为逻辑算法场景。 比如： 不同类型的交易方式...</p>
-  </div>
-  <footer class="entry-footer"><span title='2020-09-22 15:36:53 +0800 CST'>2020-09-22</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to 模板模式&amp;策略模式-登录优化" href="https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
