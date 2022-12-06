@@ -35,6 +35,15 @@
     </item>
     
     <item>
+      <title>SprintBoot下的banner.text</title>
+      <link>https://habyss.github.io/posts/tool/springboot_banner/</link>
+      <pubDate>Tue, 21 Apr 2020 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tool/springboot_banner/</guid>
+      <description>springboot启动时会显示自带的banner, 这个是可以自定义的, 记录一下. 我们只需要在springboot项目的resources文</description>
+    </item>
+    
+    <item>
       <title>TraceId 日志跟踪</title>
       <link>https://habyss.github.io/posts/tech/springboot_traceid/</link>
       <pubDate>Wed, 23 Oct 2019 15:36:53 +0800</pubDate>

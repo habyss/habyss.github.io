@@ -98,6 +98,15 @@
     </item>
     
     <item>
+      <title>Java中的锁</title>
+      <link>https://habyss.github.io/posts/tech/java%E4%B8%AD%E7%9A%84%E9%94%81/</link>
+      <pubDate>Wed, 10 Mar 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/java%E4%B8%AD%E7%9A%84%E9%94%81/</guid>
+      <description>Java中的锁 1. 乐观锁 一种乐观思想, 读取数据的时候乐观的认为别的线程不会进行修改, 所以读取的时候不上锁. 当更新的时候上锁, 并判断当前值是否与</description>
+    </item>
+    
+    <item>
       <title>模板模式&amp;策略模式-登录优化</title>
       <link>https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/</link>
       <pubDate>Tue, 22 Sep 2020 15:36:53 +0800</pubDate>

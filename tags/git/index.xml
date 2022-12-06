@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Git on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/git/</link>
+    <description>Recent content in Git on 叶灰灰的小窝</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 30 May 2021 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Git回滚方式 Idea</title>
+      <link>https://habyss.github.io/posts/tool/git_reset/</link>
+      <pubDate>Sun, 30 May 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tool/git_reset/</guid>
+      <description>将远程的代码回滚到某个版本</description>
+    </item>
+    
+  </channel>
+</rss>

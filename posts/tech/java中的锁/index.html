@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Java中的锁 | 叶灰灰的小窝</title>
+<meta name="keywords" content="锁">
+<meta name="description" content="Java中的锁 1. 乐观锁 一种乐观思想, 读取数据的时候乐观的认为别的线程不会进行修改, 所以读取的时候不上锁. 当更新的时候上锁, 并判断当前值是否与">
+<meta name="author" content="叶灰灰">
+<link rel="canonical" href="https://habyss.github.io/posts/tech/java%E4%B8%AD%E7%9A%84%E9%94%81/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://habyss.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://habyss.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://habyss.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Java中的锁" />
+<meta property="og:description" content="Java中的锁 1. 乐观锁 一种乐观思想, 读取数据的时候乐观的认为别的线程不会进行修改, 所以读取的时候不上锁. 当更新的时候上锁, 并判断当前值是否与" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://habyss.github.io/posts/tech/java%E4%B8%AD%E7%9A%84%E9%94%81/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-10T15:36:53+08:00" />
+<meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java中的锁"/>
+<meta name="twitter:description" content="Java中的锁 1. 乐观锁 一种乐观思想, 读取数据的时候乐观的认为别的线程不会进行修改, 所以读取的时候不上锁. 当更新的时候上锁, 并判断当前值是否与"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://habyss.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻技术",
+      "item": "https://habyss.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Java中的锁",
+      "item": "https://habyss.github.io/posts/tech/java%E4%B8%AD%E7%9A%84%E9%94%81/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Java中的锁",
+  "name": "Java中的锁",
+  "description": "Java中的锁 1. 乐观锁 一种乐观思想, 读取数据的时候乐观的认为别的线程不会进行修改, 所以读取的时候不上锁. 当更新的时候上锁, 并判断当前值是否与",
+  "keywords": [
+    "锁"
+  ],
+  "articleBody": "Java中的锁 1. 乐观锁 一种乐观思想, 读取数据的时候乐观的认为别的线程不会进行修改, 所以读取的时候不上锁. 当更新的时候上锁, 并判断当前值是否与期望的相同, 相同则更新.\njava中的本地方法cas, 数据库一般的version字段\n2. 悲观锁 一种悲观思想, 每次读数据的时候都悲观的认为别的线程会进行修改 , 所以读取的时候上锁. 只能有一个线程进行读写操作.\njava中的synchronized, ReentrantLock\n3. 自旋锁 为了避免线程切换的开销, 让一个线程执行循环操作, 而为了避免长时间占用处理器时间, 一战有默认的自旋次数, java默认10次, 之后会使用传统的方式挂起线程.\njava中cas比较失败后的自旋\n4. 可重入锁 可有效避免死锁, 任意一个线程在获取锁之后能再次获取锁, 但其他线程不可获取锁, 不会被锁阻塞. 内置计数器\njava中的ReentrantLock, synchronized修饰\n5. 读写锁 ReentrantReadWriteLock, 分为读锁和写锁, 多个读锁不互斥, 读锁和写锁互斥.\n读锁\u003e允许多个线程获取读锁, 同时访问同一个资源\n写锁\u003e只允许一个线程获取写锁, 不允许同时访问同一个资源\n6. 公平锁 按照申请所的顺序来获取锁, 在并发环境中, 每个线程会先查看此锁维护的等待队列, 如果为空, 则站有锁, 如果不为空, 则加入到队列的末尾, 按照先进先出的原则占有锁.\n7. 非公平锁 线程先尝试获取锁, 如果获取不到, 再采用公平锁的方式. 即如果当时锁的状态刚好是没有被占用的话, 直接占有锁, 不必等待和切换.\n性能会高于公平锁, 但是有可能造成线程饥饿(某个线程很长时间内获取不到锁)\nsynchronnized, ReentrantLock可指定, 但默认是非公平锁\n8. 共享锁 多个线程可以同时获取锁, 以共享的方式持有锁.\njava中的ReentrantReadWriteLock\n9. 独占锁 只能有一个线程获取锁\njava中的synchronnized, ReentrantLock\n10. ",
+  "wordCount" : "758",
+  "inLanguage": "zh",
+  "datePublished": "2021-03-10T15:36:53+08:00",
+  "dateModified": "2022-11-29T15:36:53+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "叶灰灰"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://habyss.github.io/posts/tech/java%E4%B8%AD%E7%9A%84%E9%94%81/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "叶灰灰的小窝",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://habyss.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://habyss.github.io/" accesskey="h" title="叶灰灰的小窝 (Alt + H)">叶灰灰的小窝</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://habyss.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/archives" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/tech/">👨🏻‍💻技术</a></div>
+    <h1 class="post-title">
+      Java中的锁
+    </h1>
+    <div class="post-meta"><span title='2021-03-10 15:36:53 +0800 CST'>2021-03-10</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#java%e4%b8%ad%e7%9a%84%e9%94%81" aria-label="Java中的锁">Java中的锁</a><ul>
+                        
+                <li>
+                    <a href="#1-%e4%b9%90%e8%a7%82%e9%94%81" aria-label="1. 乐观锁">1. 乐观锁</a></li>
+                <li>
+                    <a href="#2-%e6%82%b2%e8%a7%82%e9%94%81" aria-label="2. 悲观锁">2. 悲观锁</a></li>
+                <li>
+                    <a href="#3-%e8%87%aa%e6%97%8b%e9%94%81" aria-label="3. 自旋锁">3. 自旋锁</a></li>
+                <li>
+                    <a href="#4-%e5%8f%af%e9%87%8d%e5%85%a5%e9%94%81" aria-label="4. 可重入锁">4. 可重入锁</a></li>
+                <li>
+                    <a href="#5-%e8%af%bb%e5%86%99%e9%94%81" aria-label="5. 读写锁">5. 读写锁</a></li>
+                <li>
+                    <a href="#6-%e5%85%ac%e5%b9%b3%e9%94%81" aria-label="6. 公平锁">6. 公平锁</a></li>
+                <li>
+                    <a href="#7-%e9%9d%9e%e5%85%ac%e5%b9%b3%e9%94%81" aria-label="7. 非公平锁">7. 非公平锁</a></li>
+                <li>
+                    <a href="#8-%e5%85%b1%e4%ba%ab%e9%94%81" aria-label="8. 共享锁">8. 共享锁</a></li>
+                <li>
+                    <a href="#9-%e7%8b%ac%e5%8d%a0%e9%94%81" aria-label="9. 独占锁">9. 独占锁</a></li>
+                <li>
+                    <a href="#10" aria-label="10.">10.</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="java中的锁">Java中的锁<a hidden class="anchor" aria-hidden="true" href="#java中的锁">#</a></h1>
+<h2 id="1-乐观锁">1. 乐观锁<a hidden class="anchor" aria-hidden="true" href="#1-乐观锁">#</a></h2>
+<p>一种乐观思想, 读取数据的时候乐观的认为别的线程不会进行修改, 所以读取的时候不上锁. 当更新的时候上锁, 并判断当前值是否与期望的相同, 相同则更新.</p>
+<p><strong>java中的本地方法cas</strong>,  <strong>数据库一般的version字段</strong></p>
+<h2 id="2-悲观锁">2. 悲观锁<a hidden class="anchor" aria-hidden="true" href="#2-悲观锁">#</a></h2>
+<p>一种悲观思想, 每次读数据的时候都悲观的认为别的线程会进行修改 , 所以读取的时候上锁. <strong>只能有一个线程进行读写操作.</strong></p>
+<p><strong>java中的synchronized, ReentrantLock</strong></p>
+<h2 id="3-自旋锁">3. 自旋锁<a hidden class="anchor" aria-hidden="true" href="#3-自旋锁">#</a></h2>
+<p>为了避免线程切换的开销, 让一个线程执行循环操作, 而为了避免长时间占用处理器时间, 一战有默认的自旋次数, java默认10次, 之后会使用传统的方式挂起线程.</p>
+<p><strong>java中cas比较失败后的自旋</strong></p>
+<h2 id="4-可重入锁">4. 可重入锁<a hidden class="anchor" aria-hidden="true" href="#4-可重入锁">#</a></h2>
+<p>可有效避免死锁, 任意一个线程在获取锁之后能再次获取锁, 但其他线程不可获取锁, 不会被锁阻塞. 内置计数器</p>
+<p><strong>java中的ReentrantLock, synchronized修饰</strong></p>
+<h2 id="5-读写锁">5. 读写锁<a hidden class="anchor" aria-hidden="true" href="#5-读写锁">#</a></h2>
+<p>ReentrantReadWriteLock, 分为读锁和写锁, 多个读锁不互斥, 读锁和写锁互斥.</p>
+<p>读锁&gt;允许多个线程获取读锁, 同时访问同一个资源</p>
+<p>写锁&gt;只允许一个线程获取写锁, 不允许同时访问同一个资源</p>
+<h2 id="6-公平锁">6. 公平锁<a hidden class="anchor" aria-hidden="true" href="#6-公平锁">#</a></h2>
+<p>按照申请所的顺序来获取锁, 在并发环境中, 每个线程会先查看此锁维护的等待队列, 如果为空, 则站有锁, 如果不为空, 则加入到队列的末尾, 按照先进先出的原则占有锁.</p>
+<h2 id="7-非公平锁">7. 非公平锁<a hidden class="anchor" aria-hidden="true" href="#7-非公平锁">#</a></h2>
+<p>线程先尝试获取锁, 如果获取不到, 再采用公平锁的方式. 即如果当时锁的状态刚好是没有被占用的话, 直接占有锁, 不必等待和切换.</p>
+<p>性能会高于公平锁, 但是有可能造成线程饥饿(某个线程很长时间内获取不到锁)</p>
+<p><strong>synchronnized, ReentrantLock可指定, 但默认是非公平锁</strong></p>
+<h2 id="8-共享锁">8. 共享锁<a hidden class="anchor" aria-hidden="true" href="#8-共享锁">#</a></h2>
+<p>多个线程可以同时获取锁, 以共享的方式持有锁.</p>
+<p><strong>java中的ReentrantReadWriteLock</strong></p>
+<h2 id="9-独占锁">9. 独占锁<a hidden class="anchor" aria-hidden="true" href="#9-独占锁">#</a></h2>
+<p>只能有一个线程获取锁</p>
+<p><strong>java中的synchronnized, ReentrantLock</strong></p>
+<h2 id="10">10.<a hidden class="anchor" aria-hidden="true" href="#10">#</a></h2>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://habyss.github.io/tags/%E9%94%81/">锁</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://habyss.github.io/posts/tool/git_reset/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Git回滚方式 Idea</span>
+  </a>
+  <a class="next" href="https://habyss.github.io/posts/tech/%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F-%E7%99%BB%E5%BD%95%E4%BC%98%E5%8C%96/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>模板模式&amp;策略模式-登录优化</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://habyss.github.io/">叶灰灰的小窝</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
