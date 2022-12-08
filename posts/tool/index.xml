@@ -6,7 +6,25 @@
     <description>Recent content in 🔧工具 on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 30 May 2021 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/tool/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 15 May 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/tool/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Intellij Idea常用设置 技巧</title>
+      <link>https://habyss.github.io/posts/tool/intellij_idea/</link>
+      <pubDate>Sun, 15 May 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tool/intellij_idea/</guid>
+      <description>目录缩进 java开发应该都小的, 有时候一个项目的层级非常多, 由于缩进太大, 目录还需要左右拖动 效果 设置 插件 个人工作中常用的插件 .ignore: 都懂, 就是隐藏</description>
+    </item>
+    
+    <item>
+      <title>DataGrip常用设置 技巧</title>
+      <link>https://habyss.github.io/posts/tool/datagrip/</link>
+      <pubDate>Wed, 11 May 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tool/datagrip/</guid>
+      <description>DaraGrip为Intellij下的数据库软件, 个人比较喜欢使用 执行sql快捷键 当在console中写完sql之后, 使用快捷键ctrl+e</description>
+    </item>
+    
     <item>
       <title>Git回滚方式 Idea</title>
       <link>https://habyss.github.io/posts/tool/git_reset/</link>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>DataGrip常用设置 技巧 | 叶灰灰的小窝</title>
+<meta name="keywords" content="DataGrip">
+<meta name="description" content="DaraGrip为Intellij下的数据库软件, 个人比较喜欢使用 执行sql快捷键 当在console中写完sql之后, 使用快捷键ctrl&#43;e">
+<meta name="author" content="叶灰灰">
+<link rel="canonical" href="https://habyss.github.io/posts/tool/datagrip/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="apple-touch-icon" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="mask-icon" href="https://habyss.github.io/gif/hwlm.gif">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="DataGrip常用设置 技巧" />
+<meta property="og:description" content="DaraGrip为Intellij下的数据库软件, 个人比较喜欢使用 执行sql快捷键 当在console中写完sql之后, 使用快捷键ctrl&#43;e" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://habyss.github.io/posts/tool/datagrip/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-11T15:36:53+08:00" />
+<meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DataGrip常用设置 技巧"/>
+<meta name="twitter:description" content="DaraGrip为Intellij下的数据库软件, 个人比较喜欢使用 执行sql快捷键 当在console中写完sql之后, 使用快捷键ctrl&#43;e"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://habyss.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "🔧工具",
+      "item": "https://habyss.github.io/posts/tool/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "DataGrip常用设置 技巧",
+      "item": "https://habyss.github.io/posts/tool/datagrip/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "DataGrip常用设置 技巧",
+  "name": "DataGrip常用设置 技巧",
+  "description": "DaraGrip为Intellij下的数据库软件, 个人比较喜欢使用 执行sql快捷键 当在console中写完sql之后, 使用快捷键ctrl+e",
+  "keywords": [
+    "DataGrip"
+  ],
+  "articleBody": " DaraGrip为Intellij下的数据库软件, 个人比较喜欢使用\n执行sql快捷键 当在console中写完sql之后, 使用快捷键ctrl+enter来执行, 默认是需要选择执行哪个sql, 可以设置为执行光标所在的最小执行单位.\n效果为光标放在哪里, 就会执行哪些sql, 而不用自己再手动去选择整条sql.\n表字段直接展示注释 效果\n设置方式: view\u003eappearance\u003edetails in tree view\n数据库展示精简化 datagrip的这个列表默认是需要点击很多层才能看到具体的表和字段, 设置优化后效果\n设置\n查询console标签固定 有时候我们查询数据库的时候, 可能会点开很多张表去看一下数据, 多了之后我们写sql的console就不见了, 但是它又是非常常用的, 所以可以固定一下, 在最上层显示\n效果\n设置有两步\n第一步, 设置单独展示pinned的行\n第二步, 在需要pin的标签上右键, pin这个标签\n数据的复制格式 在datagrip中, 数据的复制可以用很多种格式, 极大方便我们对数据的组装, 例如\nSQL Insterts: 直接复制成insert语句\nWhere Clause: 直接将选中的数据复制成where语句\nsql-insert-mutirow:\n1 2 3 4 5 insert into scar_test.t_dic_region (region_name, region_name_en, simple_name, parent_id, full_name) values ('西城区', 'XichengQu', '西城', 1, '北京市西城区'), ('朝阳区', 'ChaoyangQu', '朝阳', 1, '北京市朝阳区'), ('丰台区', 'FengtaiQu', '丰台', 1, '北京市丰台区'), ('石景山区', 'ShijingshanQu', '石景山', 1, '北京市石景山区'); 可以自己选中操作尝试一下不同的格式, 也可以自定义,一般用不到\n设置\n目录缩进/展示树形线 默认的目录缩进比较大, 可以缩小一点, 更简洁明了, 至于效果上面的图应该可以看出来了.\n设置\n复制表不方便 这个东西最大的毛病就是复制表很不方便, 不像navcat直接拖拽就行了\n",
+  "wordCount" : "779",
+  "inLanguage": "zh",
+  "datePublished": "2022-05-11T15:36:53+08:00",
+  "dateModified": "2022-11-29T15:36:53+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "叶灰灰"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://habyss.github.io/posts/tool/datagrip/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "叶灰灰的小窝",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://habyss.github.io/gif/hwlm.gif"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://habyss.github.io/" accesskey="h" title="叶灰灰的小窝 (Alt + H)">叶灰灰的小窝</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://habyss.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/archives" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/tool/">🔧工具</a></div>
+    <h1 class="post-title">
+      DataGrip常用设置 技巧
+    </h1>
+    <div class="post-meta"><span title='2022-05-11 15:36:53 +0800 CST'>2022-05-11</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e6%89%a7%e8%a1%8csql%e5%bf%ab%e6%8d%b7%e9%94%ae" aria-label="执行sql快捷键">执行sql快捷键</a></li>
+                <li>
+                    <a href="#%e8%a1%a8%e5%ad%97%e6%ae%b5%e7%9b%b4%e6%8e%a5%e5%b1%95%e7%a4%ba%e6%b3%a8%e9%87%8a" aria-label="表字段直接展示注释">表字段直接展示注释</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e5%b1%95%e7%a4%ba%e7%b2%be%e7%ae%80%e5%8c%96" aria-label="数据库展示精简化">数据库展示精简化</a></li>
+                <li>
+                    <a href="#%e6%9f%a5%e8%af%a2console%e6%a0%87%e7%ad%be%e5%9b%ba%e5%ae%9a" aria-label="查询console标签固定">查询console标签固定</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e7%9a%84%e5%a4%8d%e5%88%b6%e6%a0%bc%e5%bc%8f" aria-label="数据的复制格式">数据的复制格式</a></li>
+                <li>
+                    <a href="#%e7%9b%ae%e5%bd%95%e7%bc%a9%e8%bf%9b%e5%b1%95%e7%a4%ba%e6%a0%91%e5%bd%a2%e7%ba%bf" aria-label="目录缩进/展示树形线">目录缩进/展示树形线</a></li>
+                <li>
+                    <a href="#%e5%a4%8d%e5%88%b6%e8%a1%a8%e4%b8%8d%e6%96%b9%e4%be%bf" aria-label="复制表不方便">复制表不方便</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><blockquote>
+<p>DaraGrip为Intellij下的数据库软件, 个人比较喜欢使用</p>
+</blockquote>
+<h3 id="执行sql快捷键">执行sql快捷键<a hidden class="anchor" aria-hidden="true" href="#执行sql快捷键">#</a></h3>
+<p>当在console中写完sql之后, 使用快捷键ctrl+enter来执行, 默认是需要选择执行哪个sql, 可以设置为执行光标所在的最小执行单位.</p>
+<p><img loading="lazy" src="image-20221208134425644.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208134425644.png" alt=""  />
+</p>
+<p>效果为光标放在哪里, 就会执行哪些sql, 而不用自己再手动去选择整条sql.</p>
+<h3 id="表字段直接展示注释">表字段直接展示注释<a hidden class="anchor" aria-hidden="true" href="#表字段直接展示注释">#</a></h3>
+<p>效果</p>
+<p><img loading="lazy" src="image-20221208134725193.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208134725193.png" alt=""  />
+</p>
+<p>设置方式: view&gt;appearance&gt;details in tree view</p>
+<p><img loading="lazy" src="image-20221208134821422.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208134821422.png" alt=""  />
+</p>
+<h3 id="数据库展示精简化">数据库展示精简化<a hidden class="anchor" aria-hidden="true" href="#数据库展示精简化">#</a></h3>
+<p>datagrip的这个列表默认是需要点击很多层才能看到具体的表和字段, 设置优化后效果</p>
+<p><img loading="lazy" src="image-20221208135106847.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208135106847.png" alt=""  />
+</p>
+<p>设置</p>
+<p><img loading="lazy" src="image-20221208135249269.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208135249269.png" alt=""  />
+</p>
+<h3 id="查询console标签固定">查询console标签固定<a hidden class="anchor" aria-hidden="true" href="#查询console标签固定">#</a></h3>
+<p>有时候我们查询数据库的时候, 可能会点开很多张表去看一下数据, 多了之后我们写sql的console就不见了, 但是它又是非常常用的, 所以可以固定一下, 在最上层显示</p>
+<p>效果</p>
+<p><img loading="lazy" src="image-20221208135538188.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208135538188.png" alt=""  />
+</p>
+<p>设置有两步</p>
+<p>第一步, 设置单独展示pinned的行</p>
+<p><img loading="lazy" src="image-20221208135711796.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208135711796.png" alt=""  />
+</p>
+<p>第二步, 在需要pin的标签上右键, pin这个标签</p>
+<p><img loading="lazy" src="image-20221208135816940.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208135816940.png" alt=""  />
+</p>
+<h3 id="数据的复制格式">数据的复制格式<a hidden class="anchor" aria-hidden="true" href="#数据的复制格式">#</a></h3>
+<p>在datagrip中, 数据的复制可以用很多种格式, 极大方便我们对数据的组装, 例如</p>
+<p>SQL Insterts: 直接复制成insert语句</p>
+<p>Where Clause: 直接将选中的数据复制成where语句</p>
+<p>sql-insert-mutirow:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">scar_test</span><span class="p">.</span><span class="n">t_dic_region</span><span class="w"> </span><span class="p">(</span><span class="n">region_name</span><span class="p">,</span><span class="w"> </span><span class="n">region_name_en</span><span class="p">,</span><span class="w"> </span><span class="n">simple_name</span><span class="p">,</span><span class="w"> </span><span class="n">parent_id</span><span class="p">,</span><span class="w"> </span><span class="n">full_name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">values</span><span class="w">  </span><span class="p">(</span><span class="s1">&#39;西城区&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;XichengQu&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;西城&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;北京市西城区&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="s1">&#39;朝阳区&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ChaoyangQu&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;朝阳&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;北京市朝阳区&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="s1">&#39;丰台区&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;FengtaiQu&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;丰台&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;北京市丰台区&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="s1">&#39;石景山区&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ShijingshanQu&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;石景山&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;北京市石景山区&#39;</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以自己选中操作尝试一下不同的格式, 也可以自定义,一般用不到</p>
+<p>设置</p>
+<p><img loading="lazy" src="image-20221208140005902.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208140005902.png" alt=""  />
+</p>
+<h3 id="目录缩进展示树形线">目录缩进/展示树形线<a hidden class="anchor" aria-hidden="true" href="#目录缩进展示树形线">#</a></h3>
+<p>默认的目录缩进比较大, 可以缩小一点, 更简洁明了, 至于效果上面的图应该可以看出来了.</p>
+<p>设置</p>
+<p><img loading="lazy" src="image-20221208141532617.png" alt=""  />
+</p>
+<p><img loading="lazy" src="D:%5cblog%5cblog%5ccontent%5cposts%5ctool%5cdatagrip%5cimage-20221208141532617.png" alt=""  />
+</p>
+<h3 id="复制表不方便">复制表不方便<a hidden class="anchor" aria-hidden="true" href="#复制表不方便">#</a></h3>
+<p>这个东西最大的毛病就是复制表很不方便, 不像navcat直接拖拽就行了</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://habyss.github.io/tags/datagrip/">DataGrip</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://habyss.github.io/posts/tech/resilience4j_%E7%86%94%E6%96%AD/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>resilience4j-spring-boot2 熔断</span>
+  </a>
+  <a class="next" href="https://habyss.github.io/posts/tech/hls_ts_m3u8_demo/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>hls ts m3u8 ffmpeg 前后端视频流demo</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://habyss.github.io/">叶灰灰的小窝</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
