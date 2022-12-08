@@ -71,6 +71,15 @@
     </item>
     
     <item>
+      <title>Mysql like模糊查询 fullText全文索引使用场景</title>
+      <link>https://habyss.github.io/posts/tech/mysql_like_fulltext/</link>
+      <pubDate>Fri, 10 Dec 2021 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/mysql_like_fulltext/</guid>
+      <description>需求 需要模糊查询文章的标题 探索 like 先测试一下300w数据量的耗时 1 2 3 4 5 6 7 8 9 10 11 &amp;gt; select count(1) from t_banner 1 row retrieved starting from 1 in 160 ms (execution: 136 ms, fetching: 24 ms) 一共311402</description>
+    </item>
+    
+    <item>
       <title>单例模式双重检查</title>
       <link>https://habyss.github.io/posts/tech/single_double/</link>
       <pubDate>Thu, 23 Sep 2021 15:36:53 +0800</pubDate>

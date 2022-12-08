@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Mysql on 叶灰灰的小窝</title>
-    <link>https://habyss.github.io/tags/mysql/</link>
-    <description>Recent content in Mysql on 叶灰灰的小窝</description>
+    <title>like on 叶灰灰的小窝</title>
+    <link>https://habyss.github.io/tags/like/</link>
+    <description>Recent content in like on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 10 Dec 2021 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Dec 2021 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/like/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Mysql like模糊查询 fullText全文索引使用场景</title>
       <link>https://habyss.github.io/posts/tech/mysql_like_fulltext/</link>
@@ -14,15 +14,6 @@
       
       <guid>https://habyss.github.io/posts/tech/mysql_like_fulltext/</guid>
       <description>需求 需要模糊查询文章的标题 探索 like 先测试一下300w数据量的耗时 1 2 3 4 5 6 7 8 9 10 11 &amp;gt; select count(1) from t_banner 1 row retrieved starting from 1 in 160 ms (execution: 136 ms, fetching: 24 ms) 一共311402</description>
-    </item>
-    
-    <item>
-      <title>Mysql Explain 简解</title>
-      <link>https://habyss.github.io/posts/tech/mysql_explain/</link>
-      <pubDate>Thu, 29 Nov 2018 15:36:53 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/posts/tech/mysql_explain/</guid>
-      <description>Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查</description>
     </item>
     
   </channel>
