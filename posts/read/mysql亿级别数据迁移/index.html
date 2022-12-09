@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>MySQL 亿级别数据迁移实战代码分享 | 叶灰灰的小窝</title>
+<meta name="keywords" content="">
+<meta name="description" content="MySQL 亿级别数据迁移实战代码分享 x业务背景 某一项技术的出现是为了解决问题的，我们之所以要学习某个技术，是因为这个技术解决了我们工作中遇到的痛点。">
+<meta name="author" content="叶灰灰">
+<link rel="canonical" href="https://habyss.github.io/posts/read/mysql%E4%BA%BF%E7%BA%A7%E5%88%AB%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.js" onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="icon" type="image/png" sizes="16x16" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="icon" type="image/png" sizes="32x32" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="apple-touch-icon" href="https://habyss.github.io/gif/hwlm.gif">
+<link rel="mask-icon" href="https://habyss.github.io/gif/hwlm.gif">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="MySQL 亿级别数据迁移实战代码分享" />
+<meta property="og:description" content="MySQL 亿级别数据迁移实战代码分享 x业务背景 某一项技术的出现是为了解决问题的，我们之所以要学习某个技术，是因为这个技术解决了我们工作中遇到的痛点。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://habyss.github.io/posts/read/mysql%E4%BA%BF%E7%BA%A7%E5%88%AB%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-23T15:36:53+08:00" />
+<meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL 亿级别数据迁移实战代码分享"/>
+<meta name="twitter:description" content="MySQL 亿级别数据迁移实战代码分享 x业务背景 某一项技术的出现是为了解决问题的，我们之所以要学习某个技术，是因为这个技术解决了我们工作中遇到的痛点。"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://habyss.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📕阅读",
+      "item": "https://habyss.github.io/posts/read/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "MySQL 亿级别数据迁移实战代码分享",
+      "item": "https://habyss.github.io/posts/read/mysql%E4%BA%BF%E7%BA%A7%E5%88%AB%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MySQL 亿级别数据迁移实战代码分享",
+  "name": "MySQL 亿级别数据迁移实战代码分享",
+  "description": "MySQL 亿级别数据迁移实战代码分享 x业务背景 某一项技术的出现是为了解决问题的，我们之所以要学习某个技术，是因为这个技术解决了我们工作中遇到的痛点。",
+  "keywords": [
+    
+  ],
+  "articleBody": "MySQL 亿级别数据迁移实战代码分享 x业务背景 某一项技术的出现是为了解决问题的，我们之所以要学习某个技术，是因为这个技术解决了我们工作中遇到的痛点。上亿条数据在 MySQL 中有索引的条件下，实际上只是查询是没有太大问题的，在没有特别大的并发的情况下，只是插入特别慢。\n在迁移大数据量的情况下面临的问题主要有如下几点：\n怎么保证查询大数据量下没有性能的瓶颈。 不能影响正常的业务查询，不要有太多的性能损耗，可以灵活控制迁移的启动与停止。 实际的迁移参数可以动态的扩展，比如一次批量提交多少条数据，一次迁移多少，迁移过程中怎么转化数据。 对于一些错误可以容忍的话怎么跳过异常，比如可以容忍几条数据的失败。 测试环境和生产环境的测试实际一般很难达到百分百一致，如何在线上对迁移的性能进行可配置的控制。 事务的提交问题，因为数据量过大，不能将所有数据查询到内存之中，数据如何分而治之。 迁移的过程需要记录，比如每次的任务执行的多长时间，事务提交了多少次，这些都可以查询，根据这些指标再次动态调整。 针对上面提出的问题，我们自己去写这样一个功能完整且稳定的功能，实际中还是比较困难的。按照通常的 Service 和 Dao 的写法，满足不了我们的需求。\nSpring Batch 核心功能的介绍 Spring Batch 是 Spring 官方的一个专门用于处理大数据体量下数据迁移的开源框架，主要解决的问题就是我们上面所说的那些问题，通过分批读取和写数据，保证内存不会发生溢出。并且通过灵活的组件组合，可以满足数据迁移中的各种需求。\n核心的功能和特点 事务管理 基于分块的处理 声明式 IO 可灵活控制开始、停止、重启 重试和跳过 基于网页的后台管理 Spring Cloud Data Flow Spring Batch 的文档很全面，但对于初学者来说，整个文档读完需要耗费比较长的时间，这里只看两张 Spring Batch 的架构图，后面我会通过实际工作中的迁移案例来讲解怎么使用它。\n架构图 第一张图是架构图，第二张分区处理图。\n从这两张图可以看到这正是我们迁移大数据量下的核心诉求。输入端是从数据源读取数据，数据源可以来源于文件或者数据库，中间的处理流程是对数据进行加工，因为有些数据我们需要进行转换和处理，输出端是写出数据，可以写入到文件或者数据库。\n核心组件 Reader：负责数据的读取 Processor：负责数据的处理 Writer：负责数据的写出 Step：流程编排 Job：任务配置 这些业务组件用我们生活中的例子来理解的话，可以想象一下如下的场景：\n数据迁移就好比从一个油田里运输原油到炼油厂，提炼完成后最终把成品油送到加油站的一个过程。原油在到成品油的过程中要经历很多的流程和运输步骤，就像我们的数据要经过转换一样。\nReader 就好比从油田里将原油装上运输车，Processor 就好比将原油提炼出成品油，Writer 就好比将油运到加油站的油箱里，Step 就是这个装油 -\u003e 提炼油 -\u003e 运输到加油站这个流水线一样的处理步骤，Job 相当与任务，这个任务就是 Step 定义好的这个流程，任务可以执行多次，但是每一次都是按照提前定义好的 Step 来执行。\n实际中的业务需求怎么实现 可以先下载源码：\nhttps://gitee.com/smartGim/batchsrv\n先从单表数据备份快速了解迁移流程 这种场景多见于项目创建初期为了快速上线，在项目初期没有做分库分表（在项目初期一般不会做分库分表），比如订单表，还有银行流水表、历史对账数据、支付记录数据表等。这种数据的特点为时间在半年或者一年以上将变为冷数据，数据查询的情况比较少，并且数据不会发生变化。通常情况下我们需要将时间大于一定时期的数据定时备份。还有一种情况就是接手一些历史遗留的项目，有些数据的单表已经达到了一个极限。\n我们以一个数据库的数据 db_source 迁移到另外一个数据库 db_target 为例，迁移过程中同时删除已经迁移走的记录。并将迁移的过程和记录进行记录下来到 db_source 中。\n实现步骤：\n1. 新建一个 Spring Boot 工程引入\n1 2 3 4 5 6 7 8 9 10 11 12 13 \u003cdependency\u003e \u003cgroupId\u003eorg.springframework.boot\u003c/groupId\u003e \u003cartifactId\u003espring-boot-starter-batch\u003c/artifactId\u003e \u003c/dependency\u003e @SpringBootApplication @EnableBatchProcessing public class BatchsrvApplication { public static void main(String[] args) { SpringApplication.run(BatchsrvApplication.class, args); } } 在启动类上添加注解 @EnableBatchProcessing。\n注意：添加上了此注解，那么项目启动后 Spring Batch 就会自动化初始相关的数据库文件，并且直接启动相关的迁移任务。在实际的线上迁移中是不会直接上线后就自动执行任务的，通常会先通过手动执行来看下执行情况，再动态配置一些指标，所以我们的项目会禁用自动执行，并且手动执行 Spring batch 的数据库文件，数据库初始文件在 spring-batch-core 中，根据数据库进行选择即可。\n禁用自动执行任务选项，batch.job.enabled = false。\n1 2 3 4 5 6 7 8 server: port: 8096 spring: profiles: active: dev batch: job: enabled: false 2. 多数据源配置\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 package cn.gitchat.share.config; import javax.sql.DataSource; import org.springframework.beans.factory.annotation.Autowired; import org.springframework.context.annotation.Bean; import org.springframework.context.annotation.Configuration; import org.springframework.context.annotation.Primary; import org.springframework.core.env.Environment; import org.springframework.jdbc.core.JdbcTemplate; import org.springframework.jdbc.datasource.DriverManagerDataSource; /** * @Author: Gim * @Date: 2019-12-04 17:05 * @Description: */ @Configuration public class DataSourceConfig { @Autowired private Environment env; @Bean @Primary public DataSource primaryDatasource() { DriverManagerDataSource dataSource = new DriverManagerDataSource(); dataSource.setDriverClassName(env.getProperty(\"source.driver-class-name\")); dataSource.setUrl(env.getProperty(\"source.jdbc-url\")); dataSource.setUsername(env.getProperty(\"source.username\")); dataSource.setPassword(env.getProperty(\"source.password\")); return dataSource; } @Bean public DataSource targetDatasource() { DriverManagerDataSource dataSource = new DriverManagerDataSource(); dataSource.setDriverClassName(env.getProperty(\"target.driver-class-name\")); dataSource.setUrl(env.getProperty(\"target.jdbc-url\")); dataSource.setUsername(env.getProperty(\"target.username\")); dataSource.setPassword(env.getProperty(\"target.password\")); return dataSource; } @Bean public JdbcTemplate primaryTemplate(){ return new JdbcTemplate(primaryDatasource()); } @Bean public JdbcTemplate targetJdbcTemplate(){ return new JdbcTemplate(targetDatasource()); } } 此处我们使用多数据源的配置，并且使用 JdbcTemplate 进行数据的读取。\n主数据源中配置 Spring Batch 的数据库文件（如果不在意迁移的情况记录可以使用内存数据库，存储 Spring Batch 的迁移记录情况，这样能提高迁移性能，但是实际中不建议做，迁移性能的大幅提升会影响线上的业务正常运行，除非迁移有及时性这种需求再开启内存数据源）。\n如何定制 Spring Batch 的框架使用的数据源？\n从源码中找到：\n1 public class BatchConfig extends DefaultBatchConfigurer 这个类继承于 DefaultBatchConfigurer 然后我们对 JobRepository 进行重写：\n1 2 3 4 5 6 7 8 9 //将spring batch 的记录存取在主数据源中 @Override protected JobRepository createJobRepository() throws Exception { JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean(); factory.setDataSource(primaryDatasource); factory.setTransactionManager(this.getTransactionManager()); factory.afterPropertiesSet(); return factory.getObject(); } 3. 读取的配置\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 /** * 数据读取 根据id 查询保证性能 分页读取 */ @Bean @StepScope public JdbcPagingItemReader\u003cPayRecord\u003e payRecordReader(@Value(\"#{jobParameters[minId]}\") Long minId, @Value(\"#{jobParameters[maxId]}\") Long maxId) throws Exception { JdbcPagingItemReader\u003cPayRecord\u003e reader = new JdbcPagingItemReader(); final SqlPagingQueryProviderFactoryBean sqlPagingQueryProviderFactoryBean = new SqlPagingQueryProviderFactoryBean(); sqlPagingQueryProviderFactoryBean.setDataSource(primaryDatasource); sqlPagingQueryProviderFactoryBean.setSelectClause(\"select * \"); sqlPagingQueryProviderFactoryBean.setFromClause(\"from pay_record\"); sqlPagingQueryProviderFactoryBean.setWhereClause(\"id \u003e \" + minId + \" and id \u003c= \" + maxId); sqlPagingQueryProviderFactoryBean.setSortKey(\"id\"); reader.setQueryProvider(sqlPagingQueryProviderFactoryBean.getObject()); reader.setDataSource(primaryDatasource); reader.setPageSize(config.getPageSize()); reader.setRowMapper(new PayRecordRowMapper()); reader.afterPropertiesSet(); reader.setSaveState(true); return reader; } 在读取的配置中有几个比较重要的点：\n第一点可以看到在 @Bean 下方有个注解 @StepScope 这个注解的作用是我们可以在 Job 执行时给 Job 添加变量，用于我们可以动态的控制每次任务要迁移的记录，通过 @Value (\"#{jobParameters [minId]}\" 这种方式进行接收参数，传递参数可以在任务执行时进行 Job 传参，使用方式如下： 1 2 3 4 5 6 7 8 9 10 11 12 @Scheduled(cron = \"0 0 2 * * ?\") public void migratePayRecord() throws Exception { Map\u003cString, Object\u003e result = primaryJdbcTemplate .queryForMap(\"select * from job_config where config_key = ?\", MigrateConstants.PAY_RECORD_JOB_CONFIG_KEY); String value = (String) result.get(\"config_value\"); JobExecuteConfig payRecordJobConfig = JSON.parseObject(value, JobExecuteConfig.class); JobParameters params = new JobParametersBuilder() .addLong(\"maxId\", payRecordJobConfig.getExecuteMaxId()) .addLong(\"minId\", payRecordJobConfig.getMinId()) .toJobParameters(); jobLauncher.run(migratePayRecordJob, params); } 第二点可以看到我们读取数据使用的是 JdbcPagingItemReader 这个类，这个类的特点是可以通过分页的方式对数据记录进行读取，保证不会内存溢出，这里面 SortKey 是个很重要的点，一定要保证数据的唯一性，这个用于任务重新启动判断从哪再次开始。 PageSize 我们可以控制每一次读取多少条记录，这个用于调优用，根据实际的情况进行控制。SaveState 用于将迁移的记录情况进行记录。 这个 Reader 的配置非常重要是保证亿级别数据不会发生内存溢出的关键配置。在这里的配置相当于我们对大数量级别的数据进行了一个分段处理。是分而治之的关键点。 4. 写入的配置\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 /** * 写入到新库 */ @Bean public ItemWriter\u003c? super PayRecord\u003e targetPayRecordWriter() { return new JdbcBatchItemWriterBuilder\u003cPayRecord\u003e() .dataSource(targetDatasource) .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider\u003c\u003e()) .sql( \"INSERT INTO `pay_record` (\\n\" + \"`id`,\\n\" + \"`user_id`,\\n\" + \"`pay_detail`,\\n\" + \"`pay_status`,\\n\" + \"`create_time`,\\n\" + \"`update_time`\\n\" + \")\\n\" + \"VALUES\\n\" + \"\\t(\\n\" + \":id,\" + \":userId,\" + \":payDetail,\" + \":payStatus,\" + \":createTime,\" + \":updateTime\" + \")\") .build(); } /** * 删除器 * * @return */ @Bean public ItemWriter\u003cPayRecord\u003e deletePayRecordWriter() { return new JdbcBatchItemWriterBuilder\u003cPayRecord\u003e() .dataSource(primaryDatasource) .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider\u003c\u003e()) .sql(\"delete from pay_record where id = :id\") .build(); } @Bean public CompositeItemWriter\u003cPayRecord\u003e compositePayRecordItemWriter(@Qualifier(\"deletePayRecordWriter\") ItemWriter deleteWriter, @Qualifier(\"targetPayRecordWriter\") ItemWriter targetPayRecordWriter) { CompositeItemWriter\u003cPayRecord\u003e compositeItemWriter = new CompositeItemWriter\u003c\u003e(); List\u003cItemWriter\u003c? super PayRecord\u003e\u003e list = new ArrayList\u003c\u003e(); list.add(deleteWriter); list.add(targetPayRecordWriter); compositeItemWriter.setDelegates(list); return compositeItemWriter; } 写入的配置这里面使用了两个配置，一个是写入新的数据源，一个是删除原来的迁移数据连接的是原来的主数据源。写入器使用的是框架提供的 JdbcBatchItemWriter ，看名字就知道这个类的作用了，它支持批量的写入，性能非常高。Spring Batch 支持各种 Writer 的组合，通过 CompositeItemWriter 来实现。在这里只是为了演示组合 Writer 的用法，实际中最好分成两步来完成这种任务。\n5. Step 的配置\n1 2 3 4 5 6 7 8 9 10 11 @Bean public Step migratePayRecordStep(@Qualifier(\"payRecordReader\") JdbcPagingItemReader\u003cPayRecord\u003e payRecordReader, @Qualifier(value = \"compositePayRecordItemWriter\") CompositeItemWriter compositeItemWriter) { return this.stepBuilderFactory.get(\"migratePayRecordStep\") .\u003cPayRecord, PayRecord\u003echunk(config.getChunkSize()) .reader(payRecordReader) .processor(new PassThroughItemProcessor()) .writer(compositeItemWriter) .taskExecutor(new SimpleAsyncTaskExecutor(\"migrate_thread\")) .throttleLimit(config.getThreadSize()) .build(); } 像上面讲到的那样 Step 的作用就是配置整个流程的，这里面 chunk 是对数据进行分块，可以动态的控制每次事务提交多少条记录。\nProcessor 是处理器。 这里面直接传递了一个 PassThroughItemProcessor ，这个类的作用是对传递过来的对象不做任何的处理。如果我们想对原有的记录进行扩展，那么可以自定义一个处理器，比如：\n1 2 3 4 5 6 7 8 9 @Component public class PayRecordExtProcessor implements ItemProcessor\u003cPayRecord,PayRecordExt\u003e { @Override public PayRecordExt process(PayRecord payRecord) throws Exception { //other service PayRecordExt ext = new PayRecordExt(); return ext; } } 在这里进行数据处理。\ntaskExecutor 这个是线程池的配置。因为每条记录的读取、处理、写入都是独立的，互相之间没有任何的影响，所以使用线程池可以实现流程的并行处理，提高处理速度。throttleLimit 用来控制最大的线程数。线程太多了会造成资源的浪费。\n6. Job 的配置\n1 2 3 4 5 6 7 @Bean public Job migratePayRecordJob(@Qualifier(\"migratePayRecordStep\") Step step) { return this.jobBuilderFactory.get(\"migratePayRecordJob\") .start(step) .incrementer(new RunIdIncrementer()) .build(); } Job 用于将 step 配置好的流程向外以任务的形式暴露。\n7. 如何启动 Job\n默认情况下 Spring Batch 会自动启动任务，上面提到了，在线上时一定不要自动启动任务。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 @Component @Slf4j public class PayRecordTask { @Autowired private Job migratePayRecordJob; @Autowired private JobLauncher jobLauncher; @Autowired @Qualifier(\"primaryTemplate\") private JdbcTemplate primaryJdbcTemplate; /** *迁移任务 * @throws Exception */ @Scheduled(cron = \"0 0 2 * * ?\") public void migratePayRecord() throws Exception { Map\u003cString, Object\u003e result = primaryJdbcTemplate .queryForMap(\"select * from job_config where config_key = ?\", MigrateConstants.PAY_RECORD_JOB_CONFIG_KEY); String value = (String) result.get(\"config_value\"); JobExecuteConfig payRecordJobConfig = JSON.parseObject(value, JobExecuteConfig.class); JobParameters params = new JobParametersBuilder() .addLong(\"maxId\", payRecordJobConfig.getExecuteMaxId()) .addLong(\"minId\", payRecordJobConfig.getMinId()) .toJobParameters(); jobLauncher.run(migratePayRecordJob, params); } /** * * 执行迁移任务之前数据迁移配置初始化 * 凌晨一点 */ @Scheduled(cron = \"0 0 1 * * ?\") public void initBillMigrateConfig() { //TODO 根据实际需要的业务逻辑动态计算出，每次要迁移的数据是哪些 ，最好根据时间算出MaxId, 然后每天执行固定的步长 ，比如每天迁移100万 } } 当在启动类上添加注解 @EnableBatchProcessing 之后，Spring Batch 会在容器中自动注入 Spring Batch 的组件，这里面我们可以使用 JobLauncher 进行任务的启动，在启动时可以配置任务启动的参数。\n1 2 3 4 JobParameters params = new JobParametersBuilder() .addLong(\"maxId\", payRecordJobConfig.getExecuteMaxId()) .addLong(\"minId\", payRecordJobConfig.getMinId()) .toJobParameters(); 这传递的参数，通过 @StepScope 注解的 Bean 就可以动态获取这个参数。\n8. Job 如何启动、停止、重启\nJob 的另一种启动和停止是通过类 JobOperator 这个类来实现的，在启动和重启之前要将 Job 注册到 JobRegistry 中，在 JobController 中可以看到具体的实现。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 @Autowired private JobRegistry registry; @PostConstruct public void registry() throws DuplicateJobException { ReferenceJobFactory factory = new ReferenceJobFactory(migratePayRecordJob); registry.register(factory); } @PostMapping(value = \"startJob\") @SneakyThrows public ResponseEntity\u003cString\u003e startJob() { Properties properties = new Properties(); properties.put(\"minId\", \"20\"); properties.put(\"maxId\", \"50\"); executePayRecordId = jobOperator.start(\"migratePayRecordJob\", PropertiesConverter.propertiesToString(properties)); return ResponseEntity.ok(\"操作成功\"); } @PostMapping(value = \"stopJob\") @SneakyThrows public ResponseEntity\u003cString\u003e stopJob() { Assert.notNull(executePayRecordId,\"执行id不能为空！\"); jobOperator.stop(executePayRecordId); return ResponseEntity.ok(\"操作成功\"); } @PostMapping(value = \"restartJob\") @SneakyThrows public ResponseEntity\u003cString\u003e restartJob(){ Assert.notNull(executePayRecordId,\"执行id不能为空！\"); jobOperator.restart(executePayRecordId); return ResponseEntity.ok(\"操作成功\"); } 这个类的方法非常的丰富，除了能启动执行外还有大量的 API：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 List\u003cLong\u003e getExecutions(long var1) throws NoSuchJobInstanceException; List\u003cLong\u003e getJobInstances(String var1, int var2, int var3) throws NoSuchJobException; Set\u003cLong\u003e getRunningExecutions(String var1) throws NoSuchJobException; String getParameters(long var1) throws NoSuchJobExecutionException; Long start(String var1, String var2) throws NoSuchJobException, JobInstanceAlreadyExistsException, JobParametersInvalidException; Long restart(long var1) throws JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException, JobRestartException, JobParametersInvalidException; Long startNextInstance(String var1) throws NoSuchJobException, JobParametersNotFoundException, JobRestartException, JobExecutionAlreadyRunningException, JobInstanceAlreadyCompleteException, UnexpectedJobExecutionException, JobParametersInvalidException; boolean stop(long var1) throws NoSuchJobExecutionException, JobExecutionNotRunningException; String getSummary(long var1) throws NoSuchJobExecutionException; Map\u003cLong, String\u003e getStepExecutionSummaries(long var1) throws NoSuchJobExecutionException; Set\u003cString\u003e getJobNames(); JobExecution abandon(long var1) throws NoSuchJobExecutionException, JobExecutionAlreadyRunningException; 在 Spring Batch 的 Admin 管理系统中主要就是通过这个类来获取任务的执行情况。\n9. 总结\n通过上面的演示可以清楚的看到 Spring Batch 的执行逻辑，Spring Batch 定义了模板，我们在使用过程中只需要按照接口提供相应的数据来源和输出的接口即可。其他的事务处理，多线程池，批量处理，内存控制都由框架来完成。那么 Spring Batch 是怎么样保证在大数据量级的情况下，内存不溢出然后又保证性能的呢，下面用一张图进行展示 Spring Batch 是通过怎么的处理，保证在数据量巨大的情况下，高性能的进行数据的读写的。\n其他业务场景的扩展 在实际中项目处理中，我们面对的系统情况可能并不是一个单表这样简单的业务情况，比如多表合一、一表分表为多表，在迁移过程中数据变更的情形。那么这些场景该如何处理呢？\n1. 多表合一的场景\n在多表合一的场景下，实际上如何两张表有关联，那么附表上一定要建立索引。我们还是会让查询逻辑在主表上，千万不要使用 Join 联查，亿级别的数据如何联查，那么基础系统就要崩溃了。此时我们需要将需要拼装的业务逻辑放在 Processor 里面，比如在我们的案例场景下，需要将 User 的信息冗余到新的一个表中那么只需要将 UserService 注入到 PayRecordExtProcessor 中，然后再通过 userService.getId(payRecord.getUserId ()) 这种方式去 load 用户信息，用户的 Id 肯定有索引，这样查询性能不会有太多的损耗。这也是现在大厂为啥要求在业务系统开发的过程中尽快不要使用 Join 联查的原因。\n1 2 3 4 5 6 7 8 9 10 @Component public class PayRecordExtProcessor implements ItemProcessor\u003cPayRecord,PayRecordExt\u003e { @Override public PayRecordExt process(PayRecord payRecord) throws Exception { //此处注入 User service 通过userService .getId(payRecord.getUserId()); PayRecordExt ext = new PayRecordExt(); return ext; } } 2. 拆分为多表的场景\n系统有些情况下需要将单表拆分为多表，比如根据用户 id 分片，这种情况下 Spring Batch 提供了一个类 ClassifierCompositeItemWriter 可以根据条件动态选择 Writer，在这里我们模拟将 pay_record 这个表拆分为两个表的场景 pay_record_1、pay_record2。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 create TABLE pay_record_1 like pay_record; create TABLE pay_record_2 like pay_record; //根据条件拆分为多表 @Bean public ClassifierCompositeItemWriter\u003c? super PayRecord\u003e classifierItemWriter(@Qualifier(\"payRecordOneWriter\") ItemWriter payRecordOneWriter,@Qualifier(\"payRecordTwoWriter\") ItemWriter payRecordTwoWriter){ ClassifierCompositeItemWriter\u003cPayRecord\u003e classifierCompositeItemWriter = new ClassifierCompositeItemWriter\u003c\u003e(); classifierCompositeItemWriter.setClassifier( (Classifier\u003cPayRecord, ItemWriter\u003c? super PayRecord\u003e\u003e) record -\u003e { ItemWriter\u003c? super PayRecord\u003e itemWriter; if(record.getId() %2 ==0 ){ itemWriter = payRecordOneWriter; }else { itemWriter = payRecordTwoWriter; } return itemWriter; }); return classifierCompositeItemWriter; } @Bean public Step splitPayRecordStep(@Qualifier(\"payRecordReader\") JdbcPagingItemReader\u003cPayRecord\u003e payRecordReader, @Qualifier(value = \"classifierItemWriter\") ClassifierCompositeItemWriter itemWriter) { return this.stepBuilderFactory.get(\"splitPayRecordStep\") .\u003cPayRecord, PayRecord\u003echunk(config.getChunkSize()) .reader(payRecordReader) .processor(new PassThroughItemProcessor()) .writer(itemWriter) .taskExecutor(new SimpleAsyncTaskExecutor(\"migrate_thread\")) .throttleLimit(config.getThreadSize()) .build(); } @Bean public Job splitPayRecordJob(@Qualifier(\"splitPayRecordStep\") Step step) { return this.jobBuilderFactory.get(\"splitPayRecordJob\") .start(step) .incrementer(new RunIdIncrementer()) .build(); } 在这里面我们定义了一个 ClassifierCompositeItemWriter 根据 Id % 表个数进行分片。具体的实现可以看代码。\n3. 迁移过程中数据有变更和增量的场景\n一般来说有单表性能的表数据，都有一个特点，随着时间的迁移会有大量的冷数据，上千万频繁变更的场景还是比较少的。如果想保证系统不间断运行，同时又能进行系统的迁移，迁移完成后再进行用户无感知的切换。需要考虑到迁移过程中有增量变更的情况。这种情况下我们一般引入 CDC (change data capture) 组件。比较常用的如阿里的 Canal、Debezium，这种中间件监听数据的变更。关于它们的使用可以去看官方的文档，非常的简单，添加好配置项就可以了。\n配置好后将变更的数据再导入的新的数据源。切换后完成再通过 Spring Batch 进行比对迁移的数据和变化数据就可以了。如果变化的量级特别大，最好选用后半夜，数据变更较小的情况下进行数据迁移。因为亿级别的数据实时同步这个是不可能的，找一个折中的方案即可。\n如何控制部署的实例不同时运行 为了保证服务的可靠性，通常我们部署的迁移服务实例是多个的，在这种情况下，我们需要保证数据不能迁移重复。在 Spring Batch 里面 Job 的概念相当于任务，还有一个概念叫 JobInstance。\n什么意思呢，上面提到 Step 相当于配置的流程，Job 是任务，那么任务是可能有多个的，就像一个类，我们可以 new 出来多个对象一样。一个 JonInstance 在相同的 JobParameter 下只会执行一次。这样在多实例的情况下，实际上部署多台实例也能控制任务不会重复执行，只不过会报一个任务已经存在的异常。但是在实际的项目迁移中我们希望 Job 的参数可以每天动态计算，比如在任务之前我们需要动态的计算出，今天的任务要迁移哪些数据。\n1 2 3 4 5 6 7 8 9 /** * * 执行迁移任务之前数据迁移配置初始化 * 凌晨一点 */ @Scheduled(cron = \"0 0 1 * * ?\") public void initMigrateConfig() { //TODO 根据实际需要的业务逻辑动态计算出，每次要迁移的数据是哪些 ，最好根据时间算出MaxId, 然后每天执行固定的步长 ，比如每天迁移100万 } 像这种任务如果是多台实例，如果不加锁实际上会有问题的。这里面我们再引入一个新的组件：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 \u003cdependency\u003e \u003cgroupId\u003enet.javacrumbs.shedlock\u003c/groupId\u003e \u003cartifactId\u003eshedlock-spring\u003c/artifactId\u003e \u003cversion\u003e4.1.0\u003c/version\u003e \u003c/dependency\u003e \u003cdependency\u003e \u003cgroupId\u003enet.javacrumbs.shedlock\u003c/groupId\u003e \u003cartifactId\u003eshedlock-provider-jdbc-template\u003c/artifactId\u003e \u003cversion\u003e4.0.4\u003c/version\u003e \u003c/dependency\u003e @Bean public LockProvider lockProvider(@Qualifier(value = \"primaryDatasource\") DataSource dataSource) { return new JdbcTemplateLockProvider(dataSource); } 此处我们使用 JdbcTemplateLock 当做我们的分布式锁的实现。这样配置之后我们的任务在同一时间就只会在一个实例上运行了。\n哪些点可以优化 \\1. 每次可以控制读取的条数，每次事务提交的个数，每个 Step 启用的线程数都可以进行配置，在本项目中提供了一个配置类，可以对这些配置项进行动态的配置。\n1 2 3 4 5 6 7 8 9 @ConfigurationProperties(prefix = \"migrate.config\") @Data public class MigrateConfig { //每次读取数据条数 private Integer pageSize; //每次事务提交记录数 private Integer chunkSize; private Integer threadSize; } \\2. 在迁移之前 MySQL 要查看连接情况，设置缓冲池大小等指标，这个也是在迁移之前要考虑的点。\n1 2 3 4 show processlist set global innodb_buffer_pool_size = 缓冲池大小 ; show variables like 'max_connections'; set global max_connections= 最大连接数; \\3. 像上面提到的 Spring Batch 在迁移过程中会将任务的执行情况都初始化到数据库中，如果我们不想要这些数据持久化，那么我们可以选择内存数据库，这个会大大提升迁移的速度，更改数据源即可。\nSpring Cloud Data Flow 入门简介 Spring Cloud Data Flow 这个是现在 Spring 在数据流处理方面一个功能非常强大的框架。目前被 Spring 放在了首页上，跟 Spring Cloud 并列。在单机条件下对 Spring Batch 的支持有限，不支持任务的动态调度，想使用调度需要 K8s 部署，Spring Cloud Data Flow 在本机搭建有两种方式，一个是用 Docker，一个是直接启动 jar 包。具体的 jar 包我放在了项目的 resources 下面。\n如果使用 Docker，cd 到 dataflow 目录下运行。\n1 2 3 4 5 export DATAFLOW_VERSION=2.2.1.RELEASE export SKIPPER_VERSION=2.1.2.RELEASE docker-compose up 如果不使用 Docker 而选择直接运行 jar 包：\n1 2 3 java -jar spring-cloud-skipper-server-2.1.2.RELEASE.jar java -jar spring-cloud-dataflow-server-2.2.1.RELEASE.jar 打开浏览器 输入 http://localhost:9393/dashboard/ 即可访问控制台。\n注意一点：如果需要使用 Spring Batch Job 需要集成 Spring Cloud Task，实际的项目中使用 JobOperator 即可，这个 UI 也是使用这个类进行 UI 展示的。如果对这个感兴趣的可以去探索。\n在实际的迁移过程中可以查询在项目启动时初始化那几张表，Spring Batch 会把每次执行的参数和执行情况全部初始化到数据库表中以 BATCH_开头的表中。\n项目代码地址 https://gitee.com/smartGim/batchsrv\n该项目是 Spring Boot 项目，打开 application-dev.yml 中按照要求创建自己的数据库，db 文件在 resources/db 文件下，source_db 开头的初始化到 source 数据库中，target_db 开头的初始化到 target 数据库中即可。\n实战代码并非理论的讲解，所以请务必查看源码进行练习。\n如何进行测试，在 jobconfig 表中更改 minId 和 maxId，这个是控制要迁移哪些数据的，你也可以写个自动化的任务去每天动态更新这个配置项。\n在 web 包下有 JobController 是前端的入口，用于本地的测试，可以通过 Postman 等工具直接发送请求即可。\n如果在测试过程中有任何问题可以提 Issue。\n其他学习的资源 一个不错的示例项目：\nhttps://github.com/pkainulainen/spring-batch-examples.git\n如果想写入到 Excel，Spring Batch 也支持 Excel，ES 的扩展：\nhttps://github.com/spring-projects/spring-batch-extensions.git\n官方的 Samples：\nhttps://github.com/spring-projects/spring-batch.git\n",
+  "wordCount" : "6945",
+  "inLanguage": "zh",
+  "datePublished": "2022-08-23T15:36:53+08:00",
+  "dateModified": "2022-11-29T15:36:53+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "叶灰灰"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://habyss.github.io/posts/read/mysql%E4%BA%BF%E7%BA%A7%E5%88%AB%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "叶灰灰的小窝",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://habyss.github.io/gif/hwlm.gif"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://habyss.github.io/" accesskey="h" title="叶灰灰的小窝 (Alt + H)">叶灰灰的小窝</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://habyss.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/archives" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://habyss.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://habyss.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/">Posts</a>&nbsp;»&nbsp;<a href="https://habyss.github.io/posts/read/">📕阅读</a></div>
+    <h1 class="post-title">
+      MySQL 亿级别数据迁移实战代码分享
+    </h1>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#mysql-%e4%ba%bf%e7%ba%a7%e5%88%ab%e6%95%b0%e6%8d%ae%e8%bf%81%e7%a7%bb%e5%ae%9e%e6%88%98%e4%bb%a3%e7%a0%81%e5%88%86%e4%ba%ab" aria-label="MySQL 亿级别数据迁移实战代码分享">MySQL 亿级别数据迁移实战代码分享</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#x%e4%b8%9a%e5%8a%a1%e8%83%8c%e6%99%af" aria-label="x业务背景">x业务背景</a></li>
+                <li>
+                    <a href="#spring-batch-%e6%a0%b8%e5%bf%83%e5%8a%9f%e8%83%bd%e7%9a%84%e4%bb%8b%e7%bb%8d" aria-label="Spring Batch 核心功能的介绍">Spring Batch 核心功能的介绍</a><ul>
+                        
+                <li>
+                    <a href="#%e6%a0%b8%e5%bf%83%e7%9a%84%e5%8a%9f%e8%83%bd%e5%92%8c%e7%89%b9%e7%82%b9" aria-label="核心的功能和特点">核心的功能和特点</a></li>
+                <li>
+                    <a href="#%e6%9e%b6%e6%9e%84%e5%9b%be" aria-label="架构图">架构图</a></li>
+                <li>
+                    <a href="#%e6%a0%b8%e5%bf%83%e7%bb%84%e4%bb%b6" aria-label="核心组件">核心组件</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%ae%9e%e9%99%85%e4%b8%ad%e7%9a%84%e4%b8%9a%e5%8a%a1%e9%9c%80%e6%b1%82%e6%80%8e%e4%b9%88%e5%ae%9e%e7%8e%b0" aria-label="实际中的业务需求怎么实现">实际中的业务需求怎么实现</a><ul>
+                        
+                <li>
+                    <a href="#%e5%85%88%e4%bb%8e%e5%8d%95%e8%a1%a8%e6%95%b0%e6%8d%ae%e5%a4%87%e4%bb%bd%e5%bf%ab%e9%80%9f%e4%ba%86%e8%a7%a3%e8%bf%81%e7%a7%bb%e6%b5%81%e7%a8%8b" aria-label="先从单表数据备份快速了解迁移流程">先从单表数据备份快速了解迁移流程</a></li>
+                <li>
+                    <a href="#%e5%85%b6%e4%bb%96%e4%b8%9a%e5%8a%a1%e5%9c%ba%e6%99%af%e7%9a%84%e6%89%a9%e5%b1%95" aria-label="其他业务场景的扩展">其他业务场景的扩展</a></li>
+                <li>
+                    <a href="#%e5%a6%82%e4%bd%95%e6%8e%a7%e5%88%b6%e9%83%a8%e7%bd%b2%e7%9a%84%e5%ae%9e%e4%be%8b%e4%b8%8d%e5%90%8c%e6%97%b6%e8%bf%90%e8%a1%8c" aria-label="如何控制部署的实例不同时运行">如何控制部署的实例不同时运行</a></li>
+                <li>
+                    <a href="#%e5%93%aa%e4%ba%9b%e7%82%b9%e5%8f%af%e4%bb%a5%e4%bc%98%e5%8c%96" aria-label="哪些点可以优化">哪些点可以优化</a></li></ul>
+                </li>
+                <li>
+                    <a href="#spring-cloud-data-flow-%e5%85%a5%e9%97%a8%e7%ae%80%e4%bb%8b" aria-label="Spring Cloud Data Flow 入门简介">Spring Cloud Data Flow 入门简介</a></li>
+                <li>
+                    <a href="#%e9%a1%b9%e7%9b%ae%e4%bb%a3%e7%a0%81%e5%9c%b0%e5%9d%80" aria-label="项目代码地址">项目代码地址</a></li>
+                <li>
+                    <a href="#%e5%85%b6%e4%bb%96%e5%ad%a6%e4%b9%a0%e7%9a%84%e8%b5%84%e6%ba%90" aria-label="其他学习的资源">其他学习的资源</a>
+                </li>
+            </ul>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="mysql-亿级别数据迁移实战代码分享">MySQL 亿级别数据迁移实战代码分享<a hidden class="anchor" aria-hidden="true" href="#mysql-亿级别数据迁移实战代码分享">#</a></h1>
+<h3 id="x业务背景">x业务背景<a hidden class="anchor" aria-hidden="true" href="#x业务背景">#</a></h3>
+<p>某一项技术的出现是为了解决问题的，我们之所以要学习某个技术，是因为这个技术解决了我们工作中遇到的痛点。上亿条数据在 MySQL 中有索引的条件下，实际上只是查询是没有太大问题的，在没有特别大的并发的情况下，只是插入特别慢。</p>
+<p>在迁移大数据量的情况下面临的问题主要有如下几点：</p>
+<ol>
+<li>怎么保证查询大数据量下没有性能的瓶颈。</li>
+<li>不能影响正常的业务查询，不要有太多的性能损耗，可以灵活控制迁移的启动与停止。</li>
+<li>实际的迁移参数可以动态的扩展，比如一次批量提交多少条数据，一次迁移多少，迁移过程中怎么转化数据。</li>
+<li>对于一些错误可以容忍的话怎么跳过异常，比如可以容忍几条数据的失败。</li>
+<li>测试环境和生产环境的测试实际一般很难达到百分百一致，如何在线上对迁移的性能进行可配置的控制。</li>
+<li>事务的提交问题，因为数据量过大，不能将所有数据查询到内存之中，数据如何分而治之。</li>
+<li>迁移的过程需要记录，比如每次的任务执行的多长时间，事务提交了多少次，这些都可以查询，根据这些指标再次动态调整。</li>
+</ol>
+<p>针对上面提出的问题，我们自己去写这样一个功能完整且稳定的功能，实际中还是比较困难的。按照通常的 Service 和 Dao 的写法，满足不了我们的需求。</p>
+<h3 id="spring-batch-核心功能的介绍">Spring Batch 核心功能的介绍<a hidden class="anchor" aria-hidden="true" href="#spring-batch-核心功能的介绍">#</a></h3>
+<p>Spring Batch 是 Spring 官方的一个专门用于处理大数据体量下数据迁移的开源框架，主要解决的问题就是我们上面所说的那些问题，通过分批读取和写数据，保证内存不会发生溢出。并且通过灵活的组件组合，可以满足数据迁移中的各种需求。</p>
+<h4 id="核心的功能和特点">核心的功能和特点<a hidden class="anchor" aria-hidden="true" href="#核心的功能和特点">#</a></h4>
+<ol>
+<li>事务管理</li>
+<li>基于分块的处理</li>
+<li>声明式 IO</li>
+<li>可灵活控制开始、停止、重启</li>
+<li>重试和跳过</li>
+<li>基于网页的后台管理 Spring Cloud Data Flow</li>
+</ol>
+<p>Spring Batch 的文档很全面，但对于初学者来说，整个文档读完需要耗费比较长的时间，这里只看两张 Spring Batch 的架构图，后面我会通过实际工作中的迁移案例来讲解怎么使用它。</p>
+<h4 id="架构图">架构图<a hidden class="anchor" aria-hidden="true" href="#架构图">#</a></h4>
+<p><img loading="lazy" src="https://learn.lianglianglee.com/%E6%96%87%E7%AB%A0/assets/8bd2ac90-2f8f-11ea-a6f3-07a41d160500.png" alt="在这里插入图片描述"  />
+</p>
+<p><img loading="lazy" src="https://learn.lianglianglee.com/%E6%96%87%E7%AB%A0/assets/96a647d0-2f8f-11ea-a6f3-07a41d160500.png" alt="在这里插入图片描述"  />
+</p>
+<p>第一张图是架构图，第二张分区处理图。</p>
+<p>从这两张图可以看到这正是我们迁移大数据量下的核心诉求。输入端是从数据源读取数据，数据源可以来源于文件或者数据库，中间的处理流程是对数据进行加工，因为有些数据我们需要进行转换和处理，输出端是写出数据，可以写入到文件或者数据库。</p>
+<h4 id="核心组件">核心组件<a hidden class="anchor" aria-hidden="true" href="#核心组件">#</a></h4>
+<ol>
+<li>Reader：负责数据的读取</li>
+<li>Processor：负责数据的处理</li>
+<li>Writer：负责数据的写出</li>
+<li>Step：流程编排</li>
+<li>Job：任务配置</li>
+</ol>
+<p>这些业务组件用我们生活中的例子来理解的话，可以想象一下如下的场景：</p>
+<blockquote>
+<p>数据迁移就好比从一个油田里运输原油到炼油厂，提炼完成后最终把成品油送到加油站的一个过程。原油在到成品油的过程中要经历很多的流程和运输步骤，就像我们的数据要经过转换一样。</p>
+<p>Reader 就好比从油田里将原油装上运输车，Processor 就好比将原油提炼出成品油，Writer 就好比将油运到加油站的油箱里，Step 就是这个装油 -&gt; 提炼油 -&gt; 运输到加油站这个流水线一样的处理步骤，Job 相当与任务，这个任务就是 Step 定义好的这个流程，任务可以执行多次，但是每一次都是按照提前定义好的 Step 来执行。</p>
+</blockquote>
+<h3 id="实际中的业务需求怎么实现">实际中的业务需求怎么实现<a hidden class="anchor" aria-hidden="true" href="#实际中的业务需求怎么实现">#</a></h3>
+<p>可以先下载源码：</p>
+<p><a href="https://gitee.com/smartGim/batchsrv">https://gitee.com/smartGim/batchsrv</a></p>
+<h4 id="先从单表数据备份快速了解迁移流程">先从单表数据备份快速了解迁移流程<a hidden class="anchor" aria-hidden="true" href="#先从单表数据备份快速了解迁移流程">#</a></h4>
+<p>这种场景多见于项目创建初期为了快速上线，在项目初期没有做分库分表（在项目初期一般不会做分库分表），比如订单表，还有银行流水表、历史对账数据、支付记录数据表等。这种数据的特点为时间在半年或者一年以上将变为冷数据，数据查询的情况比较少，并且数据不会发生变化。通常情况下我们需要将时间大于一定时期的数据定时备份。还有一种情况就是接手一些历史遗留的项目，有些数据的单表已经达到了一个极限。</p>
+<p>我们以一个数据库的数据 db_source 迁移到另外一个数据库 db_target 为例，迁移过程中同时删除已经迁移走的记录。并将迁移的过程和记录进行记录下来到 db_source 中。</p>
+<p>实现步骤：</p>
+<p><strong>1. 新建一个 Spring Boot 工程引入</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">boot</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">starter</span><span class="o">-</span><span class="n">batch</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@EnableBatchProcessing</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BatchsrvApplication</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">BatchsrvApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在启动类上添加注解 @EnableBatchProcessing。</p>
+<p><strong>注意</strong>：添加上了此注解，那么项目启动后 Spring Batch 就会自动化初始相关的数据库文件，并且直接启动相关的迁移任务。在实际的线上迁移中是不会直接上线后就自动执行任务的，通常会先通过手动执行来看下执行情况，再动态配置一些指标，所以我们的项目会禁用自动执行，并且手动执行 Spring batch 的数据库文件，数据库初始文件在 spring-batch-core 中，根据数据库进行选择即可。</p>
+<p>禁用自动执行任务选项，<code>batch.job.enabled = false</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nl">server:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">port</span><span class="o">:</span> <span class="mi">8096</span>
+</span></span><span class="line"><span class="cl"><span class="nl">spring:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">profiles</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">active</span><span class="o">:</span> <span class="n">dev</span>
+</span></span><span class="line"><span class="cl">  <span class="n">batch</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">job</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="n">enabled</span><span class="o">:</span> <span class="kc">false</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2. 多数据源配置</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">cn.gitchat.share.config</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">javax.sql.DataSource</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Primary</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.springframework.core.env.Environment</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.springframework.jdbc.core.JdbcTemplate</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.springframework.jdbc.datasource.DriverManagerDataSource</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Author: Gim
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Date: 2019-12-04 17:05
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Description:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Configuration</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataSourceConfig</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">Environment</span> <span class="n">env</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Primary</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">primaryDatasource</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">DriverManagerDataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DriverManagerDataSource</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setDriverClassName</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;source.driver-class-name&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setUrl</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;source.jdbc-url&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;source.username&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;source.password&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">dataSource</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">targetDatasource</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">DriverManagerDataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DriverManagerDataSource</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setDriverClassName</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;target.driver-class-name&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setUrl</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;target.jdbc-url&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;target.username&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dataSource</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;target.password&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">dataSource</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">JdbcTemplate</span> <span class="nf">primaryTemplate</span><span class="o">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">new</span> <span class="n">JdbcTemplate</span><span class="o">(</span><span class="n">primaryDatasource</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">JdbcTemplate</span> <span class="nf">targetJdbcTemplate</span><span class="o">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">new</span> <span class="n">JdbcTemplate</span><span class="o">(</span><span class="n">targetDatasource</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此处我们使用多数据源的配置，并且使用 JdbcTemplate 进行数据的读取。</p>
+<p>主数据源中配置 Spring Batch 的数据库文件（如果不在意迁移的情况记录可以使用内存数据库，存储 Spring Batch 的迁移记录情况，这样能提高迁移性能，但是实际中不建议做，迁移性能的大幅提升会影响线上的业务正常运行，除非迁移有及时性这种需求再开启内存数据源）。</p>
+<p><strong>如何定制 Spring Batch 的框架使用的数据源？</strong></p>
+<p>从源码中找到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BatchConfig</span> <span class="kd">extends</span> <span class="n">DefaultBatchConfigurer</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个类继承于 DefaultBatchConfigurer 然后我们对 JobRepository 进行重写：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//将spring batch 的记录存取在主数据源中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl"><span class="kd">protected</span> <span class="n">JobRepository</span> <span class="nf">createJobRepository</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JobRepositoryFactoryBean</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JobRepositoryFactoryBean</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">factory</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">primaryDatasource</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">factory</span><span class="o">.</span><span class="na">setTransactionManager</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getTransactionManager</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">factory</span><span class="o">.</span><span class="na">afterPropertiesSet</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">factory</span><span class="o">.</span><span class="na">getObject</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3. 读取的配置</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 数据读取 根据id 查询保证性能 分页读取
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@StepScope</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">JdbcPagingItemReader</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;</span> <span class="nf">payRecordReader</span><span class="o">(</span><span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;#{jobParameters[minId]}&#34;</span><span class="o">)</span> <span class="n">Long</span> <span class="n">minId</span><span class="o">,</span> <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;#{jobParameters[maxId]}&#34;</span><span class="o">)</span> <span class="n">Long</span> <span class="n">maxId</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JdbcPagingItemReader</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;</span> <span class="n">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JdbcPagingItemReader</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">final</span> <span class="n">SqlPagingQueryProviderFactoryBean</span> <span class="n">sqlPagingQueryProviderFactoryBean</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlPagingQueryProviderFactoryBean</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sqlPagingQueryProviderFactoryBean</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">primaryDatasource</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sqlPagingQueryProviderFactoryBean</span><span class="o">.</span><span class="na">setSelectClause</span><span class="o">(</span><span class="s">&#34;select * &#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sqlPagingQueryProviderFactoryBean</span><span class="o">.</span><span class="na">setFromClause</span><span class="o">(</span><span class="s">&#34;from pay_record&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sqlPagingQueryProviderFactoryBean</span><span class="o">.</span><span class="na">setWhereClause</span><span class="o">(</span><span class="s">&#34;id &gt; &#34;</span> <span class="o">+</span> <span class="n">minId</span> <span class="o">+</span> <span class="s">&#34; and id &lt;= &#34;</span> <span class="o">+</span> <span class="n">maxId</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sqlPagingQueryProviderFactoryBean</span><span class="o">.</span><span class="na">setSortKey</span><span class="o">(</span><span class="s">&#34;id&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="o">.</span><span class="na">setQueryProvider</span><span class="o">(</span><span class="n">sqlPagingQueryProviderFactoryBean</span><span class="o">.</span><span class="na">getObject</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">primaryDatasource</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="o">.</span><span class="na">setPageSize</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="o">.</span><span class="na">setRowMapper</span><span class="o">(</span><span class="k">new</span> <span class="n">PayRecordRowMapper</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="o">.</span><span class="na">afterPropertiesSet</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="o">.</span><span class="na">setSaveState</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">reader</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>在读取的配置中有几个比较重要的点：</strong></p>
+<ul>
+<li>第一点可以看到在 @Bean 下方有个注解 @StepScope 这个注解的作用是我们可以在 Job 执行时给 Job 添加变量，用于我们可以动态的控制每次任务要迁移的记录，通过 <code>@Value (&quot;#{jobParameters [minId]}&quot;</code> 这种方式进行接收参数，传递参数可以在任务执行时进行 Job 传参，使用方式如下：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Scheduled</span><span class="o">(</span><span class="n">cron</span> <span class="o">=</span> <span class="s">&#34;0 0 2 * * ?&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">migratePayRecord</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">primaryJdbcTemplate</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">queryForMap</span><span class="o">(</span><span class="s">&#34;select * from job_config where config_key = ?&#34;</span><span class="o">,</span> <span class="n">MigrateConstants</span><span class="o">.</span><span class="na">PAY_RECORD_JOB_CONFIG_KEY</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;config_value&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JobExecuteConfig</span> <span class="n">payRecordJobConfig</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">parseObject</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">JobExecuteConfig</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JobParameters</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JobParametersBuilder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">addLong</span><span class="o">(</span><span class="s">&#34;maxId&#34;</span><span class="o">,</span> <span class="n">payRecordJobConfig</span><span class="o">.</span><span class="na">getExecuteMaxId</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">addLong</span><span class="o">(</span><span class="s">&#34;minId&#34;</span><span class="o">,</span> <span class="n">payRecordJobConfig</span><span class="o">.</span><span class="na">getMinId</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">toJobParameters</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jobLauncher</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">migratePayRecordJob</span><span class="o">,</span> <span class="n">params</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>第二点可以看到我们读取数据使用的是 JdbcPagingItemReader 这个类，这个类的特点是可以通过分页的方式对数据记录进行读取，保证不会内存溢出，这里面 SortKey 是个很重要的点，一定要保证数据的唯一性，这个用于任务重新启动判断从哪再次开始。</li>
+<li>PageSize 我们可以控制每一次读取多少条记录，这个用于调优用，根据实际的情况进行控制。SaveState 用于将迁移的记录情况进行记录。</li>
+<li>这个 Reader 的配置非常重要是保证亿级别数据不会发生内存溢出的关键配置。在这里的配置相当于我们对大数量级别的数据进行了一个分段处理。是分而治之的关键点。</li>
+</ul>
+<p><strong>4. 写入的配置</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 写入到新库
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ItemWriter</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">PayRecord</span><span class="o">&gt;</span> <span class="nf">targetPayRecordWriter</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">new</span> <span class="n">JdbcBatchItemWriterBuilder</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;()</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">dataSource</span><span class="o">(</span><span class="n">targetDatasource</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">itemSqlParameterSourceProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">BeanPropertyItemSqlParameterSourceProvider</span><span class="o">&lt;&gt;())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">sql</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">                    <span class="s">&#34;INSERT INTO `pay_record` (\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;`id`,\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;`user_id`,\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;`pay_detail`,\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;`pay_status`,\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;`create_time`,\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;`update_time`\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;)\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;VALUES\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;\t(\n&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;:id,&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;:userId,&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;:payDetail,&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;:payStatus,&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;:createTime,&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;:updateTime&#34;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">+</span> <span class="s">&#34;)&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 删除器
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ItemWriter</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;</span> <span class="nf">deletePayRecordWriter</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">new</span> <span class="n">JdbcBatchItemWriterBuilder</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;()</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">dataSource</span><span class="o">(</span><span class="n">primaryDatasource</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">itemSqlParameterSourceProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">BeanPropertyItemSqlParameterSourceProvider</span><span class="o">&lt;&gt;())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">sql</span><span class="o">(</span><span class="s">&#34;delete from pay_record where id = :id&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">CompositeItemWriter</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;</span> <span class="nf">compositePayRecordItemWriter</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;deletePayRecordWriter&#34;</span><span class="o">)</span> <span class="n">ItemWriter</span> <span class="n">deleteWriter</span><span class="o">,</span> <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;targetPayRecordWriter&#34;</span><span class="o">)</span> <span class="n">ItemWriter</span> <span class="n">targetPayRecordWriter</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CompositeItemWriter</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;</span> <span class="n">compositeItemWriter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CompositeItemWriter</span><span class="o">&lt;&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">List</span><span class="o">&lt;</span><span class="n">ItemWriter</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">PayRecord</span><span class="o">&gt;&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">deleteWriter</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">targetPayRecordWriter</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">compositeItemWriter</span><span class="o">.</span><span class="na">setDelegates</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">compositeItemWriter</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>写入的配置这里面使用了两个配置，一个是写入新的数据源，一个是删除原来的迁移数据连接的是原来的主数据源。写入器使用的是框架提供的 JdbcBatchItemWriter ，看名字就知道这个类的作用了，它支持批量的写入，性能非常高。Spring Batch 支持各种 Writer 的组合，通过 CompositeItemWriter 来实现。在这里只是为了演示组合 Writer 的用法，实际中最好分成两步来完成这种任务。</p>
+<p><strong>5. Step 的配置</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">Step</span> <span class="nf">migratePayRecordStep</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;payRecordReader&#34;</span><span class="o">)</span> <span class="n">JdbcPagingItemReader</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">&gt;</span> <span class="n">payRecordReader</span><span class="o">,</span> <span class="nd">@Qualifier</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;compositePayRecordItemWriter&#34;</span><span class="o">)</span> <span class="n">CompositeItemWriter</span> <span class="n">compositeItemWriter</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">stepBuilderFactory</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;migratePayRecordStep&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.&lt;</span><span class="n">PayRecord</span><span class="o">,</span> <span class="n">PayRecord</span><span class="o">&gt;</span><span class="n">chunk</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="na">getChunkSize</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">reader</span><span class="o">(</span><span class="n">payRecordReader</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">processor</span><span class="o">(</span><span class="k">new</span> <span class="n">PassThroughItemProcessor</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">writer</span><span class="o">(</span><span class="n">compositeItemWriter</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">taskExecutor</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleAsyncTaskExecutor</span><span class="o">(</span><span class="s">&#34;migrate_thread&#34;</span><span class="o">))</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">throttleLimit</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="na">getThreadSize</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>像上面讲到的那样 Step 的作用就是配置整个流程的，这里面 chunk 是对数据进行分块，可以动态的控制每次事务提交多少条记录。</p>
+<p>Processor 是处理器。 这里面直接传递了一个 PassThroughItemProcessor ，这个类的作用是对传递过来的对象不做任何的处理。如果我们想对原有的记录进行扩展，那么可以自定义一个处理器，比如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PayRecordExtProcessor</span> <span class="kd">implements</span> <span class="n">ItemProcessor</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">,</span><span class="n">PayRecordExt</span><span class="o">&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PayRecordExt</span> <span class="nf">process</span><span class="o">(</span><span class="n">PayRecord</span> <span class="n">payRecord</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//other service
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">PayRecordExt</span> <span class="n">ext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PayRecordExt</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ext</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在这里进行数据处理。</p>
+<p>taskExecutor 这个是线程池的配置。因为每条记录的读取、处理、写入都是独立的，互相之间没有任何的影响，所以使用线程池可以实现流程的并行处理，提高处理速度。throttleLimit 用来控制最大的线程数。线程太多了会造成资源的浪费。</p>
+<p><strong>6. Job 的配置</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">Job</span> <span class="nf">migratePayRecordJob</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;migratePayRecordStep&#34;</span><span class="o">)</span> <span class="n">Step</span> <span class="n">step</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">jobBuilderFactory</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;migratePayRecordJob&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">step</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">incrementer</span><span class="o">(</span><span class="k">new</span> <span class="n">RunIdIncrementer</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Job 用于将 step 配置好的流程向外以任务的形式暴露。</p>
+<p><strong>7. 如何启动 Job</strong></p>
+<p>默认情况下 Spring Batch 会自动启动任务，上面提到了，在线上时一定不要自动启动任务。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PayRecordTask</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">Job</span> <span class="n">migratePayRecordJob</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">JobLauncher</span> <span class="n">jobLauncher</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;primaryTemplate&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">JdbcTemplate</span> <span class="n">primaryJdbcTemplate</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *迁移任务
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @throws Exception
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Scheduled</span><span class="o">(</span><span class="n">cron</span> <span class="o">=</span> <span class="s">&#34;0 0 2 * * ?&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">migratePayRecord</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">primaryJdbcTemplate</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">queryForMap</span><span class="o">(</span><span class="s">&#34;select * from job_config where config_key = ?&#34;</span><span class="o">,</span> <span class="n">MigrateConstants</span><span class="o">.</span><span class="na">PAY_RECORD_JOB_CONFIG_KEY</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;config_value&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">JobExecuteConfig</span> <span class="n">payRecordJobConfig</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">parseObject</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">JobExecuteConfig</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">JobParameters</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JobParametersBuilder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">addLong</span><span class="o">(</span><span class="s">&#34;maxId&#34;</span><span class="o">,</span> <span class="n">payRecordJobConfig</span><span class="o">.</span><span class="na">getExecuteMaxId</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">addLong</span><span class="o">(</span><span class="s">&#34;minId&#34;</span><span class="o">,</span> <span class="n">payRecordJobConfig</span><span class="o">.</span><span class="na">getMinId</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">toJobParameters</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jobLauncher</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">migratePayRecordJob</span><span class="o">,</span> <span class="n">params</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 执行迁移任务之前数据迁移配置初始化
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 凌晨一点
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Scheduled</span><span class="o">(</span><span class="n">cron</span> <span class="o">=</span> <span class="s">&#34;0 0 1 * * ?&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initBillMigrateConfig</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">       <span class="c1">//TODO 根据实际需要的业务逻辑动态计算出，每次要迁移的数据是哪些  ，最好根据时间算出MaxId, 然后每天执行固定的步长 ，比如每天迁移100万
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当在启动类上添加注解 @EnableBatchProcessing 之后，Spring Batch 会在容器中自动注入 Spring Batch 的组件，这里面我们可以使用 JobLauncher 进行任务的启动，在启动时可以配置任务启动的参数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">JobParameters</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JobParametersBuilder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">addLong</span><span class="o">(</span><span class="s">&#34;maxId&#34;</span><span class="o">,</span> <span class="n">payRecordJobConfig</span><span class="o">.</span><span class="na">getExecuteMaxId</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">addLong</span><span class="o">(</span><span class="s">&#34;minId&#34;</span><span class="o">,</span> <span class="n">payRecordJobConfig</span><span class="o">.</span><span class="na">getMinId</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">toJobParameters</span><span class="o">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这传递的参数，通过 @StepScope 注解的 Bean 就可以动态获取这个参数。</p>
+<p><strong>8. Job 如何启动、停止、重启</strong></p>
+<p>Job 的另一种启动和停止是通过类 JobOperator 这个类来实现的，在启动和重启之前要将 Job 注册到 JobRegistry 中，在 JobController 中可以看到具体的实现。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="n">JobRegistry</span> <span class="n">registry</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@PostConstruct</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">registry</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">DuplicateJobException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ReferenceJobFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ReferenceJobFactory</span><span class="o">(</span><span class="n">migratePayRecordJob</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">registry</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">factory</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;startJob&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@SneakyThrows</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">startJob</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Properties</span> <span class="n">properties</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">properties</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;minId&#34;</span><span class="o">,</span> <span class="s">&#34;20&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">properties</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;maxId&#34;</span><span class="o">,</span> <span class="s">&#34;50&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">executePayRecordId</span> <span class="o">=</span> <span class="n">jobOperator</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="s">&#34;migratePayRecordJob&#34;</span><span class="o">,</span> <span class="n">PropertiesConverter</span><span class="o">.</span><span class="na">propertiesToString</span><span class="o">(</span><span class="n">properties</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="s">&#34;操作成功&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;stopJob&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@SneakyThrows</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">stopJob</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">executePayRecordId</span><span class="o">,</span><span class="s">&#34;执行id不能为空！&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jobOperator</span><span class="o">.</span><span class="na">stop</span><span class="o">(</span><span class="n">executePayRecordId</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="s">&#34;操作成功&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;restartJob&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@SneakyThrows</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">restartJob</span><span class="o">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">executePayRecordId</span><span class="o">,</span><span class="s">&#34;执行id不能为空！&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jobOperator</span><span class="o">.</span><span class="na">restart</span><span class="o">(</span><span class="n">executePayRecordId</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ResponseEntity</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="s">&#34;操作成功&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个类的方法非常的丰富，除了能启动执行外还有大量的 API：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="nf">getExecutions</span><span class="o">(</span><span class="kt">long</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobInstanceException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="nf">getJobInstances</span><span class="o">(</span><span class="n">String</span> <span class="n">var1</span><span class="o">,</span> <span class="kt">int</span> <span class="n">var2</span><span class="o">,</span> <span class="kt">int</span> <span class="n">var3</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Set</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="nf">getRunningExecutions</span><span class="o">(</span><span class="n">String</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">String</span> <span class="nf">getParameters</span><span class="o">(</span><span class="kt">long</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobExecutionException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Long</span> <span class="nf">start</span><span class="o">(</span><span class="n">String</span> <span class="n">var1</span><span class="o">,</span> <span class="n">String</span> <span class="n">var2</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobException</span><span class="o">,</span> <span class="n">JobInstanceAlreadyExistsException</span><span class="o">,</span> <span class="n">JobParametersInvalidException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Long</span> <span class="nf">restart</span><span class="o">(</span><span class="kt">long</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">JobInstanceAlreadyCompleteException</span><span class="o">,</span> <span class="n">NoSuchJobExecutionException</span><span class="o">,</span> <span class="n">NoSuchJobException</span><span class="o">,</span> <span class="n">JobRestartException</span><span class="o">,</span> <span class="n">JobParametersInvalidException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Long</span> <span class="nf">startNextInstance</span><span class="o">(</span><span class="n">String</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobException</span><span class="o">,</span> <span class="n">JobParametersNotFoundException</span><span class="o">,</span> <span class="n">JobRestartException</span><span class="o">,</span> <span class="n">JobExecutionAlreadyRunningException</span><span class="o">,</span> <span class="n">JobInstanceAlreadyCompleteException</span><span class="o">,</span> <span class="n">UnexpectedJobExecutionException</span><span class="o">,</span> <span class="n">JobParametersInvalidException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">boolean</span> <span class="nf">stop</span><span class="o">(</span><span class="kt">long</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobExecutionException</span><span class="o">,</span> <span class="n">JobExecutionNotRunningException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">String</span> <span class="nf">getSummary</span><span class="o">(</span><span class="kt">long</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobExecutionException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Map</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="nf">getStepExecutionSummaries</span><span class="o">(</span><span class="kt">long</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobExecutionException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">getJobNames</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">JobExecution</span> <span class="nf">abandon</span><span class="o">(</span><span class="kt">long</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NoSuchJobExecutionException</span><span class="o">,</span> <span class="n">JobExecutionAlreadyRunningException</span><span class="o">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 Spring Batch 的 Admin 管理系统中主要就是通过这个类来获取任务的执行情况。</p>
+<p><strong>9. 总结</strong></p>
+<p>通过上面的演示可以清楚的看到 Spring Batch 的执行逻辑，Spring Batch 定义了模板，我们在使用过程中只需要按照接口提供相应的数据来源和输出的接口即可。其他的事务处理，多线程池，批量处理，内存控制都由框架来完成。那么 Spring Batch 是怎么样保证在大数据量级的情况下，内存不溢出然后又保证性能的呢，下面用一张图进行展示 Spring Batch 是通过怎么的处理，保证在数据量巨大的情况下，高性能的进行数据的读写的。</p>
+<p><img loading="lazy" src="https://learn.lianglianglee.com/%E6%96%87%E7%AB%A0/assets/d9d2ef90-2f8f-11ea-b7a2-bd62e8fb625b.png" alt="在这里插入图片描述"  />
+</p>
+<h4 id="其他业务场景的扩展">其他业务场景的扩展<a hidden class="anchor" aria-hidden="true" href="#其他业务场景的扩展">#</a></h4>
+<p>在实际中项目处理中，我们面对的系统情况可能并不是一个单表这样简单的业务情况，比如多表合一、一表分表为多表，在迁移过程中数据变更的情形。那么这些场景该如何处理呢？</p>
+<p><strong>1. 多表合一的场景</strong></p>
+<p>在多表合一的场景下，实际上如何两张表有关联，那么附表上一定要建立索引。我们还是会让查询逻辑在主表上，千万不要使用 Join 联查，亿级别的数据如何联查，那么基础系统就要崩溃了。此时我们需要将需要拼装的业务逻辑放在 Processor 里面，比如在我们的案例场景下，需要将 User 的信息冗余到新的一个表中那么只需要将 UserService 注入到 PayRecordExtProcessor 中，然后再通过 <code>userService.getId(payRecord.getUserId ())</code> 这种方式去 load 用户信息，用户的 Id 肯定有索引，这样查询性能不会有太多的损耗。这也是现在大厂为啥要求在业务系统开发的过程中尽快不要使用 Join 联查的原因。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PayRecordExtProcessor</span> <span class="kd">implements</span> <span class="n">ItemProcessor</span><span class="o">&lt;</span><span class="n">PayRecord</span><span class="o">,</span><span class="n">PayRecordExt</span><span class="o">&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PayRecordExt</span> <span class="nf">process</span><span class="o">(</span><span class="n">PayRecord</span> <span class="n">payRecord</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//此处注入 User service 通过userService .getId(payRecord.getUserId());
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">PayRecordExt</span> <span class="n">ext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PayRecordExt</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ext</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2. 拆分为多表的场景</strong></p>
+<p>系统有些情况下需要将单表拆分为多表，比如根据用户 id 分片，这种情况下 Spring Batch 提供了一个类 ClassifierCompositeItemWriter 可以根据条件动态选择 Writer，在这里我们模拟将 pay_record 这个表拆分为两个表的场景 pay_record_1、pay_record2。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">create</span> <span class="nx">TABLE</span>  <span class="nx">pay_record_1</span> <span class="nx">like</span>  <span class="nx">pay_record</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">create</span> <span class="nx">TABLE</span>  <span class="nx">pay_record_2</span> <span class="nx">like</span> <span class="nx">pay_record</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//根据条件拆分为多表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="kd">@Bean</span>
+</span></span><span class="line"><span class="cl"> <span class="kr">public</span> <span class="nx">ClassifierCompositeItemWriter</span><span class="o">&lt;?</span> <span class="kr">super</span> <span class="nx">PayRecord</span><span class="o">&gt;</span> <span class="nx">classifierItemWriter</span><span class="p">(</span><span class="kd">@Qualifier</span><span class="p">(</span><span class="s2">&#34;payRecordOneWriter&#34;</span><span class="p">)</span> <span class="nx">ItemWriter</span> <span class="nx">payRecordOneWriter</span><span class="p">,</span><span class="kd">@Qualifier</span><span class="p">(</span><span class="s2">&#34;payRecordTwoWriter&#34;</span><span class="p">)</span> <span class="nx">ItemWriter</span> <span class="nx">payRecordTwoWriter</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">ClassifierCompositeItemWriter</span><span class="p">&lt;</span><span class="nt">PayRecord</span><span class="p">&gt;</span> <span class="nx">classifierCompositeItemWriter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClassifierCompositeItemWriter</span><span class="p">&lt;&gt;();</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">classifierCompositeItemWriter</span><span class="p">.</span><span class="nx">setClassifier</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">             <span class="p">(</span><span class="nx">Classifier</span><span class="p">&lt;</span><span class="nt">PayRecord</span><span class="err">,</span> <span class="na">ItemWriter</span><span class="err">&lt;?</span> <span class="na">super</span> <span class="na">PayRecord</span><span class="p">&gt;</span><span class="o">&gt;</span><span class="p">)</span> <span class="nx">record</span> <span class="o">-&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                 <span class="nx">ItemWriter</span><span class="o">&lt;?</span> <span class="kr">super</span> <span class="nx">PayRecord</span><span class="o">&gt;</span> <span class="nx">itemWriter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                 <span class="k">if</span><span class="p">(</span><span class="nx">record</span><span class="p">.</span><span class="nx">getId</span><span class="p">()</span> <span class="o">%</span><span class="mi">2</span> <span class="o">==</span><span class="mi">0</span> <span class="p">){</span>
+</span></span><span class="line"><span class="cl">                     <span class="nx">itemWriter</span> <span class="o">=</span> <span class="nx">payRecordOneWriter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                 <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                     <span class="nx">itemWriter</span> <span class="o">=</span> <span class="nx">payRecordTwoWriter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                 <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                 <span class="k">return</span> <span class="nx">itemWriter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">             <span class="p">});</span>
+</span></span><span class="line"><span class="cl">     <span class="k">return</span> <span class="nx">classifierCompositeItemWriter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="kd">@Bean</span>
+</span></span><span class="line"><span class="cl"> <span class="kr">public</span> <span class="nx">Step</span> <span class="nx">splitPayRecordStep</span><span class="p">(</span><span class="kd">@Qualifier</span><span class="p">(</span><span class="s2">&#34;payRecordReader&#34;</span><span class="p">)</span> <span class="nx">JdbcPagingItemReader</span><span class="p">&lt;</span><span class="nt">PayRecord</span><span class="p">&gt;</span> <span class="nx">payRecordReader</span><span class="p">,</span> <span class="kd">@Qualifier</span><span class="p">(</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">&#34;classifierItemWriter&#34;</span><span class="p">)</span> <span class="nx">ClassifierCompositeItemWriter</span> <span class="nx">itemWriter</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">stepBuilderFactory</span><span class="p">.</span><span class="kr">get</span><span class="p">(</span><span class="s2">&#34;splitPayRecordStep&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.&lt;</span><span class="nt">PayRecord</span><span class="err">,</span> <span class="na">PayRecord</span><span class="p">&gt;</span><span class="nx">chunk</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">getChunkSize</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">reader</span><span class="p">(</span><span class="nx">payRecordReader</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">processor</span><span class="p">(</span><span class="k">new</span> <span class="nx">PassThroughItemProcessor</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">writer</span><span class="p">(</span><span class="nx">itemWriter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">taskExecutor</span><span class="p">(</span><span class="k">new</span> <span class="nx">SimpleAsyncTaskExecutor</span><span class="p">(</span><span class="s2">&#34;migrate_thread&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">throttleLimit</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">getThreadSize</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="kd">@Bean</span>
+</span></span><span class="line"><span class="cl"> <span class="kr">public</span> <span class="nx">Job</span> <span class="nx">splitPayRecordJob</span><span class="p">(</span><span class="kd">@Qualifier</span><span class="p">(</span><span class="s2">&#34;splitPayRecordStep&#34;</span><span class="p">)</span> <span class="nx">Step</span> <span class="nx">step</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">jobBuilderFactory</span><span class="p">.</span><span class="kr">get</span><span class="p">(</span><span class="s2">&#34;splitPayRecordJob&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">step</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">incrementer</span><span class="p">(</span><span class="k">new</span> <span class="nx">RunIdIncrementer</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">             <span class="p">.</span><span class="nx">build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在这里面我们定义了一个 ClassifierCompositeItemWriter 根据 Id % 表个数进行分片。具体的实现可以看代码。</p>
+<p><strong>3. 迁移过程中数据有变更和增量的场景</strong></p>
+<p>一般来说有单表性能的表数据，都有一个特点，随着时间的迁移会有大量的冷数据，上千万频繁变更的场景还是比较少的。如果想保证系统不间断运行，同时又能进行系统的迁移，迁移完成后再进行用户无感知的切换。需要考虑到迁移过程中有增量变更的情况。这种情况下我们一般引入 CDC (change data capture) 组件。比较常用的如阿里的 Canal、Debezium，这种中间件监听数据的变更。关于它们的使用可以去看官方的文档，非常的简单，添加好配置项就可以了。</p>
+<p>配置好后将变更的数据再导入的新的数据源。切换后完成再通过 Spring Batch 进行比对迁移的数据和变化数据就可以了。如果变化的量级特别大，最好选用后半夜，数据变更较小的情况下进行数据迁移。因为亿级别的数据实时同步这个是不可能的，找一个折中的方案即可。</p>
+<h4 id="如何控制部署的实例不同时运行">如何控制部署的实例不同时运行<a hidden class="anchor" aria-hidden="true" href="#如何控制部署的实例不同时运行">#</a></h4>
+<p>为了保证服务的可靠性，通常我们部署的迁移服务实例是多个的，在这种情况下，我们需要保证数据不能迁移重复。在 Spring Batch 里面 Job 的概念相当于任务，还有一个概念叫 JobInstance。</p>
+<p>什么意思呢，上面提到 Step 相当于配置的流程，Job 是任务，那么任务是可能有多个的，就像一个类，我们可以 new 出来多个对象一样。一个 JonInstance 在相同的 JobParameter 下只会执行一次。这样在多实例的情况下，实际上部署多台实例也能控制任务不会重复执行，只不过会报一个任务已经存在的异常。但是在实际的项目迁移中我们希望 Job 的参数可以每天动态计算，比如在任务之前我们需要动态的计算出，今天的任务要迁移哪些数据。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 执行迁移任务之前数据迁移配置初始化
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 凌晨一点
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Scheduled</span><span class="o">(</span><span class="n">cron</span> <span class="o">=</span> <span class="s">&#34;0 0 1 * * ?&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">initMigrateConfig</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">   <span class="c1">//TODO 根据实际需要的业务逻辑动态计算出，每次要迁移的数据是哪些  ，最好根据时间算出MaxId, 然后每天执行固定的步长 ，比如每天迁移100万
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>像这种任务如果是多台实例，如果不加锁实际上会有问题的。这里面我们再引入一个新的组件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">net</span><span class="o">.</span><span class="na">javacrumbs</span><span class="o">.</span><span class="na">shedlock</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">shedlock</span><span class="o">-</span><span class="n">spring</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">4.1.0</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">net</span><span class="o">.</span><span class="na">javacrumbs</span><span class="o">.</span><span class="na">shedlock</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">shedlock</span><span class="o">-</span><span class="n">provider</span><span class="o">-</span><span class="n">jdbc</span><span class="o">-</span><span class="n">template</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">4.0.4</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">LockProvider</span> <span class="nf">lockProvider</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;primaryDatasource&#34;</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">new</span> <span class="n">JdbcTemplateLockProvider</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此处我们使用 JdbcTemplateLock 当做我们的分布式锁的实现。这样配置之后我们的任务在同一时间就只会在一个实例上运行了。</p>
+<h4 id="哪些点可以优化">哪些点可以优化<a hidden class="anchor" aria-hidden="true" href="#哪些点可以优化">#</a></h4>
+<p>\1. 每次可以控制读取的条数，每次事务提交的个数，每个 Step 启用的线程数都可以进行配置，在本项目中提供了一个配置类，可以对这些配置项进行动态的配置。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">&#34;migrate.config&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Data</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MigrateConfig</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//每次读取数据条数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">pageSize</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//每次事务提交记录数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">chunkSize</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">threadSize</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>\2. 在迁移之前 MySQL 要查看连接情况，设置缓冲池大小等指标，这个也是在迁移之前要考虑的点。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">show</span><span class="w"> </span><span class="n">processlist</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">set</span><span class="w"> </span><span class="k">global</span><span class="w"> </span><span class="n">innodb_buffer_pool_size</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="err">缓冲池大小</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;max_connections&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">set</span><span class="w"> </span><span class="k">global</span><span class="w"> </span><span class="n">max_connections</span><span class="o">=</span><span class="w"> </span><span class="err">最大连接数</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>\3. 像上面提到的 Spring Batch 在迁移过程中会将任务的执行情况都初始化到数据库中，如果我们不想要这些数据持久化，那么我们可以选择内存数据库，这个会大大提升迁移的速度，更改数据源即可。</p>
+<h3 id="spring-cloud-data-flow-入门简介">Spring Cloud Data Flow 入门简介<a hidden class="anchor" aria-hidden="true" href="#spring-cloud-data-flow-入门简介">#</a></h3>
+<p>Spring Cloud Data Flow 这个是现在 Spring 在数据流处理方面一个功能非常强大的框架。目前被 Spring 放在了首页上，跟 Spring Cloud 并列。在单机条件下对 Spring Batch 的支持有限，不支持任务的动态调度，想使用调度需要 K8s 部署，Spring Cloud Data Flow 在本机搭建有两种方式，一个是用 Docker，一个是直接启动 jar 包。具体的 jar 包我放在了项目的 resources 下面。</p>
+<p>如果使用 Docker，cd 到 dataflow 目录下运行。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">export</span> <span class="n">DATAFLOW_VERSION</span><span class="o">=</span><span class="mf">2.2.1</span><span class="o">.</span><span class="na">RELEASE</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">export</span> <span class="n">SKIPPER_VERSION</span><span class="o">=</span><span class="mf">2.1.2</span><span class="o">.</span><span class="na">RELEASE</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果不使用 Docker 而选择直接运行 jar 包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">java -jar spring-cloud-skipper-server-2.1.2.RELEASE.jar
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">java -jar spring-cloud-dataflow-server-2.2.1.RELEASE.jar
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>打开浏览器 输入 http://localhost:9393/dashboard/ 即可访问控制台。</p>
+<p>注意一点：如果需要使用 Spring Batch Job 需要集成 Spring Cloud Task，实际的项目中使用 JobOperator 即可，这个 UI 也是使用这个类进行 UI 展示的。如果对这个感兴趣的可以去探索。</p>
+<p>在实际的迁移过程中可以查询在项目启动时初始化那几张表，Spring Batch 会把每次执行的参数和执行情况全部初始化到数据库表中以 BATCH_开头的表中。</p>
+<h3 id="项目代码地址">项目代码地址<a hidden class="anchor" aria-hidden="true" href="#项目代码地址">#</a></h3>
+<blockquote>
+<p><a href="https://gitee.com/smartGim/batchsrv">https://gitee.com/smartGim/batchsrv</a></p>
+</blockquote>
+<p>该项目是 Spring Boot 项目，打开 application-dev.yml 中按照要求创建自己的数据库，db 文件在 resources/db 文件下，source_db 开头的初始化到 source 数据库中，target_db 开头的初始化到 target 数据库中即可。</p>
+<p>实战代码并非理论的讲解，所以请务必查看源码进行练习。</p>
+<p>如何进行测试，在 jobconfig 表中更改 minId 和 maxId，这个是控制要迁移哪些数据的，你也可以写个自动化的任务去每天动态更新这个配置项。</p>
+<p>在 web 包下有 JobController 是前端的入口，用于本地的测试，可以通过 Postman 等工具直接发送请求即可。</p>
+<p>如果在测试过程中有任何问题可以提 Issue。</p>
+<h3 id="其他学习的资源">其他学习的资源<a hidden class="anchor" aria-hidden="true" href="#其他学习的资源">#</a></h3>
+<p>一个不错的示例项目：</p>
+<blockquote>
+<p><a href="https://github.com/pkainulainen/spring-batch-examples.git">https://github.com/pkainulainen/spring-batch-examples.git</a></p>
+</blockquote>
+<p>如果想写入到 Excel，Spring Batch 也支持 Excel，ES 的扩展：</p>
+<blockquote>
+<p><a href="https://github.com/spring-projects/spring-batch-extensions.git">https://github.com/spring-projects/spring-batch-extensions.git</a></p>
+</blockquote>
+<p>官方的 Samples：</p>
+<blockquote>
+<p><a href="https://github.com/spring-projects/spring-batch.git">https://github.com/spring-projects/spring-batch.git</a></p>
+</blockquote>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://habyss.github.io/posts/read/linux%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Linux性能优化</span>
+  </a>
+  <a class="next" href="https://habyss.github.io/posts/read/mysql%E5%9C%B0%E5%9F%BA_%E4%BC%98%E5%8C%96/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>MySQL补充</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://habyss.github.io/">叶灰灰的小窝</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
