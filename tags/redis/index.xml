@@ -6,7 +6,16 @@
     <description>Recent content in Redis on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 03 Feb 2019 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 12 Mar 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>缓存与数据库的数据一致性</title>
+      <link>https://habyss.github.io/posts/tech/redis_mysql/</link>
+      <pubDate>Sat, 12 Mar 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/tech/redis_mysql/</guid>
+      <description>1. 什么是数据的一致性 “数据一致”一般指的是：缓存中有数据，缓存的数据值 = 数据库中的值。 但根据缓存中是否有数据为依据，则”一致“可以包含两种情</description>
+    </item>
+    
     <item>
       <title>基于springboot常用aop方式</title>
       <link>https://habyss.github.io/posts/tech/springboot_aop/</link>

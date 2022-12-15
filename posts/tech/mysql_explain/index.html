@@ -59,7 +59,7 @@
 <meta property="og:description" content="Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://habyss.github.io/posts/tech/mysql_explain/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2018-11-29T15:36:53+08:00" />
+<meta property="article:published_time" content="2018-12-29T15:36:53+08:00" />
 <meta property="article:modified_time" content="2022-11-29T15:36:53+08:00" />
 
 <meta name="twitter:card" content="summary"/>
@@ -106,7 +106,7 @@
   "articleBody": "Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有:\nSIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查询中如果包含子查询或其他部分, 则外层的SELECT将被标记为PRIMARY SUBQUERY: 子查询中的第一个SELECT NUION: 在UNION语句中, UNION之后出现的SELECT DERIVED: 在FROM中出现的子查询 UNION RESULT: UNION查询的结果 table 当前的数据表\npartitions 查询所匹配记录的分区, 对于未分区的表, 值为NULL\ntype 查询执行的类型, 最优排行\nsystem \u003e const \u003e eq_ref \u003e ref \u003e fulltext \u003e ref_or_null \u003e index_merge \u003e unique_subquery \u003e index_subquery \u003e range \u003e index \u003e ALL\nsystem: 表中只有一行数据, 是const的一种特例 const: 表中最多只有一行匹配的记录 eq_ref: 连表查询时, 前一张表的行在当前表中只有一行与之对应(除了system与const最好的连表方式) ref: 使用普通索引作为查询条件, 查询结果可能找到多行匹配的记录 fulltext: 全文索引 ref_or_null: 使用普通索引作为查询条件 , 查询结果可能找到多行匹配的记录, 还查询了值为NULL的行 index_merge: 当查询条件使用多个索引时, index_merge表示开启了Index Merge优化 unique_subquery: eq_ref类似, 在一些使用IN的子查询中, 使用唯一索引 index_subquery: 与unique_subquery类似, 在IN子查询中, 使用了普通索引 range: 对索引列进行范围查询 index: 查询便利了整个索引树, ALL: 遍历全表, 很可能读磁盘, 速度最慢 possible_key 可能被使用的索引, 不一定被查询实际使用\nkey 查询中实际使用到的索引, 如果为NULL, 则表示为建立索引或索引失效\nkey_len 查询索引时使用的字节数, 在满足前提的需求下, 越小越好\nref 在查询索引时, 那些列或常量被用来与索引值比较\nrows 可能查询时需要遍历的行数\nfiltered 估算经过查询条件筛选出的列数的百分比\nExtra 查询时的额外信息\n当包含Using filesort或Using temporary, 需要优化\nUsing filesort: 在排序时使用了外部的索引排序, 没有使用表内的索引进行排序 Using temporary: 需要创建临时表来存储查询的结果, 常见于ORDER BY和GROUP BY Using index: 使用了索引覆盖, 查询效率非常高 Using where: 使用了WHERE子句进行条件过滤, 一般在没有使用到索引的时候出现 Impossible where: 表示where子句的结果总是false且无法查到任意行 Using join buffer(Block Nested Loop): 连表查询时, 当被驱动表没有使用索引时, 会先将驱动表读到join buffer中, 再遍历被驱动表与驱动表进行查询 Using json buffer(Batched Key Access): 与Using join buffer(Block Nested Loop)类似, 使用的是BKA算法– 前提是被驱动表有索引可用 ",
   "wordCount" : "975",
   "inLanguage": "zh",
-  "datePublished": "2018-11-29T15:36:53+08:00",
+  "datePublished": "2018-12-29T15:36:53+08:00",
   "dateModified": "2022-11-29T15:36:53+08:00",
   "author":[{
     "@type": "Person",
@@ -204,7 +204,7 @@
     <h1 class="post-title">
       Mysql Explain 简解
     </h1>
-    <div class="post-meta"><span title='2018-11-29 15:36:53 +0800 CST'>2018-11-29</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
+    <div class="post-meta"><span title='2018-12-29 15:36:53 +0800 CST'>2018-12-29</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰
 
 </div>
   </header> <div class="toc">
@@ -319,15 +319,15 @@
       <li><a href="https://habyss.github.io/tags/mysql/">Mysql</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="https://habyss.github.io/posts/tool/%E5%B0%8F%E9%B9%A4%E5%8F%8C%E6%8B%BC/">
+  <a class="prev" href="https://habyss.github.io/posts/tech/transactional/">
     <span class="title">« 上一页</span>
     <br>
-    <span>小鹤双拼</span>
+    <span>@Transactional失效排查</span>
   </a>
-  <a class="next" href="https://habyss.github.io/posts/tech/%E6%B5%8B%E8%AF%95/">
+  <a class="next" href="https://habyss.github.io/posts/tech/springboot_localdatetime/">
     <span class="title">下一页 »</span>
     <br>
-    <span>测试</span>
+    <span>SpringBoot中时间戳和LocalDateTime相关的接收和转换</span>
   </a>
 </nav>
 

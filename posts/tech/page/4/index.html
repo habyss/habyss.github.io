@@ -164,6 +164,30 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>rabbitmq限流Qos 多个消费者同时消费一个消息
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>高并发情况下 RabbitMQ 服务限流 spring下默认为250, 若默写服务需要限流或者需要强制顺序性执行, 则需要自定义qos 1 2 3 4 5 @RabbitHandler @RabbitListener(queues = QueueConstant.RE_SMS_ORDER_NOT_PAID_QUEUE) public void process(Channel channel, Message message)...</p>
+  </div>
+  <footer class="entry-footer"><span title='2019-05-20 15:36:53 +0800 CST'>2019-05-20</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <a class="entry-link" aria-label="post link to rabbitmq限流Qos 多个消费者同时消费一个消息" href="https://habyss.github.io/posts/tech/rabbitmq_qos_random/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>rabbitmq实现延时队列
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>方式一: 原生RabbitMq延时队列 💡缺点: 每个队列的消息是顺序的, 靠后的过期时间短的消息并不能先执行 配置队列 机制 “死信”是RabbitMQ...</p>
+  </div>
+  <footer class="entry-footer"><span title='2019-04-12 15:36:53 +0800 CST'>2019-04-12</span>&nbsp;·&nbsp;3 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <a class="entry-link" aria-label="post link to rabbitmq实现延时队列" href="https://habyss.github.io/posts/tech/rabbitmq_delay/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>基于springboot常用aop方式
     </h2>
   </header>
@@ -200,37 +224,13 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>$ref-fastjson排查
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>$ref-fastjson 问题排查 问题排查 项目返回的数据中出现$ref数据 查询得知是fastjson的特性循环引用 fastjson支持循环引用，并且是缺省打开的。 当...</p>
-  </div>
-  <footer class="entry-footer"><span title='2018-12-20 15:36:53 +0800 CST'>2018-12-20</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to $ref-fastjson排查" href="https://habyss.github.io/posts/tech/ref-fastjson/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>SpringBoot中时间戳和LocalDateTime相关的接收和转换
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>SpringBoot中时间戳和LocalDateTime相关的接收和转换 前言 一般情况下, 前端和后端在时间格式的传递上都走的是时间戳（方便前端...</p>
-  </div>
-  <footer class="entry-footer"><span title='2018-12-10 15:36:53 +0800 CST'>2018-12-10</span>&nbsp;·&nbsp;4 分钟&nbsp;·&nbsp;叶灰灰</footer>
-  <a class="entry-link" aria-label="post link to SpringBoot中时间戳和LocalDateTime相关的接收和转换" href="https://habyss.github.io/posts/tech/springboot_localdatetime/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
     <h2>Mysql Explain 简解
     </h2>
   </header>
   <div class="entry-content">
     <p>Mysql-explain id id相同时, 执行顺序由上而下 id不同时, 执行顺序由大到小, 一般为子查询 select_type 查询类型, 常见的值有: SIMPLE: 简单查询, 不包含UNION或者子查询 PRIMARY: 查...</p>
   </div>
-  <footer class="entry-footer"><span title='2018-11-29 15:36:53 +0800 CST'>2018-11-29</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
+  <footer class="entry-footer"><span title='2018-12-29 15:36:53 +0800 CST'>2018-12-29</span>&nbsp;·&nbsp;2 分钟&nbsp;·&nbsp;叶灰灰</footer>
   <a class="entry-link" aria-label="post link to Mysql Explain 简解" href="https://habyss.github.io/posts/tech/mysql_explain/"></a>
 </article>
 <footer class="page-footer">

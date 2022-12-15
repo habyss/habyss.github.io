@@ -6,11 +6,20 @@
     <description>Recent content in 📕阅读 on 叶灰灰的小窝</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 23 Aug 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/read/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 29 Nov 2022 15:36:53 +0800</lastBuildDate><atom:link href="https://habyss.github.io/posts/read/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL补充</title>
+      <link>https://habyss.github.io/posts/read/mysql%E5%9C%B0%E5%9F%BA_%E4%BC%98%E5%8C%96/</link>
+      <pubDate>Tue, 29 Nov 2022 15:36:53 +0800</pubDate>
+      
+      <guid>https://habyss.github.io/posts/read/mysql%E5%9C%B0%E5%9F%BA_%E4%BC%98%E5%8C%96/</guid>
+      <description>MySQL 地基基础：事务和锁的面纱 什么是事务，为什么需要事务 在 MySQL 中，事务是由一条或多条 SQL 组成的单位，在这个单位中所有的 SQL 共存亡，有点有福同享，有难同</description>
+    </item>
+    
     <item>
       <title>Java错误示例100讲</title>
       <link>https://habyss.github.io/posts/read/java%E9%94%99%E8%AF%AF%E7%A4%BA%E4%BE%8B100%E8%AE%B2/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/java%E9%94%99%E8%AF%AF%E7%A4%BA%E4%BE%8B100%E8%AE%B2/</guid>
       <description>Java错误示例100讲 00 开篇词 业务代码真的会有这么多坑？ 我先和你说说我这 15 年的工作经历吧，以加深彼此的了解。前 7 年，我专注于.NET 领域，</description>
@@ -19,7 +28,7 @@
     <item>
       <title>Java基础36讲</title>
       <link>https://habyss.github.io/posts/read/java%E5%9F%BA%E7%A1%8036%E8%AE%B2/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/java%E5%9F%BA%E7%A1%8036%E8%AE%B2/</guid>
       <description>Java基础36讲 开篇词 以面试题为切入点，有效提升你的Java内功 Java 是一门历史悠久的编程语言，可以毫无争议地说，Java 是最主流的编程语言之</description>
@@ -28,7 +37,7 @@
     <item>
       <title>Java中的ThreadLocal</title>
       <link>https://habyss.github.io/posts/read/java%E4%B8%AD%E7%9A%84threadlocal/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/java%E4%B8%AD%E7%9A%84threadlocal/</guid>
       <description>Java中的ThreadLocal 前言 面试的时候被问到ThreadLocal的相关知识，没有回答好（奶奶的，现在感觉问啥都能被问倒），所以我</description>
@@ -37,7 +46,7 @@
     <item>
       <title>Linux性能优化</title>
       <link>https://habyss.github.io/posts/read/linux%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/linux%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</guid>
       <description>Linux性能优化 00开篇词 别再让Linux性能问题成为你的绊脚石 你好，我是倪朋飞，微软 Azure 的资深工程师，同时也是 Kubernetes 项目维护者，主要负责开源容</description>
@@ -46,25 +55,16 @@
     <item>
       <title>MySQL 亿级别数据迁移实战代码分享</title>
       <link>https://habyss.github.io/posts/read/mysql%E4%BA%BF%E7%BA%A7%E5%88%AB%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/mysql%E4%BA%BF%E7%BA%A7%E5%88%AB%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/</guid>
       <description>MySQL 亿级别数据迁移实战代码分享 x业务背景 某一项技术的出现是为了解决问题的，我们之所以要学习某个技术，是因为这个技术解决了我们工作中遇到的痛点。</description>
     </item>
     
     <item>
-      <title>MySQL补充</title>
-      <link>https://habyss.github.io/posts/read/mysql%E5%9C%B0%E5%9F%BA_%E4%BC%98%E5%8C%96/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
-      
-      <guid>https://habyss.github.io/posts/read/mysql%E5%9C%B0%E5%9F%BA_%E4%BC%98%E5%8C%96/</guid>
-      <description>MySQL 地基基础：事务和锁的面纱 什么是事务，为什么需要事务 在 MySQL 中，事务是由一条或多条 SQL 组成的单位，在这个单位中所有的 SQL 共存亡，有点有福同享，有难同</description>
-    </item>
-    
-    <item>
       <title>MySQL实战45讲</title>
       <link>https://habyss.github.io/posts/read/mysql%E5%AE%9E%E6%88%9845%E8%AE%B2/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/mysql%E5%AE%9E%E6%88%9845%E8%AE%B2/</guid>
       <description>MySQL实战45讲 00开篇词 这一次，让我们一起来搞懂MySQL 你好，我是林晓斌，网名“丁奇”，欢迎加入我的专栏，和我一起开始 MySQL 学习之旅。我</description>
@@ -73,7 +73,7 @@
     <item>
       <title>持续交付36讲</title>
       <link>https://habyss.github.io/posts/read/%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%9836%E8%AE%B2/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%9836%E8%AE%B2/</guid>
       <description>持续交付36讲 开篇词 量身定制你的持续交付体系 你好，我是王潇俊，从今天开始，我将会和你一起聊聊“持续交付”这个话题。 “持续交付”已不再是一个陌</description>
@@ -82,7 +82,7 @@
     <item>
       <title>从0开始学微服务</title>
       <link>https://habyss.github.io/posts/read/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1/</guid>
       <description>从0开始学微服务 00 开篇词 微服务，从放弃到入门 你好，我是胡忠想，微博技术专家。从 2012 年加入微博到现在，我一直在做微博首页信息流相关的业务研发，几</description>
@@ -91,7 +91,7 @@
     <item>
       <title>代码精进之路</title>
       <link>https://habyss.github.io/posts/read/%E4%BB%A3%E7%A0%81%E7%B2%BE%E8%BF%9B%E4%B9%8B%E8%B7%AF/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/%E4%BB%A3%E7%A0%81%E7%B2%BE%E8%BF%9B%E4%B9%8B%E8%B7%AF/</guid>
       <description>代码精进之路 01从条件运算符说起，反思什么是好的代码 写出优秀的代码是我们每一个程序员的毕生追求，毕竟写代码本身就是个技术活，代码的好坏，其实</description>
@@ -100,7 +100,7 @@
     <item>
       <title>趣谈网络协议</title>
       <link>https://habyss.github.io/posts/read/%E8%B6%A3%E8%B0%88%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</link>
-      <pubDate>Tue, 23 Aug 2022 15:36:53 +0800</pubDate>
+      <pubDate>Thu, 01 Nov 2018 15:36:53 +0800</pubDate>
       
       <guid>https://habyss.github.io/posts/read/%E8%B6%A3%E8%B0%88%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</guid>
       <description>趣谈网络协议 00 我是如何创作“趣谈网络协议”专栏的 我用将近半年的时间在“极客时间”写了一个专栏“趣谈网络协议”。对于我自己来讲，这真的是个非常</description>
